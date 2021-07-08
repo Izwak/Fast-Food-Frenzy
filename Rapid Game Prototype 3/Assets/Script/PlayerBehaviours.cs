@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerBehaviours : MonoBehaviour
 {
+    public GameObject empltySlot;
+    Transform slotPos;
 
     Rigidbody body;
 
@@ -37,13 +39,22 @@ public class PlayerBehaviours : MonoBehaviour
         body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
         transform.rotation = Quaternion.Euler(0, angle, 0);
 
-        Shoot();
+        OutlineCounter();
+
+        if (empltySlot.transform.childCount > 0)
+        {
+            empltySlot.transform.GetChild(0).localPosition = Vector3.zero;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            InteractCounter();
+        }
+
     }
 
-    void Shoot()
+    void OutlineCounter()
     {
-        //Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f));
-
         RaycastHit newhit;
 
 
@@ -64,10 +75,6 @@ public class PlayerBehaviours : MonoBehaviour
 
             hit = newhit;
 
-            // For some reason this shoots out in funky direction
-            //target = hit.point;
-            Debug.Log("You hit a boi");
-            Debug.Log(hit.transform.tag);
 
             Outline outline = hit.transform.GetComponent<Outline>();
             if (outline != null) {
@@ -83,5 +90,54 @@ public class PlayerBehaviours : MonoBehaviour
                 }
             }
         }
+    }
+
+    void InteractCounter()
+    {
+        // Swap items In and out of counters
+
+        RaycastHit hit;
+
+        Counter counter;
+
+        // Check if looking at an object
+        if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.forward, out hit))
+        {
+            // Check if it's in reach
+            if (hit.distance < 2)
+            {
+                // Check if it's a counter
+                counter = hit.transform.GetComponent<Counter>();
+
+                if (counter != null)
+                {
+                    int children = empltySlot.transform.GetChildCount();
+                    int counterChildren = counter.emptySlot.transform.GetChildCount();
+
+
+                    //GameObject playerObject = empltySlot.transform.GetChild(0).gameObject;
+                    //GameObject counterObject = counter.emptySlot.transform.GetChild(0).gameObject;
+
+                    // Swap object from hand to counter
+                    if (children > 0 && counterChildren == 0)
+                    {
+                        print("swap hand with counter");
+
+                        GameObject playerObject = empltySlot.transform.GetChild(0).gameObject;
+
+                        playerObject.transform.SetParent(counter.emptySlot.transform);
+                    }
+                    // Swap object from counter to hand
+                    else if (counterChildren > 0 && children == 0)
+                    {
+                        print("swap counter with hand");
+
+                        GameObject counterObject = counter.emptySlot.transform.GetChild(0).gameObject;
+                        counterObject.transform.SetParent(empltySlot.transform);
+                    }
+                }
+            }
+        }
+
     }
 }
