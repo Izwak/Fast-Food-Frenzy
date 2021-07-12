@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerBehaviours : MonoBehaviour
@@ -74,18 +75,22 @@ public class PlayerBehaviours : MonoBehaviour
             }
 
             hit = newhit;
-
+            TMP_Text textObj = null;
+            if (hit.transform.GetComponentInChildren<TMP_Text>() != null)
+                textObj = hit.transform.GetComponentInChildren<TMP_Text>();
 
             Outline outline = hit.transform.GetComponent<Outline>();
             if (outline != null) {
                 if (hit.distance < 2)
                 {
                     outline.enabled = true;
+                    textObj.text = "yee";
                     //outline.OutlineWidth = 4;
                 }
                 else
                 {
                     outline.enabled = false;
+                    textObj.text = "noo";
                     //outline.OutlineWidth = 0;
                 }
             }
@@ -111,8 +116,8 @@ public class PlayerBehaviours : MonoBehaviour
 
                 if (counter != null)
                 {
-                    int children = empltySlot.transform.GetChildCount();
-                    int counterChildren = counter.emptySlot.transform.GetChildCount();
+                    int children = empltySlot.transform.childCount;
+                    int counterChildren = counter.emptySlot.transform.childCount;
 
 
                     //GameObject playerObject = empltySlot.transform.GetChild(0).gameObject;
