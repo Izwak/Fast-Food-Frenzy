@@ -5,14 +5,11 @@ using UnityEngine;
 public class PlayerBehaviours1 : MonoBehaviour
 {
     public GameObject empltySlot;
-    Transform slotPos;
 
     Rigidbody body;
 
     float speed = 5;
     float angle;
-
-    Material mat;
 
     RaycastHit hit;
 
@@ -31,9 +28,9 @@ public class PlayerBehaviours1 : MonoBehaviour
 
         angle = Mathf.Atan2(tartgetPoint.x, tartgetPoint.y) * Mathf.Rad2Deg;
 
-        if (tartgetPoint.magnitude > speed /2)
+        if (tartgetPoint.magnitude > speed)
         {
-            tartgetPoint = tartgetPoint.normalized * speed / 2;
+            tartgetPoint = tartgetPoint.normalized * speed;
         }
 
         body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
@@ -47,45 +44,6 @@ public class PlayerBehaviours1 : MonoBehaviour
             Interactions();
         }
 
-    }
-
-    void OutlineCounter()
-    {
-        RaycastHit newhit;
-
-        if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.forward, out newhit))
-        {
-            if (hit.transform != null)
-            {
-                if (!newhit.Equals(hit))
-                {
-                    Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
-                    if (oldOutline != null)
-                    {
-                        oldOutline.enabled = false;
-                        //oldOutline.OutlineWidth = 0;
-                    }
-                }
-            }
-
-            hit = newhit;
-
-
-            Outline outline = hit.transform.GetComponentInParent<Outline>();
-            if (outline != null)
-            {
-                if (hit.distance < 2)
-                {
-                    outline.enabled = true;
-                    //outline.OutlineWidth = 4;
-                }
-                else
-                {
-                    outline.enabled = false;
-                    //outline.OutlineWidth = 0;
-                }
-            }
-        }
     }
 
     void ShadeInteracatbles()
@@ -114,7 +72,6 @@ public class PlayerBehaviours1 : MonoBehaviour
                 }
 
 
-
                 if (obj.type == Interactables.BIN)
                 {
                     RenderOutline(newhit);
@@ -133,7 +90,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                             RenderOutline(newhit);
                         }
                     }
-                    if (playersObject.CompareTag("Fry Tray") && obj.type == Interactables.FRYSTATION)
+
+                    else if (playersObject.CompareTag("Fry Tray") && obj.type == Interactables.FRYSTATION)
                     {
                         FryStation fryStation = obj.GetComponent<FryStation>();
 
@@ -145,17 +103,30 @@ public class PlayerBehaviours1 : MonoBehaviour
                             }
                         }
                     }
-                    if ((playersObject.CompareTag("Food")) && obj.type == Interactables.COUNTER)
+
+                    else if(playersObject.CompareTag("Cooked Paddies") && obj.type == Interactables.HEATER)
                     {
                         RenderOutline(newhit);
                     }
 
+                    else if ((playersObject.CompareTag("Food")) && obj.type == Interactables.COUNTER)
+                    {
+                        RenderOutline(newhit);
+                    }
+
+                    else if (obj.type == Interactables.HOTPLATE)
+                    {
+                        RenderOutline(newhit);
+                    }
                 }
+
                 // If not holding anything and any of these things
-                else if (obj.type == Interactables.COUNTER || obj.type == Interactables.FRIDGE || obj.type == Interactables.SERVICECOUNTER || obj.type == Interactables.BURGERSTATION)
+                else if (obj.type == Interactables.COUNTER || obj.type == Interactables.FRIDGE || obj.type == Interactables.SERVICECOUNTER 
+                    || obj.type == Interactables.BURGERSTATION || obj.type == Interactables.HOTPLATE)
                 {
                     RenderOutline(newhit);
                 }
+
                 else if (obj.type == Interactables.FRIER)
                 {
                     Frier frier = obj.GetComponent<Frier>();
@@ -167,6 +138,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             RenderOutline(newhit);
                     }
                 }
+
                 else if (obj.type == Interactables.FRYSTATION)
                 {
                     FryStation fryStation = obj.GetComponent<FryStation>();
@@ -296,7 +268,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                         newFryTray.transform.forward = transform.forward;
                                         frier.spotTaken[i] = false;
                                         break;
-                                    } 
+                                    }
                                 }
                             }
                             // Put fries in frier
@@ -359,35 +331,101 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         if (holdingNum == 0)
                         {
-                            GameObject newRawFries = Instantiate(obj.createObject);
-                            newRawFries.transform.SetParent(empltySlot.transform);
+                            GameObject food = Instantiate(obj.createObject);
+                            food.transform.SetParent(empltySlot.transform);
 
-                            if (newRawFries.CompareTag("Raw Fries"))
-                                newRawFries.transform.localPosition = new Vector3(0.3f, -0.1f, -0.2f);
+                            if (food.CompareTag("Raw Fries"))
+                                food.transform.localPosition = new Vector3(0.3f, -0.1f, -0.2f);
                             else
-                                newRawFries.transform.localPosition = Vector3.zero;
-                            newRawFries.transform.forward = transform.right;
+                                food.transform.localPosition = Vector3.zero;
+
+                            food.transform.forward = transform.right;
+                        }
+                        else if (holdingNum == 1 && obj.createObject.CompareTag("Raw Paddies"))
+                        {
+                            if (empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") )
+                            {
+
+                                GameObject food = Instantiate(obj.createObject);
+                                food.transform.SetParent(empltySlot.transform);
+                                food.transform.localPosition = new Vector3(0, 0.1f, 0);
+                                food.transform.localRotation = Quaternion.identity;
+                            }
                         }
                     }
-
+                    
                     else if (obj.type == Interactables.BURGERSTATION)
                     {
-                        Hotplate hotplate = obj.GetComponent<Hotplate>();
+                        BurgerStation burgerStation = obj.GetComponent<BurgerStation>();
 
-                        if (hotplate != null)
+                        if (holdingNum == 0 && burgerStation != null )
                         {
-                            if (holdingNum == 0)
+                            if (burgerStation.paddyHeater.childCount > 0)
                             {
                                 GameObject newBurger = Instantiate(obj.createObject);
                                 newBurger.transform.SetParent(empltySlot.transform);
                                 newBurger.transform.localPosition = Vector3.zero;
                                 newBurger.transform.forward = transform.forward;
+
+                                burgerStation.TakePaddy();
+                            }
+                        }
+                    }
+
+                    else if (obj.type == Interactables.HOTPLATE)
+                    {
+                        if (holdingNum > 0 && counterHoldingNum == 0)
+                        {
+                            GameObject paddy = empltySlot.transform.GetChild(0).gameObject;
+                            if (paddy.CompareTag("Raw Paddies"))
+                            {
+                                Destroy(paddy);
+
+                                GameObject cookedPaddy = Instantiate(obj.createObject);
+                                cookedPaddy.transform.SetParent(obj.emptySlot.transform);
+                                cookedPaddy.transform.localPosition = Vector3.zero;
+                                cookedPaddy.transform.rotation = Quaternion.identity;
+                            }
+                        }
+
+                        else if (counterHoldingNum > 0 && holdingNum == 0)
+                        {
+                            Transform cookedPaddy = obj.emptySlot.transform.GetChild(0).transform;
+                            cookedPaddy.SetParent(empltySlot.transform);
+                            cookedPaddy.localPosition = Vector3.zero;
+                            cookedPaddy.localRotation = Quaternion.identity;
+                        }
+                        // Can grab 2 paddies at a time
+                        else if (counterHoldingNum > 0 && holdingNum == 1)
+                        {
+                            if (empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                            {
+                                Transform cookedPaddy = obj.emptySlot.transform.GetChild(0).transform;
+                                cookedPaddy.SetParent(empltySlot.transform);
+                                cookedPaddy.localPosition = new Vector3(0, 0.1f, 0);
+                                cookedPaddy.localRotation = Quaternion.identity;
+                            }
+                        }
+                    }
+
+                    else if (obj.type == Interactables.HEATER)
+                    {
+                        if (holdingNum > 0 && counterHoldingNum < 3)
+                        {
+                            GameObject paddy = empltySlot.transform.GetChild(0).gameObject;
+
+                            if (paddy.CompareTag("Cooked Paddies"))
+                            {
+                                paddy.transform.SetParent(obj.emptySlot.transform);
+                                paddy.transform.localRotation = Quaternion.identity;
+
+
+                                paddy.transform.localPosition = new Vector3(0, counterHoldingNum * 0.3f, 0);
                             }
                         }
                     }
                 }
             }
         }
-
     }
 }

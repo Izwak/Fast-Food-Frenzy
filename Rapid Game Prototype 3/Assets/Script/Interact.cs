@@ -11,6 +11,7 @@ public enum Interactables
     FRYSTATION,
     FRIDGE,
     HOTPLATE,
+    HEATER,
     NOTHING,
 }
 public class Interact : MonoBehaviour

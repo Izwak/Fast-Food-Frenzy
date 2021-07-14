@@ -105,9 +105,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4770537976323117703}
+  - component: {fileID: 8421852176456559682}
   m_Layer: 0
   m_Name: Paddy Cooked
-  m_TagString: Food
+  m_TagString: Cooked Paddies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,6 +131,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8421852176456559682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4770537976323117702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48b495f357772004da06f3e1f3d2b874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paddy:
+  - {fileID: 4770537976310020646}
+  - {fileID: 4770537976813638003}
+  - {fileID: 4770537976624681578}
+  - {fileID: 4770537976944939611}
 --- !u!1 &4770537976624681578
 GameObject:
   m_ObjectHideFlags: 0
