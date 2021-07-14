@@ -10,6 +10,7 @@ public enum Interactables
     SERVICECOUNTER,
     FRYSTATION,
     FRIDGE,
+    HOTPLATE,
     NOTHING,
 }
 public class Interact : MonoBehaviour

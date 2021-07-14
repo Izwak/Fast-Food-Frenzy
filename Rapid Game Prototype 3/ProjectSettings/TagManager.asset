@@ -11,6 +11,7 @@ TagManager:
   - Fries
   - Food
   - Raw Fries
+  - Raw Paddies
   layers:
   - Default
   - TransparentFX

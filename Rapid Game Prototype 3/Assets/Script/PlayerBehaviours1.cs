@@ -372,12 +372,17 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                     else if (obj.type == Interactables.BURGERSTATION)
                     {
-                        if (holdingNum == 0)
+                        Hotplate hotplate = obj.GetComponent<Hotplate>();
+
+                        if (hotplate != null)
                         {
-                            GameObject newBurger = Instantiate(obj.createObject);
-                            newBurger.transform.SetParent(empltySlot.transform);
-                            newBurger.transform.localPosition = Vector3.zero;
-                            newBurger.transform.forward = transform.forward;
+                            if (holdingNum == 0)
+                            {
+                                GameObject newBurger = Instantiate(obj.createObject);
+                                newBurger.transform.SetParent(empltySlot.transform);
+                                newBurger.transform.localPosition = Vector3.zero;
+                                newBurger.transform.forward = transform.forward;
+                            }
                         }
                     }
                 }
