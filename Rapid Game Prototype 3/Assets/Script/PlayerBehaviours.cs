@@ -103,7 +103,7 @@ public class PlayerBehaviours : MonoBehaviour
 
         RaycastHit hit;
 
-        Counter counter;
+        Interact counter;
 
         // Check if looking at an object
         if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.forward, out hit))
@@ -112,7 +112,7 @@ public class PlayerBehaviours : MonoBehaviour
             if (hit.distance < 2)
             {
                 // Check if it's a counter
-                counter = hit.transform.GetComponent<Counter>();
+                counter = hit.transform.GetComponent<Interact>();
 
                 if (counter != null)
                 {

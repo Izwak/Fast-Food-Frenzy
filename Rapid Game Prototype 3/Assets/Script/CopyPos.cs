@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Counter : MonoBehaviour
+public class CopyPos : MonoBehaviour
 {
-    public GameObject emptySlot;
+    public GameObject target;
     //public TMP_Text textBox;
 
     // Start is called before the first frame update
@@ -17,9 +17,6 @@ public class Counter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (emptySlot.transform.childCount > 0)
-        {
-            emptySlot.transform.GetChild(0).localPosition = Vector3.zero;
-        }
+        transform.position = target.transform.position;
     }
 }
