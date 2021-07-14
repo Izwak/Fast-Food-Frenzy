@@ -126,11 +126,24 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                     if (playersObject.CompareTag("Raw Fries") && obj.type == Interactables.FRIER)
                     {
-                        RenderOutline(newhit);
+                        Frier frier = obj.GetComponent<Frier>();
+                        if (frier != null)
+                        {
+                            if (!frier.isFull)
+                            RenderOutline(newhit);
+                        }
                     }
                     if (playersObject.CompareTag("Fry Tray") && obj.type == Interactables.FRYSTATION)
                     {
-                        RenderOutline(newhit);
+                        FryStation fryStation = obj.GetComponent<FryStation>();
+
+                        if (fryStation != null)
+                        {
+                            if  (fryStation.fryLvl <= 1)
+                            {
+                                RenderOutline(newhit);
+                            }
+                        }
                     }
                     if ((playersObject.CompareTag("Food")) && obj.type == Interactables.COUNTER)
                     {
@@ -150,7 +163,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                     // Check if you can interact with frier
                     if (frier != null)
                     {
-                        if (frier.isInteracable)
+                        if (!frier.isEmpty)
                             RenderOutline(newhit);
                     }
                 }
@@ -348,8 +361,12 @@ public class PlayerBehaviours1 : MonoBehaviour
                         {
                             GameObject newRawFries = Instantiate(obj.createObject);
                             newRawFries.transform.SetParent(empltySlot.transform);
-                            newRawFries.transform.localPosition = Vector3.zero;
-                            newRawFries.transform.forward = transform.forward;
+
+                            if (newRawFries.CompareTag("Raw Fries"))
+                                newRawFries.transform.localPosition = new Vector3(0.3f, -0.1f, -0.2f);
+                            else
+                                newRawFries.transform.localPosition = Vector3.zero;
+                            newRawFries.transform.forward = transform.right;
                         }
                     }
 

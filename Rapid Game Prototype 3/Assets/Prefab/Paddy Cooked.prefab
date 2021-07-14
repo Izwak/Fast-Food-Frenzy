@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1bc830d4ca7697f4eaff6c634a69c2d5, type: 2}
+  - {fileID: 2100000, guid: af21bae8cee39ad4e8d176e8acc5d0ce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,7 +106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4770537976323117703}
   m_Layer: 0
-  m_Name: Quad Paddy
+  m_Name: Paddy Cooked
   m_TagString: Food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -190,7 +190,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1bc830d4ca7697f4eaff6c634a69c2d5, type: 2}
+  - {fileID: 2100000, guid: af21bae8cee39ad4e8d176e8acc5d0ce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -286,7 +286,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1bc830d4ca7697f4eaff6c634a69c2d5, type: 2}
+  - {fileID: 2100000, guid: af21bae8cee39ad4e8d176e8acc5d0ce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -382,7 +382,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1bc830d4ca7697f4eaff6c634a69c2d5, type: 2}
+  - {fileID: 2100000, guid: af21bae8cee39ad4e8d176e8acc5d0ce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

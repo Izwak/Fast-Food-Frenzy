@@ -8,7 +8,7 @@ public class Frier : MonoBehaviour
 
     public bool[] spotTaken = new bool[4];
 
-    public bool isInteracable;
+    public bool isEmpty, isFull;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +19,8 @@ public class Frier : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isInteracable = false;
+        isEmpty = true;
+        isFull = true;
 
         for (int i = 0; i < 4; i++)
         {
@@ -27,7 +28,11 @@ public class Frier : MonoBehaviour
 
             if (spotTaken[i])
             {
-                isInteracable = true;
+                isEmpty = false;
+            }
+            if (!spotTaken[i])
+            {
+                isFull = false;
             }
         }
     }
