@@ -6,7 +6,11 @@ using UnityEngine;
 public class Counter : MonoBehaviour
 {
     public GameObject emptySlot;
-    //public TMP_Text textBox;
+    public GameObject item;
+    public GameObject counterTopper;
+
+    bool timer = false;
+    float timeLeft;
 
     // Start is called before the first frame update
     void Start()
@@ -21,5 +25,39 @@ public class Counter : MonoBehaviour
         {
             emptySlot.transform.GetChild(0).localPosition = Vector3.zero;
         }
+        if (timer)
+        {
+            timeLeft -= Time.deltaTime;
+            if (timeLeft <= 0)
+            {
+                timer = false;
+                gameObject.transform.GetComponent<TMP_Text>().text = "";
+            }
+        }
+
+        //check if counter has an item on it (checks if EmptySlot has a child)
+        if (gameObject.transform.GetChild(1).GetChild(0) != null)
+        {
+            item = gameObject.transform.GetChild(1).GetChild(0).transform.gameObject;
+            if (item.CompareTag("Patty"))
+            {
+                
+            }
+        }
+    }
+
+    void DoTimer(float seconds)
+    {
+        if (!timer)
+        {
+            timer = true;
+            timeLeft = seconds;
+        }
+    }
+
+    void AddTime(float s)
+    {
+        if (timer)
+            timeLeft += s;
     }
 }

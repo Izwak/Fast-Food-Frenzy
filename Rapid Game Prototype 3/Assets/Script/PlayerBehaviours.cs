@@ -58,7 +58,6 @@ public class PlayerBehaviours : MonoBehaviour
     {
         RaycastHit newhit;
 
-
         if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.forward, out newhit))
         {
             if (hit.transform != null)
@@ -76,6 +75,7 @@ public class PlayerBehaviours : MonoBehaviour
 
             hit = newhit;
             TMP_Text textObj = null;
+
             if (hit.transform.GetComponentInChildren<TMP_Text>() != null)
                 textObj = hit.transform.GetComponentInChildren<TMP_Text>();
 
@@ -100,9 +100,7 @@ public class PlayerBehaviours : MonoBehaviour
     void InteractCounter()
     {
         // Swap items In and out of counters
-
         RaycastHit hit;
-
         Counter counter;
 
         // Check if looking at an object
@@ -127,16 +125,13 @@ public class PlayerBehaviours : MonoBehaviour
                     if (children > 0 && counterChildren == 0)
                     {
                         print("swap hand with counter");
-
                         GameObject playerObject = empltySlot.transform.GetChild(0).gameObject;
-
                         playerObject.transform.SetParent(counter.emptySlot.transform);
                     }
                     // Swap object from counter to hand
                     else if (counterChildren > 0 && children == 0)
                     {
                         print("swap counter with hand");
-
                         GameObject counterObject = counter.emptySlot.transform.GetChild(0).gameObject;
                         counterObject.transform.SetParent(empltySlot.transform);
                     }
