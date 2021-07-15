@@ -467,6 +467,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                         pickUp.RemoveDisplayOrder(i);
                                         OrderMechanics.orders.RemoveAt(i);
+                                        Destroy(obj.emptySlot.transform.GetChild(0).gameObject);
                                         break;
                                     }
                                 }
