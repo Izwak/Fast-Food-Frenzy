@@ -39,7 +39,7 @@ public class PlayerBehaviours1 : MonoBehaviour
         //GameManager.Instance.test;
 
         //OutlineCounter();
-        ShadeInteracatbles();
+        LookingAtObjects();
 
         if (Input.GetButtonDown("Interact"))
         {
@@ -48,12 +48,26 @@ public class PlayerBehaviours1 : MonoBehaviour
 
     }
 
-    void ShadeInteracatbles()
+    void LookingAtObjects()
     {
         RaycastHit newhit;
 
         if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.forward, out newhit))
         {
+            // Deselect old Object if look new object is different
+            if (hit.transform != null)
+            {
+                if (!newhit.Equals(hit))
+                {
+                    Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
+                    if (oldOutline != null)
+                    {
+                        oldOutline.enabled = false;
+                    }
+                }
+            }
+
+
             Interact obj = newhit.transform.GetComponentInParent<Interact>();
 
             if (obj != null)
@@ -61,19 +75,11 @@ public class PlayerBehaviours1 : MonoBehaviour
                 int holdingNum = empltySlot.transform.childCount;
                 int counterHoldingNum = obj.emptySlot.transform.childCount;
 
-                if (hit.transform != null)
-                {
-                    if (!newhit.Equals(hit))
-                    {
-                        Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
-                        if (oldOutline != null)
-                        {
-                            oldOutline.enabled = false;
-                        }
-                    }
-                }
+
+                // Here is where u can right code 
 
 
+                // Choose whether or not to outline selected objects
                 if (obj.type == Interactables.BIN)
                 {
                     RenderOutline(newhit);
@@ -151,6 +157,18 @@ public class PlayerBehaviours1 : MonoBehaviour
                         if (fryStation.fryLvl > 0)
                             RenderOutline(newhit);
                     }
+                }
+            }
+        }
+        else
+        {
+            // Deselect old Object if not looking at any object
+            if (hit.transform != null)
+            {
+                Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
+                if (oldOutline != null)
+                {
+                    oldOutline.enabled = false;
                 }
             }
         }
@@ -337,11 +355,11 @@ public class PlayerBehaviours1 : MonoBehaviour
                             food.transform.SetParent(empltySlot.transform);
 
                             if (food.CompareTag("Raw Fries"))
-                                food.transform.localPosition = new Vector3(0.3f, -0.1f, -0.2f);
+                                food.transform.localPosition = Vector3.zero;
                             else
                                 food.transform.localPosition = Vector3.zero;
 
-                            food.transform.forward = transform.right;
+                            food.transform.forward = transform.forward;
                         }
                         else if (holdingNum == 1 && obj.createObject.CompareTag("Raw Paddies"))
                         {
