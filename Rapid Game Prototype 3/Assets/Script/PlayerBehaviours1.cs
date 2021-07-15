@@ -36,6 +36,8 @@ public class PlayerBehaviours1 : MonoBehaviour
         body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
         transform.rotation = Quaternion.Euler(0, angle, 0);
 
+        //GameManager.Instance.test;
+
         //OutlineCounter();
         ShadeInteracatbles();
 
@@ -109,7 +111,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                         RenderOutline(newhit);
                     }
 
-                    else if ((playersObject.CompareTag("Food")) && obj.type == Interactables.COUNTER)
+                    else if ((playersObject.CompareTag("Food")) && (obj.type == Interactables.COUNTER || obj.type == Interactables.PICKUP))
                     {
                         RenderOutline(newhit);
                     }
@@ -122,7 +124,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                 // If not holding anything and any of these things
                 else if (obj.type == Interactables.COUNTER || obj.type == Interactables.FRIDGE || obj.type == Interactables.SERVICECOUNTER 
-                    || obj.type == Interactables.BURGERSTATION || obj.type == Interactables.HOTPLATE)
+                    || obj.type == Interactables.BURGERSTATION || obj.type == Interactables.HOTPLATE || obj.type == Interactables.PICKUP)
                 {
                     RenderOutline(newhit);
                 }
@@ -205,7 +207,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                     int holdingNum = empltySlot.transform.childCount;
                     int counterHoldingNum = obj.emptySlot.transform.childCount;
 
-                    if (obj.type == Interactables.COUNTER)
+                    if (obj.type == Interactables.COUNTER )
                     {
                         // Swap object from hand to counter
                         if (holdingNum > 0 && counterHoldingNum == 0)
@@ -219,7 +221,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 print("swap hand with counter");
                                 playersObject.transform.SetParent(obj.emptySlot.transform);
                                 playersObject.transform.localPosition = Vector3.zero;
-                                playersObject.transform.rotation = Quaternion.identity;
+                                playersObject.transform.localRotation = Quaternion.identity;
                             }
 
                         }
@@ -232,7 +234,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
                             counterObject.transform.SetParent(empltySlot.transform);
                             counterObject.transform.localPosition = Vector3.zero;
-                            counterObject.transform.rotation = Quaternion.identity;
+                            counterObject.transform.localRotation = Quaternion.identity;
                         }
                     }
 
@@ -422,6 +424,75 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                 paddy.transform.localPosition = new Vector3(0, counterHoldingNum * 0.3f, 0);
                             }
+                        }
+                    }
+
+                    else if (obj.type == Interactables.SERVICECOUNTER)
+                    {
+                        ServiceCounter service = obj.GetComponent<ServiceCounter>();
+
+                        if (service != null)
+                        {
+                            OrderMechanics.CreateNewOrder();
+
+                            service.AddOrdersToScreen();
+                        }
+                    }
+
+                    else if (obj.type == Interactables.PICKUP)
+                    {
+                        PickUp pickUp = obj.GetComponent<PickUp>();
+
+                        // Put object on counter
+                        if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
+                        {
+
+                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+
+                            // Can put objects on counters if they're a food
+                            if (playersObject.CompareTag("Food"))
+                            {
+                                print("swap hand with counter");
+                                playersObject.transform.SetParent(obj.emptySlot.transform);
+                                playersObject.transform.localPosition = Vector3.zero;
+                                playersObject.transform.localRotation = Quaternion.identity;
+
+                                for (int i = 0; i < pickUp.canvas.transform.childCount; i++)
+                                {
+                                    GameObject order = pickUp.canvas.transform.GetChild(i).gameObject;
+
+                                    if (playersObject.name == order.name)
+                                    {
+                                        print("Success");
+
+                                        pickUp.RemoveDisplayOrder(i);
+                                        OrderMechanics.orders.RemoveAt(i);
+                                        break;
+                                    }
+                                }
+                                /*for (int i = 0; i < OrderMechanics.orders.Count; i++)
+                                {
+                                    if (playersObject.name == OrderMechanics.orders[i])
+                                    {
+                                        print("Success");
+
+                                        OrderMechanics.orders.RemoveAt(0);
+                                        pickUp.RemoveDisplayOrder(0);
+                                        break;
+                                    }
+                                }*/
+                            }
+                        }
+
+                        // Take object from counter
+                        else if (counterHoldingNum > 0 && holdingNum == 0)
+                        {
+                            print("swap counter with hand");
+
+                            GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
+                            counterObject.transform.SetParent(empltySlot.transform);
+                            counterObject.transform.localPosition = Vector3.zero;
+                            counterObject.transform.localRotation = Quaternion.identity;
                         }
                     }
                 }

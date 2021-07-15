@@ -13,6 +13,7 @@ public enum Interactables
     HOTPLATE,
     HEATER,
     NOTHING,
+    PICKUP,
 }
 public class Interact : MonoBehaviour
 {
