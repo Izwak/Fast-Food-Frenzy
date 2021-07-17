@@ -29,5 +29,13 @@ public class ServiceCounter : MonoBehaviour
 
         newOrder.transform.localPosition = new Vector3(-1000 + 300 * (canvas.transform.childCount - 1), 500, 0);
         alert.SetActive(false);
+
+        if (canvas.transform.childCount > 7)
+        {
+            for (int i = 0; i < canvas.transform.childCount; i++)
+            {
+                canvas.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (canvas.transform.childCount - 1)) * (i) , 500, 0);
+            }
+        }
     }
 }

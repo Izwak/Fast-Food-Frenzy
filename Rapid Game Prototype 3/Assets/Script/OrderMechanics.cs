@@ -12,7 +12,7 @@ public static class OrderMechanics
 
         foreach (string food in orders)
         {
-            Debug.Log(food); 
+            //Debug.Log(food); 
         }
     }
 }

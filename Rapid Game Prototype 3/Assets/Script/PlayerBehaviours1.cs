@@ -39,13 +39,52 @@ public class PlayerBehaviours1 : MonoBehaviour
         //GameManager.Instance.test;
 
         //OutlineCounter();
-        LookingAtObjects();
+        LookingAtObjects2();
 
         if (Input.GetButtonDown("Interact"))
         {
             Interactions();
         }
 
+    }
+    void RenderOutline(RaycastHit newhit)
+    {
+        if (hit.transform != null)
+        {
+            if (!newhit.Equals(hit))
+            {
+                Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
+                if (oldOutline != null)
+                {
+                    oldOutline.enabled = false;
+                }
+            }
+        }
+
+        hit = newhit;
+
+
+        Outline outline = hit.transform.GetComponentInParent<Outline>();
+        if (outline != null)
+        {
+            if (hit.distance < 2)
+            {
+                outline.enabled = true;
+            }
+            else
+            {
+                outline.enabled = false;
+            }
+        }
+    }
+
+    void DisableOutline(RaycastHit newhit)
+    {
+        Outline outline = hit.transform.GetComponentInParent<Outline>();
+        if (outline != null)
+        {
+            outline.enabled = false;
+        }
     }
 
     void LookingAtObjects()
@@ -57,12 +96,28 @@ public class PlayerBehaviours1 : MonoBehaviour
             // Deselect old Object if look new object is different
             if (hit.transform != null)
             {
-                if (!newhit.Equals(hit))
+                if (!newhit.transform.Equals(hit.transform))
                 {
-                    Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
-                    if (oldOutline != null)
+                    GameObject oldObj = hit.transform.parent.gameObject;
+
+                    if (oldObj != null)
                     {
-                        oldOutline.enabled = false;
+                        Outline oldOutline = oldObj.GetComponent<Outline>();
+                        Pointer pointer = oldObj.GetComponent<Pointer>();
+                        DisplayIcon displayIcon = oldObj.GetComponent<DisplayIcon>();
+
+                        if (oldOutline != null)
+                        {
+                            oldOutline.enabled = false;
+                        }
+                        if (pointer != null)
+                        {
+                            pointer.pointer.gameObject.SetActive(false);
+                        }
+                        if (displayIcon != null)
+                        {
+                            displayIcon.icon.gameObject.SetActive(false);
+                        }
                     }
                 }
             }
@@ -72,9 +127,10 @@ public class PlayerBehaviours1 : MonoBehaviour
 
             if (obj != null)
             {
+                DisplayIcon displayIcon = newhit.transform.GetComponentInParent<DisplayIcon>();
+
                 int holdingNum = empltySlot.transform.childCount;
                 int counterHoldingNum = obj.emptySlot.transform.childCount;
-
 
                 // Here is where u can right code 
 
@@ -84,6 +140,29 @@ public class PlayerBehaviours1 : MonoBehaviour
                 {
                     RenderOutline(newhit);
                 }
+
+                else if (obj.type == Interactables.HOTPLATE)
+                {
+                    RenderOutline(newhit);
+                }
+
+                else if (obj.type == Interactables.BURGERSTATION)
+                {
+                    RenderOutline(newhit);
+
+                    if (displayIcon != null)
+                    {
+                        if (holdingNum == 0)
+                        {
+                            displayIcon.icon.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            displayIcon.icon.gameObject.SetActive(false);
+                        }
+                    }
+                }
+
                 else if (holdingNum > 0)
                 {
 
@@ -130,7 +209,12 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                 // If not holding anything and any of these things
                 else if (obj.type == Interactables.COUNTER || obj.type == Interactables.FRIDGE || obj.type == Interactables.SERVICECOUNTER 
-                    || obj.type == Interactables.BURGERSTATION || obj.type == Interactables.HOTPLATE || obj.type == Interactables.PICKUP)
+                      || obj.type == Interactables.PICKUP)
+                {
+                    RenderOutline(newhit);
+                }
+
+                else if (obj.type == Interactables.HEATER)
                 {
                     RenderOutline(newhit);
                 }
@@ -174,33 +258,173 @@ public class PlayerBehaviours1 : MonoBehaviour
         }
     }
 
-    void RenderOutline(RaycastHit newhit)
+    void LookingAtObjects2()
     {
-        if (hit.transform != null)
+        RaycastHit newhit;
+
+        if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.forward, out newhit) )
         {
-            if (!newhit.Equals(hit))
+            // Deselect old Object if look new object is different
+            if (hit.transform != null)
+            {
+                GameObject oldObj = hit.transform.parent.gameObject;
+
+                if (!newhit.transform.Equals(hit.transform) && oldObj != null)
+                {
+                    Outline oldOutline = oldObj.GetComponent<Outline>();
+                    Pointer pointer = oldObj.GetComponent<Pointer>();
+                    DisplayIcon displayIcon = oldObj.GetComponent<DisplayIcon>();
+
+                    if (oldOutline != null)
+                        oldOutline.enabled = false;
+                    if (pointer != null)
+                        pointer.pointer.gameObject.SetActive(false);
+                    if (displayIcon != null)
+                        displayIcon.icon.gameObject.SetActive(false);
+                }
+            }
+
+            Interact obj = newhit.transform.GetComponentInParent<Interact>();
+
+            if (obj != null)
+            {
+                int holdingNum = empltySlot.transform.childCount;
+                int counterHoldingNum = obj.emptySlot.transform.childCount;
+
+                Pointer pointer = newhit.transform.GetComponentInParent<Pointer>();
+                DisplayIcon displayIcon = newhit.transform.GetComponentInParent<DisplayIcon>();
+
+                RenderOutline(newhit);
+
+                // If objects have a icon whether or not it's displays
+                if (displayIcon != null && newhit.distance < 2)
+                {
+                    displayIcon.icon.gameObject.SetActive(true);
+
+                    if (holdingNum > 0 || counterHoldingNum > 0)
+                    {
+                        displayIcon.icon.gameObject.SetActive(false);
+                    }
+                }
+
+                // Interactable types
+                if (obj.type == Interactables.NOTHING)
+                {
+                    DisableOutline(newhit);
+                }
+                if (obj.type == Interactables.COUNTER || obj.type == Interactables.PICKUP)
+                {
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Food"))
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.HOTPLATE)
+                {
+                    if (holdingNum > 0)
+                    {
+                        if (!empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") && !empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                        {
+                            DisableOutline(newhit);
+                        }
+                        if (empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") || empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                        {
+                            if (counterHoldingNum > 0)
+                            {
+                                if (empltySlot.transform.GetChild(0).tag != obj.emptySlot.transform.GetChild(0).tag)
+                                {
+                                    DisableOutline(newhit);
+                                }
+                                else if (holdingNum >= 2)
+                                {
+                                    DisableOutline(newhit);
+                                }
+                            }
+                            else if (!empltySlot.transform.GetChild(0).CompareTag("Raw Paddies"))
+                            {
+                                DisableOutline(newhit);
+                            }
+                        }
+                    }
+                }
+                if (obj.type == Interactables.FRIDGE)
+                {
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Raw Paddies"))
+                    {
+                        DisableOutline(newhit);
+
+                    }
+
+                    if (holdingNum >= 2)
+                    {
+                        DisableOutline(newhit);
+                    }
+
+                    /*if (holdingNum >= 2 || (holdingNum >= 1 && !obj.createObject.gameObject.CompareTag("Raw Paddies")))
+                    {
+                        DisableOutline(newhit);
+                    }*/
+                }
+                if (obj.type == Interactables.SERVICECOUNTER)
+                {
+                    if (holdingNum > 0)
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.BURGERSTATION)
+                {
+                    if (holdingNum > 0)
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.FRYSTATION)
+                {
+                    FryStation fryStation = newhit.transform.GetComponentInParent<FryStation>();
+
+                    if (fryStation != null)
+                    {
+                        if (fryStation.fryLvl > 1 && holdingNum > 0)
+                        {
+                            DisableOutline(newhit);
+                        }
+                    }
+
+                    /*if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Fry Tray") && holdingNum < 2)
+                    {
+                        DisableOutline(newhit);
+                    }*/
+                }
+                if (obj.type == Interactables.FRIER)
+                {
+                    Frier frier = newhit.transform.GetComponentInParent<Frier>();
+
+                    if (frier != null)
+                    {
+                        if (frier.isFull && holdingNum > 0)
+                        {
+                            DisableOutline(newhit);
+                        }
+                    }
+
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Raw Fries")) {
+                        DisableOutline(newhit);
+                    }
+                }
+            }
+        }
+        // If i do see anything deselect last object
+        else
+        {
+            // Deselect old Object if not looking at any object
+            if (hit.transform != null)
             {
                 Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
                 if (oldOutline != null)
                 {
                     oldOutline.enabled = false;
                 }
-            }
-        }
-
-        hit = newhit;
-
-
-        Outline outline = hit.transform.GetComponentInParent<Outline>();
-        if (outline != null)
-        {
-            if (hit.distance < 2)
-            {
-                outline.enabled = true;
-            }
-            else
-            {
-                outline.enabled = false;
             }
         }
     }
@@ -217,13 +441,20 @@ public class PlayerBehaviours1 : MonoBehaviour
             // Check if it's in reach
             if (hit.distance < 2)
             {
-                // Check if it's a counter
+                // Check if it's a Interactable
                 Interact obj = hit.transform.GetComponentInParent<Interact>();
 
                 if (obj != null)
                 {
                     int holdingNum = empltySlot.transform.childCount;
                     int counterHoldingNum = obj.emptySlot.transform.childCount;
+
+                    Pointer pointer = obj.GetComponent<Pointer>();
+
+                    if (pointer != null && (holdingNum == 0 && counterHoldingNum == 0))
+                    {
+                        pointer.pointer.gameObject.SetActive(true);
+                    }
 
                     if (obj.type == Interactables.COUNTER )
                     {
@@ -261,16 +492,15 @@ public class PlayerBehaviours1 : MonoBehaviour
                         // Checks that you have something to discard
                         if (holdingNum > 0)
                         {
-                            // Discard item in bin
-                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
-                            playersObject.transform.SetParent(obj.emptySlot.transform);
-                            playersObject.SetActive(false);
+                            Destroy(empltySlot.transform.GetChild(holdingNum - 1).gameObject);
                         }
                     }
 
                     else if (obj.type == Interactables.FRIER)
                     {
                         Frier frier = obj.GetComponent<Frier>();
+
+                        print(holdingNum);
 
                         if (frier != null)
                         {
@@ -287,6 +517,11 @@ public class PlayerBehaviours1 : MonoBehaviour
                                         newFryTray.transform.localPosition = Vector3.zero;
                                         newFryTray.transform.forward = transform.forward;
                                         frier.spotTaken[i] = false;
+
+                                        if (pointer != null)
+                                        {
+                                            pointer.pointer.gameObject.SetActive(false);
+                                        }
                                         break;
                                     }
                                 }
@@ -311,6 +546,24 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 }
                             }
                         }
+
+                        if (pointer != null)
+                        {
+                            bool isLoaded = false;
+
+                            for (int i = 0; i < 4; i++)
+                            {
+                                if (frier.spotTaken[i])
+                                {
+                                    isLoaded = true;
+                                }
+                            }
+
+                            if (isLoaded)
+                            {
+                                pointer.pointer.gameObject.SetActive(false);
+                            }
+                        }
                     }
 
                     else if (obj.type == Interactables.FRYSTATION)
@@ -319,6 +572,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                         if (fryStation != null)
                         {
+                            // Put fry in station
                             if (holdingNum > 0)
                             {
                                 GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
@@ -332,6 +586,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     }
                                 }
                             }
+                            // Take fries in station
                             else
                             {
                                 if (fryStation.fryLvl > 0)
@@ -341,7 +596,13 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     newFries.transform.localPosition = Vector3.zero;
                                     newFries.transform.forward = transform.forward;
 
+
                                     fryStation.fryLvl -= 0.25f;
+
+                                    if (pointer != null)
+                                    {
+                                        pointer.pointer.gameObject.SetActive(false);
+                                    }
                                 }
                             }
                         }
@@ -378,7 +639,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         BurgerStation burgerStation = obj.GetComponent<BurgerStation>();
 
-                        if (holdingNum == 0 && burgerStation != null )
+                        if (holdingNum == 0 && burgerStation != null)
                         {
                             if (burgerStation.paddyHeater.childCount > 0)
                             {
@@ -394,9 +655,10 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                     else if (obj.type == Interactables.HOTPLATE)
                     {
+
                         if (holdingNum > 0 && counterHoldingNum == 0)
                         {
-                            GameObject paddy = empltySlot.transform.GetChild(0).gameObject;
+                            GameObject paddy = empltySlot.transform.GetChild(holdingNum -1).gameObject;
                             if (paddy.CompareTag("Raw Paddies"))
                             {
                                 Destroy(paddy);
@@ -449,7 +711,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         ServiceCounter service = obj.GetComponent<ServiceCounter>();
 
-                        if (service != null)
+                        if (service != null && holdingNum == 0)
                         {
                             OrderMechanics.CreateNewOrder();
 
@@ -470,7 +732,6 @@ public class PlayerBehaviours1 : MonoBehaviour
                             // Can put objects on counters if they're a food
                             if (playersObject.CompareTag("Food"))
                             {
-                                print("swap hand with counter + Success");
                                 playersObject.transform.SetParent(obj.emptySlot.transform);
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
@@ -481,33 +742,18 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                     if (playersObject.name == order.name)
                                     {
-                                        print("Success");
-
                                         pickUp.RemoveDisplayOrder(i);
                                         OrderMechanics.orders.RemoveAt(i);
                                         Destroy(obj.emptySlot.transform.GetChild(0).gameObject);
                                         break;
                                     }
                                 }
-                                /*for (int i = 0; i < OrderMechanics.orders.Count; i++)
-                                {
-                                    if (playersObject.name == OrderMechanics.orders[i])
-                                    {
-                                        print("Success");
-
-                                        OrderMechanics.orders.RemoveAt(0);
-                                        pickUp.RemoveDisplayOrder(0);
-                                        break;
-                                    }
-                                }*/
                             }
                         }
 
                         // Take object from counter
                         else if (counterHoldingNum > 0 && holdingNum == 0)
                         {
-                            print("swap counter with hand");
-
                             GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
                             counterObject.transform.SetParent(empltySlot.transform);
                             counterObject.transform.localPosition = Vector3.zero;
