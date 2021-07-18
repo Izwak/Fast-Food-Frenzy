@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject customerPrefab;
 
-    //public PlayerBehaviours1 pb1;
+    public PlayerBehaviours1 pb1;
 
     public
 

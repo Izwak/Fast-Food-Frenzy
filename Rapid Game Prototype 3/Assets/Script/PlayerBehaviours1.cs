@@ -28,33 +28,36 @@ public class PlayerBehaviours1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tartgetPoint += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-        angle = Mathf.Atan2(tartgetPoint.x, tartgetPoint.y) * Mathf.Rad2Deg;
-
-        if (tartgetPoint.magnitude > speed)
+        if (isRunning)
         {
-            tartgetPoint = tartgetPoint.normalized * speed;
-        }
+            tartgetPoint += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
-        transform.rotation = Quaternion.Euler(0, angle, 0);
+            angle = Mathf.Atan2(tartgetPoint.x, tartgetPoint.y) * Mathf.Rad2Deg;
+
+            if (tartgetPoint.magnitude > speed)
+            {
+                tartgetPoint = tartgetPoint.normalized * speed;
+            }
+
+            body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
+            transform.rotation = Quaternion.Euler(0, angle, 0);
 
 
-        if (Input.GetButtonDown("Fire3"))
-        {
-            speed = 8;
-        }
-        if (Input.GetButtonUp("Fire3"))
-        {
-            speed = 5;
-        }
+            if (Input.GetButtonDown("Fire3"))
+            {
+                speed = 8;
+            }
+            if (Input.GetButtonUp("Fire3"))
+            {
+                speed = 5;
+            }
 
-        LookingAtObjects2();
+            LookingAtObjects2();
 
-        if (Input.GetButtonDown("Interact"))
-        {
-            Interactions();
+            if (Input.GetButtonDown("Interact"))
+            {
+                Interactions();
+            }
         }
     }
 
@@ -555,6 +558,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 newBurger.transform.forward = transform.forward;
 
                                 burgerStation.TakePaddy();
+                                isRunning = false;
 
                                 if (pointer != null)
                                 {

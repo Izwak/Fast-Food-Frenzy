@@ -146,7 +146,7 @@ public class Snap_Control : MonoBehaviour
             correctPos[i] = false;
             DObjects[i].transform.position = new Vector3(Random.RandomRange(100, 1820), Random.RandomRange(100, 920), 0);
             gameManager.gameState = GameState.GAMEPLAY;
-            
+            gameManager.pb1.isRunning = true;
             this.gameObject.SetActive(false);
         }
 
