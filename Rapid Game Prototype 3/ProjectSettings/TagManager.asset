@@ -13,6 +13,8 @@ TagManager:
   - Raw Fries
   - Raw Paddies
   - Cooked Paddies
+  - Cooked Fries
+  - Bad
   layers:
   - Default
   - TransparentFX

@@ -4,36 +4,30 @@ using UnityEngine;
 
 public class Frier : MonoBehaviour
 {
-    public GameObject[] FriesSpots = new GameObject[4];
+    public GameObject[] traySlots = new GameObject[4];
 
-    public bool[] spotTaken = new bool[4];
 
-    public bool isEmpty, isFull;
-
-    // Start is called before the first frame update
-    void Start()
+    public bool isFull ()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        isEmpty = true;
-        isFull = true;
 
         for (int i = 0; i < 4; i++)
         {
-            FriesSpots[i].SetActive(spotTaken[i]);
-
-            if (spotTaken[i])
+            if (traySlots[i].transform.childCount == 0)
             {
-                isEmpty = false;
-            }
-            if (!spotTaken[i])
-            {
-                isFull = false;
+                return false;
             }
         }
+        return true;
+    }
+    public bool isEmpty()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (traySlots[i].transform.childCount > 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

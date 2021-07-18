@@ -6,6 +6,8 @@ public class PlayerBehaviours1 : MonoBehaviour
 {
     public GameObject empltySlot;
 
+    public Transform target;
+
     Rigidbody body;
 
     float speed = 5;
@@ -36,10 +38,17 @@ public class PlayerBehaviours1 : MonoBehaviour
         body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
         transform.rotation = Quaternion.Euler(0, angle, 0);
 
-        //GameManager.Instance.test;
 
-        //OutlineCounter();
-        LookingAtObjects2();
+        if (Input.GetButtonDown("Fire3"))
+        {
+            speed = 8;
+        }
+        if (Input.GetButtonUp("Fire3"))
+        {
+            speed = 5;
+        }
+
+            LookingAtObjects2();
 
         if (Input.GetButtonDown("Interact"))
         {
@@ -87,183 +96,14 @@ public class PlayerBehaviours1 : MonoBehaviour
         }
     }
 
-    void LookingAtObjects()
-    {
-        RaycastHit newhit;
-
-        if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.forward, out newhit))
-        {
-            // Deselect old Object if look new object is different
-            if (hit.transform != null)
-            {
-                if (!newhit.transform.Equals(hit.transform))
-                {
-                    GameObject oldObj = hit.transform.parent.gameObject;
-
-                    if (oldObj != null)
-                    {
-                        Outline oldOutline = oldObj.GetComponent<Outline>();
-                        Pointer pointer = oldObj.GetComponent<Pointer>();
-                        DisplayIcon displayIcon = oldObj.GetComponent<DisplayIcon>();
-
-                        if (oldOutline != null)
-                        {
-                            oldOutline.enabled = false;
-                        }
-                        if (pointer != null)
-                        {
-                            pointer.pointer.gameObject.SetActive(false);
-                        }
-                        if (displayIcon != null)
-                        {
-                            displayIcon.icon.gameObject.SetActive(false);
-                        }
-                    }
-                }
-            }
-
-
-            Interact obj = newhit.transform.GetComponentInParent<Interact>();
-
-            if (obj != null)
-            {
-                DisplayIcon displayIcon = newhit.transform.GetComponentInParent<DisplayIcon>();
-
-                int holdingNum = empltySlot.transform.childCount;
-                int counterHoldingNum = obj.emptySlot.transform.childCount;
-
-                // Here is where u can right code 
-
-
-                // Choose whether or not to outline selected objects
-                if (obj.type == Interactables.BIN)
-                {
-                    RenderOutline(newhit);
-                }
-
-                else if (obj.type == Interactables.HOTPLATE)
-                {
-                    RenderOutline(newhit);
-                }
-
-                else if (obj.type == Interactables.BURGERSTATION)
-                {
-                    RenderOutline(newhit);
-
-                    if (displayIcon != null)
-                    {
-                        if (holdingNum == 0)
-                        {
-                            displayIcon.icon.gameObject.SetActive(true);
-                        }
-                        else
-                        {
-                            displayIcon.icon.gameObject.SetActive(false);
-                        }
-                    }
-                }
-
-                else if (holdingNum > 0)
-                {
-
-                    GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
-
-                    if (playersObject.CompareTag("Raw Fries") && obj.type == Interactables.FRIER)
-                    {
-                        Frier frier = obj.GetComponent<Frier>();
-                        if (frier != null)
-                        {
-                            if (!frier.isFull)
-                            RenderOutline(newhit);
-                        }
-                    }
-
-                    else if (playersObject.CompareTag("Fry Tray") && obj.type == Interactables.FRYSTATION)
-                    {
-                        FryStation fryStation = obj.GetComponent<FryStation>();
-
-                        if (fryStation != null)
-                        {
-                            if  (fryStation.fryLvl <= 1)
-                            {
-                                RenderOutline(newhit);
-                            }
-                        }
-                    }
-
-                    else if(playersObject.CompareTag("Cooked Paddies") && obj.type == Interactables.HEATER)
-                    {
-                        RenderOutline(newhit);
-                    }
-
-                    else if ((playersObject.CompareTag("Food")) && (obj.type == Interactables.COUNTER || obj.type == Interactables.PICKUP))
-                    {
-                        RenderOutline(newhit);
-                    }
-
-                    else if (obj.type == Interactables.HOTPLATE)
-                    {
-                        RenderOutline(newhit);
-                    }
-                }
-
-                // If not holding anything and any of these things
-                else if (obj.type == Interactables.COUNTER || obj.type == Interactables.FRIDGE || obj.type == Interactables.SERVICECOUNTER 
-                      || obj.type == Interactables.PICKUP)
-                {
-                    RenderOutline(newhit);
-                }
-
-                else if (obj.type == Interactables.HEATER)
-                {
-                    RenderOutline(newhit);
-                }
-
-                else if (obj.type == Interactables.FRIER)
-                {
-                    Frier frier = obj.GetComponent<Frier>();
-                    
-                    // Check if you can interact with frier
-                    if (frier != null)
-                    {
-                        if (!frier.isEmpty)
-                            RenderOutline(newhit);
-                    }
-                }
-
-                else if (obj.type == Interactables.FRYSTATION)
-                {
-                    FryStation fryStation = obj.GetComponent<FryStation>();
-
-                    // Check if you can interact with frier
-                    if (fryStation != null)
-                    {
-                        if (fryStation.fryLvl > 0)
-                            RenderOutline(newhit);
-                    }
-                }
-            }
-        }
-        else
-        {
-            // Deselect old Object if not looking at any object
-            if (hit.transform != null)
-            {
-                Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
-                if (oldOutline != null)
-                {
-                    oldOutline.enabled = false;
-                }
-            }
-        }
-    }
-
     void LookingAtObjects2()
     {
         RaycastHit newhit;
 
-        if (Physics.Raycast(transform.position - new Vector3(0, 1, 0), transform.forward, out newhit) )
+        if (Physics.Raycast(transform.position - new Vector3(0, 0.7f, 0), transform.forward, out newhit) )
         {
+            target.position = newhit.point;
+
             // Deselect old Object if look new object is different
             if (hit.transform != null)
             {
@@ -323,11 +163,17 @@ public class PlayerBehaviours1 : MonoBehaviour
                 {
                     if (holdingNum > 0)
                     {
-                        if (!empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") && !empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                        if (counterHoldingNum > 0 && obj.emptySlot.transform.GetChild(0).CompareTag("Raw Paddies"))
                         {
                             DisableOutline(newhit);
                         }
-                        if (empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") || empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                        if (!empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") && !empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") && 
+                            !empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
+                        {
+                            DisableOutline(newhit);
+                        }
+                        if (empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") || empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") || 
+                            empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
                         {
                             if (counterHoldingNum > 0)
                             {
@@ -391,10 +237,10 @@ public class PlayerBehaviours1 : MonoBehaviour
                         }
                     }
 
-                    /*if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Fry Tray") && holdingNum < 2)
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Cooked Fries"))
                     {
                         DisableOutline(newhit);
-                    }*/
+                    }
                 }
                 if (obj.type == Interactables.FRIER)
                 {
@@ -402,13 +248,24 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                     if (frier != null)
                     {
-                        if (frier.isFull && holdingNum > 0)
+                        if (frier.isFull() && holdingNum > 0)
                         {
                             DisableOutline(newhit);
                         }
                     }
 
                     if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Raw Fries")) {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.HEATER)
+                {
+                    if (counterHoldingNum >= 3)
+                    {
+                        DisableOutline(newhit);
+                    }
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                    {
                         DisableOutline(newhit);
                     }
                 }
@@ -436,7 +293,7 @@ public class PlayerBehaviours1 : MonoBehaviour
         RaycastHit hit;
 
         // Check if looking at an object
-        if (Physics.Raycast(body.position - new Vector3(0, 1, 0), transform.forward, out hit))
+        if (Physics.Raycast(body.position - new Vector3(0, 0.7f, 0), transform.forward, out hit))
         {
             // Check if it's in reach
             if (hit.distance < 2)
@@ -498,7 +355,65 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                     else if (obj.type == Interactables.FRIER)
                     {
+
                         Frier frier = obj.GetComponent<Frier>();
+
+                        if (frier != null)
+                        {
+                            // Take Fries out of frier
+                            if (holdingNum == 0)
+                            {
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    if (frier.traySlots[i].transform.childCount > 0 && !frier.traySlots[i].transform.GetChild(0).CompareTag("Raw Fries"))
+                                    {
+                                        GameObject friedFries = frier.traySlots[i].transform.GetChild(0).gameObject;
+
+                                        friedFries.transform.SetParent(empltySlot.transform);
+                                        friedFries.transform.localPosition = Vector3.zero;
+                                        friedFries.transform.localRotation = Quaternion.identity;
+
+                                        Cooking cooking = friedFries.GetComponent<Cooking>();
+
+                                        if (friedFries.CompareTag("Cooked Fries") && cooking != null) {
+                                            cooking.beingCooked = false;
+                                        }
+
+                                        if (pointer != null)
+                                        {
+                                            pointer.pointer.gameObject.SetActive(false);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            // Puting in the frier
+                            else if (holdingNum > 0)
+                            {
+                                GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+                                Cooking cooking = empltySlot.transform.GetChild(0).GetComponent<Cooking>();
+
+                                if (playersObject.CompareTag("Raw Fries") && cooking != null)
+                                {
+                                    for (int i = 0; i < 4; i++)
+                                    {
+                                        if (frier.traySlots[i].transform.childCount == 0)
+                                        {
+                                            playersObject.transform.SetParent(frier.traySlots[i].transform);
+                                            playersObject.transform.localPosition = Vector3.zero;
+                                            playersObject.transform.localRotation = Quaternion.identity;
+
+                                                cooking.beingCooked = true;
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                        /*Frier frier = obj.GetComponent<Frier>();
 
                         print(holdingNum);
 
@@ -509,14 +424,13 @@ public class PlayerBehaviours1 : MonoBehaviour
                             {
                                 for (int i = 0; i < 4; i++)
                                 {
-                                    if (frier.spotTaken[i])
+                                    if (frier.traySlots[i].transform.childCount == 0)
                                     {
                                         // Create new fry tray
                                         GameObject newFryTray = Instantiate(obj.createObject);
                                         newFryTray.transform.SetParent(empltySlot.transform);
                                         newFryTray.transform.localPosition = Vector3.zero;
                                         newFryTray.transform.forward = transform.forward;
-                                        frier.spotTaken[i] = false;
 
                                         if (pointer != null)
                                         {
@@ -545,21 +459,11 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     }
                                 }
                             }
-                        }
+                        }*/
 
                         if (pointer != null)
                         {
-                            bool isLoaded = false;
-
-                            for (int i = 0; i < 4; i++)
-                            {
-                                if (frier.spotTaken[i])
-                                {
-                                    isLoaded = true;
-                                }
-                            }
-
-                            if (isLoaded)
+                            if (!frier.isEmpty())
                             {
                                 pointer.pointer.gameObject.SetActive(false);
                             }
@@ -577,7 +481,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             {
                                 GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
 
-                                if (playersObject.CompareTag("Fry Tray"))
+                                if (playersObject.CompareTag("Cooked Fries"))
                                 {
                                     if (fryStation.fryLvl <= 1)
                                     {
@@ -649,43 +553,68 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 newBurger.transform.forward = transform.forward;
 
                                 burgerStation.TakePaddy();
+
+                                if (pointer != null)
+                                {
+                                    pointer.pointer.gameObject.SetActive(false);
+                                }
                             }
                         }
                     }
 
                     else if (obj.type == Interactables.HOTPLATE)
                     {
-
+                        // Put paddys on hotplate
                         if (holdingNum > 0 && counterHoldingNum == 0)
                         {
                             GameObject paddy = empltySlot.transform.GetChild(holdingNum -1).gameObject;
                             if (paddy.CompareTag("Raw Paddies"))
                             {
-                                Destroy(paddy);
+                                paddy.transform.SetParent(obj.emptySlot.transform);
+                                paddy.transform.localPosition = Vector3.zero;
+                                paddy.transform.localRotation = Quaternion.identity;
 
-                                GameObject cookedPaddy = Instantiate(obj.createObject);
-                                cookedPaddy.transform.SetParent(obj.emptySlot.transform);
-                                cookedPaddy.transform.localPosition = Vector3.zero;
-                                cookedPaddy.transform.rotation = Quaternion.identity;
+                                Cooking cooking = paddy.GetComponent<Cooking>();
+
+                                if (cooking != null)
+                                {
+                                    cooking.beingCooked = true;
+                                }
                             }
                         }
 
-                        else if (counterHoldingNum > 0 && holdingNum == 0)
+                        // Take paddys off hotplate
+                        else if (counterHoldingNum > 0 && holdingNum == 0 && !obj.emptySlot.transform.GetChild(0).CompareTag("Raw Paddies"))
                         {
                             Transform cookedPaddy = obj.emptySlot.transform.GetChild(0).transform;
                             cookedPaddy.SetParent(empltySlot.transform);
                             cookedPaddy.localPosition = Vector3.zero;
                             cookedPaddy.localRotation = Quaternion.identity;
+
+                            Cooking cooking = cookedPaddy.GetComponent<Cooking>();
+
+                            if (cooking != null)
+                            {
+                                cooking.beingCooked = false;
+                            }
                         }
+
                         // Can grab 2 paddies at a time
                         else if (counterHoldingNum > 0 && holdingNum == 1)
                         {
-                            if (empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                            if (empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") || empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
                             {
                                 Transform cookedPaddy = obj.emptySlot.transform.GetChild(0).transform;
                                 cookedPaddy.SetParent(empltySlot.transform);
                                 cookedPaddy.localPosition = new Vector3(0, 0.1f, 0);
                                 cookedPaddy.localRotation = Quaternion.identity;
+
+                                Cooking cooking = cookedPaddy.GetComponent<Cooking>();
+
+                                if (cooking != null)
+                                {
+                                    cooking.beingCooked = false;
+                                }
                             }
                         }
                     }
