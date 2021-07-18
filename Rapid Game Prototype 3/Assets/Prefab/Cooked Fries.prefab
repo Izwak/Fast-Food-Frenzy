@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1533252877868505038}
   - component: {fileID: 9189317104727972594}
   m_Layer: 0
-  m_Name: Raw Fries
-  m_TagString: Raw Fries
+  m_Name: Cooked Fries
+  m_TagString: Cooked Fries
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd3bdce55d9c5154b9932c0b11220d56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextStage: {fileID: 5103367691402085539, guid: 502e0b8ba975a54478c81c32a546e60d,
+  nextStage: {fileID: 5103367691402085539, guid: 8c8fc68b846e5f7478fedd94202908e8,
     type: 3}
   slider: {fileID: 1356916762447409328}
   beingCooked: 0
-  duration: 2
+  duration: 10
 --- !u!1 &5595705990554289420
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,7 +110,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 498d24a9835ad90468b62ba0befb093a, type: 2}
+  - {fileID: 2100000, guid: 1617cc94a939e444595e30493fe65ac4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -152,6 +152,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1533252877868505038}
     m_Modifications:
+    - target: {fileID: 2347981436519012887, guid: f5f9c884f472dcb4fb0c0506ffcdd298,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2347981436519012887, guid: f5f9c884f472dcb4fb0c0506ffcdd298,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2347981436519012887, guid: f5f9c884f472dcb4fb0c0506ffcdd298,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.4528302
+      objectReference: {fileID: 0}
+    - target: {fileID: 2347981436986908712, guid: f5f9c884f472dcb4fb0c0506ffcdd298,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.02525569
+      objectReference: {fileID: 0}
+    - target: {fileID: 2347981436986908712, guid: f5f9c884f472dcb4fb0c0506ffcdd298,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2347981436986908712, guid: f5f9c884f472dcb4fb0c0506ffcdd298,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.8509804
+      objectReference: {fileID: 0}
     - target: {fileID: 2347981436986908713, guid: f5f9c884f472dcb4fb0c0506ffcdd298,
         type: 3}
       propertyPath: m_AnchorMax.x

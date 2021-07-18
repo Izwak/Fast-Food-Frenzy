@@ -35,6 +35,18 @@ public class PickUp : MonoBehaviour
                 {
                     canvas.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * (i - 1), 500, 0);
                 }
+
+                if (canvas.transform.childCount > 7)
+                {
+                    if (i < index)
+                    {
+                        canvas.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (canvas.transform.childCount - 2)) * (i), 500, 0);
+                    }
+                    else
+                    {
+                        canvas.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (canvas.transform.childCount - 2)) * (i - 1), 500, 0);
+                    }
+                }
             }
         }
     }
