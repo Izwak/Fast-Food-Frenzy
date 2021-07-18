@@ -665,9 +665,9 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
 
-                                for (int i = 0; i < pickUp.canvas.transform.childCount; i++)
+                                for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
                                 {
-                                    GameObject order = pickUp.canvas.transform.GetChild(i).gameObject;
+                                    GameObject order = pickUp.orderMenu.transform.GetChild(i).gameObject;
 
                                     if (playersObject.name == order.name)
                                     {

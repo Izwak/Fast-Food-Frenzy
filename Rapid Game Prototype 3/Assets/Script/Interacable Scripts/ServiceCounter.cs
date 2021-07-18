@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ServiceCounter : MonoBehaviour
 {
-    public Canvas canvas;
+    public Transform orderMenu;
 
     public GameObject fryPrefab;
 
@@ -25,16 +25,16 @@ public class ServiceCounter : MonoBehaviour
 
     public void AddOrdersToScreen()
     {
-        GameObject newOrder = Instantiate(fryPrefab, canvas.transform);
+        GameObject newOrder = Instantiate(fryPrefab, orderMenu.transform);
 
-        newOrder.transform.localPosition = new Vector3(-1000 + 300 * (canvas.transform.childCount - 1), 500, 0);
+        newOrder.transform.localPosition = new Vector3(-1000 + 300 * (orderMenu.transform.childCount - 1), 500, 0);
         alert.SetActive(false);
 
-        if (canvas.transform.childCount > 7)
+        if (orderMenu.transform.childCount > 7)
         {
-            for (int i = 0; i < canvas.transform.childCount; i++)
+            for (int i = 0; i < orderMenu.transform.childCount; i++)
             {
-                canvas.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (canvas.transform.childCount - 1)) * (i) , 500, 0);
+                orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (orderMenu.transform.childCount - 1)) * (i) , 500, 0);
             }
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
-    public Canvas canvas;
+    public Transform orderMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -20,31 +20,31 @@ public class PickUp : MonoBehaviour
 
     public void RemoveDisplayOrder(int index)
     {
-        if (canvas.transform.childCount >= index)
+        if (orderMenu.transform.childCount >= index)
         {
-            Destroy(canvas.transform.GetChild(index).gameObject);
+            Destroy(orderMenu.transform.GetChild(index).gameObject);
 
             // Reset pos of orders
-            for (int i = 0; i < canvas.transform.childCount; i++)
+            for (int i = 0; i < orderMenu.transform.childCount; i++)
             {
                 if (i < index)
                 {
-                    canvas.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * i, 500, 0);
+                    orderMenu.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * i, 500, 0);
                 }
                 else 
                 {
-                    canvas.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * (i - 1), 500, 0);
+                    orderMenu.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * (i - 1), 500, 0);
                 }
 
-                if (canvas.transform.childCount > 7)
+                if (orderMenu.transform.childCount > 7)
                 {
                     if (i < index)
                     {
-                        canvas.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (canvas.transform.childCount - 2)) * (i), 500, 0);
+                        orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (orderMenu.transform.childCount - 2)) * (i), 500, 0);
                     }
                     else
                     {
-                        canvas.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (canvas.transform.childCount - 2)) * (i - 1), 500, 0);
+                        orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (orderMenu.transform.childCount - 2)) * (i - 1), 500, 0);
                     }
                 }
             }
