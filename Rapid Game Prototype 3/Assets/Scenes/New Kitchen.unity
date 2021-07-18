@@ -457,9 +457,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 105796998}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e64a67e2c12f5d4cb4230f900317720, type: 3}
+  m_Script: {fileID: 11500000, guid: 79f94dbf501755e4abdde512394cf20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragRectTrans: {fileID: 105796999}
 --- !u!114 &105797001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1545,6 +1546,8 @@ GameObject:
   - component: {fileID: 298565407}
   - component: {fileID: 298565406}
   - component: {fileID: 298565405}
+  - component: {fileID: 298565408}
+  - component: {fileID: 298565409}
   m_Layer: 5
   m_Name: Tomato
   m_TagString: Untagged
@@ -1621,6 +1624,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 298565403}
   m_CullTransparentMesh: 1
+--- !u!61 &298565408
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 298565403}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &298565409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 298565403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f94dbf501755e4abdde512394cf20a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragRectTrans: {fileID: 298565404}
 --- !u!4 &315283980 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6373140172459599160, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
@@ -2130,9 +2172,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 400301002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e64a67e2c12f5d4cb4230f900317720, type: 3}
+  m_Script: {fileID: 11500000, guid: 79f94dbf501755e4abdde512394cf20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragRectTrans: {fileID: 400301003}
 --- !u!114 &400301005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6813,6 +6856,7 @@ GameObject:
   - component: {fileID: 1109846566}
   - component: {fileID: 1109846565}
   - component: {fileID: 1109846564}
+  - component: {fileID: 1109846567}
   m_Layer: 5
   m_Name: Bottom Bun
   m_TagString: Untagged
@@ -6889,6 +6933,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109846562}
   m_CullTransparentMesh: 1
+--- !u!61 &1109846567
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109846562}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1126492026
 GameObject:
   m_ObjectHideFlags: 0
@@ -7873,6 +7943,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1364008786}
   - component: {fileID: 1364008787}
+  - component: {fileID: 1364008789}
+  - component: {fileID: 1364008788}
   m_Layer: 5
   m_Name: Minigame
   m_TagString: Untagged
@@ -7907,10 +7979,10 @@ RectTransform:
   m_Father: {fileID: 1059418449}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1364008787
 MonoBehaviour:
@@ -7928,6 +8000,44 @@ MonoBehaviour:
   DObjects: []
   correctPos: 000000000000
   SRange: 0.5
+--- !u!114 &1364008788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364008785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.34901962}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1364008789
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364008785}
+  m_CullTransparentMesh: 1
 --- !u!4 &1368034805 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6615149617026019804, guid: 998583917626e204ab3d4f94857489f6,
@@ -8834,9 +8944,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1531735434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e64a67e2c12f5d4cb4230f900317720, type: 3}
+  m_Script: {fileID: 11500000, guid: 79f94dbf501755e4abdde512394cf20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragRectTrans: {fileID: 1531735435}
 --- !u!114 &1531735437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9564,7 +9675,7 @@ GameObject:
   - component: {fileID: 1728005420}
   - component: {fileID: 1728005419}
   m_Layer: 5
-  m_Name: Cheese (1)
+  m_Name: Paddy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9598,9 +9709,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1728005417}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e64a67e2c12f5d4cb4230f900317720, type: 3}
+  m_Script: {fileID: 11500000, guid: 79f94dbf501755e4abdde512394cf20a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragRectTrans: {fileID: 1728005418}
 --- !u!114 &1728005420
 MonoBehaviour:
   m_ObjectHideFlags: 0
