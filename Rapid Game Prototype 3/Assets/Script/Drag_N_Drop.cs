@@ -27,6 +27,7 @@ public class Drag_N_Drop : MonoBehaviour
     private void OnMouseUp()
     {
         drag = false;
+
         dragEndCallBack(this);
     }
 }
