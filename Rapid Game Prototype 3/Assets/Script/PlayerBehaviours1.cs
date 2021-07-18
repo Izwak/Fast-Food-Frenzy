@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerBehaviours1 : MonoBehaviour
 {
+    public bool isRunning = true;
+
     public GameObject empltySlot;
 
     public Transform target;
@@ -48,14 +50,14 @@ public class PlayerBehaviours1 : MonoBehaviour
             speed = 5;
         }
 
-            LookingAtObjects2();
+        LookingAtObjects2();
 
         if (Input.GetButtonDown("Interact"))
         {
             Interactions();
         }
-
     }
+
     void RenderOutline(RaycastHit newhit)
     {
         if (hit.transform != null)

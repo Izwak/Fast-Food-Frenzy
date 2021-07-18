@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Snap_Control : MonoBehaviour
 {
+    public GameManager gameManager;
     public List<Transform> SPoints;
-    public List<Drag_N_Drop> DObjects;
+    public List<Transform> DObjects;
     public bool[] correctPos = new bool[6];
 
     public float SRange = 0.5f;
@@ -14,47 +15,61 @@ public class Snap_Control : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach(Drag_N_Drop drag in DObjects)
-        {
-            drag.dragEndCallBack = OnDragEnd;
-        }
 
         for (int i = 0; i < 6; i++) 
         {
             correctPos[i] = false;
         }
     }
-    private void OnDragEnd(Drag_N_Drop drag)
+
+    private void Update()
     {
-        float closeDist = -1;
-        Transform closeSPoint = null;
-
-        correctPos[getDragElement(drag)] = false;
-
-        foreach (Transform SPoint in SPoints)
+        if(won())
         {
-            float currentDist = Vector2.Distance(drag.transform.localPosition, SPoint.localPosition);
-            if(closeSPoint == null || currentDist < closeDist)
-            {
-                closeSPoint = SPoint;
-                closeDist = currentDist;
-            }
+            print("Has Won");
+
+            ResetBoard();
         }
 
-        if(closeSPoint != null && closeDist <= SRange)
+        for (int i = 0; i < 6; i++)
         {
-            drag.transform.localPosition = closeSPoint.localPosition;
+            DragWindow dragWin = DObjects[i].GetComponent<DragWindow>();
 
-            print("Click");
-
-            print("Correct Pos: " + elementsMatch(drag, closeSPoint));
-
-            if (elementsMatch(drag, closeSPoint))
+            // If not being dragged
+            if (dragWin != null)
             {
-                correctPos[getDragElement(drag)] = true;
-            }
+                // Check whether over points
+                if (!dragWin.beingDragged)
+                {
+                    float closestDis = 50;
+                    int closestElemnt = -1;
 
-            print("Has Won: " + won());
+                    for (int j = 0; j < 6; j++)
+                    {
+                        float distance = Vector3.Distance(DObjects[i].transform.position, SPoints[j].transform.position);
+
+                        if (closestDis > distance)
+                        {
+                            closestDis = distance;
+                            closestElemnt = j;
+                        }
+                    }
+
+                    if (closestElemnt != -1)
+                    {
+                        DObjects[i].transform.position = SPoints[closestElemnt].transform.position;
+
+                        if (i == closestElemnt)
+                        {
+                            correctPos[i] = true;
+                        }
+                    }
+                }
+                else
+                {
+                    correctPos[i] = false;
+                }
+            }
         }
     }
 
@@ -121,5 +136,20 @@ public class Snap_Control : MonoBehaviour
         }
 
         return result;
+    }
+
+    void ResetBoard()
+    {
+
+        for (int i = 0; i < 6; i++)
+        {
+            correctPos[i] = false;
+            DObjects[i].transform.position = new Vector3(Random.RandomRange(100, 1820), Random.RandomRange(100, 920), 0);
+            gameManager.gameState = GameState.GAMEPLAY;
+            
+            this.gameObject.SetActive(false);
+        }
+
+
     }
 }
