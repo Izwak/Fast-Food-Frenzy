@@ -12,7 +12,7 @@ public class BurgerStation : MonoBehaviour
     {
         Minigame.gameObject.SetActive(true);
 
-/*        if (paddyHeater.childCount > 0)
+        if (paddyHeater.childCount > 0)
         {
             GameObject quadPadObj = paddyHeater.transform.GetChild(paddyHeater.childCount - 1).gameObject;
 
@@ -22,6 +22,6 @@ public class BurgerStation : MonoBehaviour
             {
                 quadPad.TakePaddy();
             }
-        }*/
+        }
     }
 }

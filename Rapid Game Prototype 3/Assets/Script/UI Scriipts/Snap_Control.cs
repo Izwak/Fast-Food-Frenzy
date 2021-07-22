@@ -19,18 +19,67 @@ public class Snap_Control : MonoBehaviour
         for (int i = 0; i < 6; i++) 
         {
             correctPos[i] = false;
+
+            // Starting rand pos
+            DObjects[i].transform.position = new Vector3(Random.Range(100, 1820), Random.Range(100, 920), 0);
         }
     }
 
     private void Update()
     {
-        if(won())
+        if(Won())
         {
             print("Has Won");
 
             ResetBoard();
         }
 
+        DoTheThing();
+    }
+
+    void DoTheThing2()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            DragWindow dragRect = DObjects[i].GetComponent<DragWindow>();
+            Stackable stackable = DObjects[i].GetComponent<Stackable>();
+
+            if (dragRect != null && !dragRect.beingDragged)
+            {
+
+                float closestDis = 50;
+                int closestElemnt = -1;
+
+                for (int j = 0; j < 6; j++)
+                {
+                    DragWindow dragRect2 = DObjects[j].GetComponent<DragWindow>();
+
+                    float distance = Vector3.Distance(DObjects[i].transform.position, SPoints[j].transform.position);
+
+                     if (dragRect2 != null && !dragRect2.beingDragged)
+                    {
+                        if (stackable != null && i + 1 != j)
+                        {
+                            if (closestDis > distance && stackable.isActive1)
+                            {
+                                closestDis = distance;
+                                closestElemnt = j;
+                            }
+                        }
+                    }
+                    
+
+                    if (closestElemnt != -1)
+                    {
+                        DObjects[i].transform.position = SPoints[closestElemnt].transform.position;
+                    }
+                }
+            }
+        }
+    }
+
+    void DoTheThing()
+    {
         for (int i = 0; i < 6; i++)
         {
             DragWindow dragWin = DObjects[i].GetComponent<DragWindow>();
@@ -48,10 +97,15 @@ public class Snap_Control : MonoBehaviour
                     {
                         float distance = Vector3.Distance(DObjects[i].transform.position, SPoints[j].transform.position);
 
-                        if (closestDis > distance)
+                        Stackable stackable = DObjects[i].GetComponent<Stackable>();
+
+                        if (stackable != null && i + 1 != j)
                         {
-                            closestDis = distance;
-                            closestElemnt = j;
+                            if (closestDis > distance && stackable.isActive1)
+                            {
+                                closestDis = distance;
+                                closestElemnt = j;
+                            }
                         }
                     }
 
@@ -73,57 +127,7 @@ public class Snap_Control : MonoBehaviour
         }
     }
 
-    int getDragElement(Drag_N_Drop drag)
-    {
-        int dragElememt = -1;
-
-        for (int i = 0; i < 6; i++)
-        {
-            if (drag.transform == DObjects[i].transform)
-            {
-                dragElememt = i;
-            }
-        }
-
-        return dragElememt;
-    }
-
-
-    bool elementsMatch(Drag_N_Drop drag, Transform snap)
-    {
-        int dragElememt = -1;
-        int snapElememt = -1;
-
-        for (int i = 0; i < 6; i++)
-        {
-            if (drag.transform == DObjects[i].transform)
-            {
-                dragElememt = i;
-            }
-
-            if (snap == SPoints[i].transform)
-            {
-                snapElememt = i;
-            }
-        }
-
-
-        if (dragElememt == -1 || snapElememt == -1)
-        {
-            print("Lol error");
-        }
-
-        print("Element " + dragElememt + ", " + snapElememt);
-
-        if (dragElememt == snapElememt)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    bool won ()
+    bool Won ()
     {
         bool result = true;
 
@@ -144,7 +148,7 @@ public class Snap_Control : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             correctPos[i] = false;
-            DObjects[i].transform.position = new Vector3(Random.RandomRange(100, 1820), Random.RandomRange(100, 920), 0);
+            DObjects[i].transform.position = new Vector3(Random.Range(100, 1820), Random.Range(100, 920), 0);
             gameManager.gameState = GameState.GAMEPLAY;
             gameManager.pb1.isRunning = true;
             this.gameObject.SetActive(false);
