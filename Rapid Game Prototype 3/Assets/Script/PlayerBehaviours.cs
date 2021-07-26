@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerBehaviours : MonoBehaviour
 {
+    public bool isRunning = true;
+
     public GameObject empltySlot;
     Transform slotPos;
 
@@ -26,32 +28,34 @@ public class PlayerBehaviours : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tartgetPoint += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-        angle = Mathf.Atan2(tartgetPoint.x, tartgetPoint.y) * Mathf.Rad2Deg;
-
-        if (tartgetPoint.magnitude > speed)
+        if (isRunning)
         {
-            tartgetPoint = tartgetPoint.normalized * speed;
+            tartgetPoint += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+            angle = Mathf.Atan2(tartgetPoint.x, tartgetPoint.y) * Mathf.Rad2Deg;
+
+            if (tartgetPoint.magnitude > speed)
+            {
+                tartgetPoint = tartgetPoint.normalized * speed;
+            }
+
+            //Debug.Log("target " + tartgetPoint + " angle " + angle + " mag " + tartgetPoint.magnitude);
+
+            body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
+            transform.rotation = Quaternion.Euler(0, angle, 0);
+
+            OutlineCounter();
+
+            if (empltySlot.transform.childCount > 0)
+            {
+                empltySlot.transform.GetChild(0).localPosition = Vector3.zero;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                InteractCounter();
+            }
         }
-
-        //Debug.Log("target " + tartgetPoint + " angle " + angle + " mag " + tartgetPoint.magnitude);
-
-        body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
-        transform.rotation = Quaternion.Euler(0, angle, 0);
-
-        OutlineCounter();
-
-        if (empltySlot.transform.childCount > 0)
-        {
-            empltySlot.transform.GetChild(0).localPosition = Vector3.zero;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            InteractCounter();
-        }
-
     }
 
     void OutlineCounter()
