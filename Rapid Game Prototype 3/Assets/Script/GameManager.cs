@@ -12,28 +12,21 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
-    public bool paused;//if freezing time doesnt work then we can just use this
+    public bool isPaused;//if freezing time doesnt work then we can just use this
 
     public GameState gameState;
 
-
     public GameObject menuScreen;
+    public PlayerBehaviours1 player;
 
-    public GameObject customerPrefab;
+    public Transform OrderMenu;
 
-    public PlayerBehaviours1 pb1;
+    int tick = 0;
 
-    public
-
-    //for testing, can remove
-    float timer = 10;
-
-    GameObject customer;
     // Start is called before the first frame update
-
     void Start()
     {
-        paused = true;
+        isPaused = true;
         Time.timeScale = 0;// idk if this might break something, just here to stop most parts of the game from playing.
         //menuScreen.SetActive(true);
         //customer = Instantiate(customerPrefab, customerPrefab.GetComponent<CustomerController>().spawnPos.position, Quaternion.identity);
@@ -44,24 +37,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-/*        if (gameState == GameState.TITLE)
+        if (!isPaused)
         {
-            pb1.isRunning = false;
+
+            tick++;
         }
-        if (gameState == GameState.GAMEPLAY)
-        {
-            pb1.isRunning = true;
-        }
-        if (gameState == GameState.MINIGAME)
-        {
-            pb1.isRunning = false;
-        }*/
     }
 
     public void LoadGameScene()
     {
         Time.timeScale = 1;
         menuScreen.SetActive(false);
-        paused = false;
+        isPaused = false;
     }
 }

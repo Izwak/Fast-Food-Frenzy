@@ -5,6 +5,7 @@ using UnityEngine;
 public class PickUp : MonoBehaviour
 {
     public Transform orderMenu;
+    public Transform CustomerParent;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +37,7 @@ public class PickUp : MonoBehaviour
                     orderMenu.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * (i - 1), 500, 0);
                 }
 
-                if (orderMenu.transform.childCount > 7)
+                if (orderMenu.transform.childCount > 8)
                 {
                     if (i < index)
                     {

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9194769949133017237}
   - component: {fileID: 9194769949133017230}
   - component: {fileID: 2380695891688400268}
+  - component: {fileID: 7533011372413724462}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -123,7 +124,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9194769949133017236}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e99f09ebb0527e4984e8018b07bdf01, type: 3}
   m_Name: 
@@ -138,6 +139,27 @@ MonoBehaviour:
     type: 3}
   step: 1
   timer: 5
+--- !u!114 &7533011372413724462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9194769949133017236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c9e2c8002afb9748853ee572b44bb31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emptySlot: {fileID: 9194769950546008307}
+  pointsOfInterest:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  stage: 0
+  dis: 0
+  angle: 0
 --- !u!1 &9194769949637383945
 GameObject:
   m_ObjectHideFlags: 0

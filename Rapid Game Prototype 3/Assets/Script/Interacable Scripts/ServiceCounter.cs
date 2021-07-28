@@ -10,6 +10,8 @@ public class ServiceCounter : MonoBehaviour
 
     public GameObject alert;
 
+    public bool umHelloImACustomer;
+
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +22,14 @@ public class ServiceCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (umHelloImACustomer)
+        {
+            alert.SetActive(true);
+        }
+        else
+        {
+            alert.SetActive(false);
+        }
     }
 
     public void AddOrdersToScreen()
@@ -28,7 +37,8 @@ public class ServiceCounter : MonoBehaviour
         GameObject newOrder = Instantiate(fryPrefab, orderMenu.transform);
 
         newOrder.transform.localPosition = new Vector3(-1000 + 300 * (orderMenu.transform.childCount - 1), 500, 0);
-        alert.SetActive(false);
+
+        umHelloImACustomer = false;
 
         if (orderMenu.transform.childCount > 7)
         {

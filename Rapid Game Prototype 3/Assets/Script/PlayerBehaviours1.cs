@@ -39,7 +39,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                 tartgetPoint = tartgetPoint.normalized * speed;
             }
 
-            body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
+            body.velocity = new Vector3(Input.GetAxis("Horizontal") * speed, body.velocity.y, Input.GetAxis("Vertical") * speed);
             transform.rotation = Quaternion.Euler(0, angle, 0);
 
 
@@ -646,10 +646,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         ServiceCounter service = obj.GetComponent<ServiceCounter>();
 
-                        if (service != null && holdingNum == 0)
+                        if (service != null && holdingNum == 0 && service.umHelloImACustomer)
                         {
-                            OrderMechanics.CreateNewOrder();
-
                             service.AddOrdersToScreen();
                         }
                     }
@@ -658,10 +656,23 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         PickUp pickUp = obj.GetComponent<PickUp>();
 
+                        /*if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
+                        {
+                            if (pickUp.CustomerParent.childCount > 0)
+                            {
+                                CustomerController1 customer = pickUp.CustomerParent.GetChild(0).GetComponent<CustomerController1>();
+
+                                if (customer != null)
+                                {
+                                    customer.stage = CustomerStage.PICKUP;
+                                    customer.pointsOfInterest.Add(obj.gameObject);
+                                }
+                            }
+                        }*/
+
                         // Put object on counter
                         if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
                         {
-
                             GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
 
                             // Can put objects on counters if they're a food
@@ -671,15 +682,25 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
 
+                                // Check for food to match orders
                                 for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
                                 {
                                     GameObject order = pickUp.orderMenu.transform.GetChild(i).gameObject;
 
-                                    if (playersObject.name == order.name)
+                                    // If an order matches ur food
+                                    if (playersObject.name == order.name && pickUp.CustomerParent.childCount > 0)
                                     {
-                                        pickUp.RemoveDisplayOrder(i);
-                                        OrderMechanics.orders.RemoveAt(i);
-                                        Destroy(obj.emptySlot.transform.GetChild(0).gameObject);
+                                        //pickUp.RemoveDisplayOrder(i);
+                                        //Destroy(obj.emptySlot.transform.GetChild(0).gameObject);
+
+                                        CustomerController1 customer = pickUp.CustomerParent.GetChild(0).GetComponent<CustomerController1>();
+
+                                        if (customer != null && customer.stage == CustomerStage.WAITING)
+                                        {
+                                            customer.stage = CustomerStage.PICKUP;
+                                            customer.pointsOfInterest.Add(obj.gameObject);
+                                        }
+
                                         break;
                                     }
                                 }
@@ -694,6 +715,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             counterObject.transform.localPosition = Vector3.zero;
                             counterObject.transform.localRotation = Quaternion.identity;
                         }
+
                     }
                 }
             }
