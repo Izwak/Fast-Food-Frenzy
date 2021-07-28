@@ -6,7 +6,7 @@ public class ServiceCounter : MonoBehaviour
 {
     public Transform orderMenu;
 
-    public GameObject fryPrefab;
+    public OrderManager orderManager;
 
     public GameObject alert;
 
@@ -34,7 +34,7 @@ public class ServiceCounter : MonoBehaviour
 
     public void AddOrdersToScreen()
     {
-        GameObject newOrder = Instantiate(fryPrefab, orderMenu.transform);
+        GameObject newOrder = Instantiate(orderManager.NewOrderObj(), orderMenu.transform);
 
         newOrder.transform.localPosition = new Vector3(-1000 + 300 * (orderMenu.transform.childCount - 1), 500, 0);
 

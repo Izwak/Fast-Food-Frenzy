@@ -25,13 +25,44 @@ public class CustomerController1 : MonoBehaviour
     float speed = 3;
     public float dis;
     public float angle;
+    public int positionInLine;
 
     // Start is called before the first frame update
     void Start()
     {
         stage = CustomerStage.INLINE;
         body = GetComponent<Rigidbody>(); 
-        register = pointsOfInterest[1].GetComponent<ServiceCounter>();
+        register = pointsOfInterest[0].GetComponent<ServiceCounter>();
+    }
+
+    int FindPosInLine(GameObject PointOfInterest, int interestElement, CustomerStage stage) 
+    {
+        // Find customers position in the line
+        // Basically all this does is count the number of other customers before this customer that are also lining up behind the same point of interest
+        // the number of customers in front gives the position in line
+
+        // Since all customers should be the child of the same object by going through all the gameobjects in the parent you'll be running through all the customers
+
+        int linePos = 0;
+
+        for (int i = 0; i < transform.parent.childCount; i++)
+        {
+            GameObject customer = transform.parent.GetChild(i).gameObject;
+            CustomerController1 customerController = customer.GetComponent<CustomerController1>();
+
+            if (customer == this.gameObject)
+            {
+                return linePos;
+            }
+
+            // If the point of interest and the stage matches this customer that means they are in the same line and this customer is behind 1 
+            if (customerController != null && customerController.pointsOfInterest[interestElement] == PointOfInterest && customerController.stage == stage)
+            {
+                linePos++;
+            }
+        }
+
+        return linePos;
     }
 
     // Update is called once per frame
@@ -45,15 +76,23 @@ public class CustomerController1 : MonoBehaviour
         // When in line walk to register
         if (stage == CustomerStage.INLINE)
         {
-            body.velocity = transform.forward * speed; 
-            target = pointsOfInterest[1].transform.position + new Vector3(0, 0, -2); // Target to be infront of register
+            // Find customers position in the line
+            positionInLine = FindPosInLine(pointsOfInterest[0], 0, CustomerStage.ATCOUNTER) + FindPosInLine(pointsOfInterest[0], 0, CustomerStage.INLINE);
 
-            if (dis < 0.1f)
+            body.velocity = transform.forward * speed; 
+            target = pointsOfInterest[0].transform.position + new Vector3(0, 0, -2 - positionInLine * 1.5f); // Target to be infront of register but also stay in line
+
+            if (dis < 0.1f && positionInLine == 0)
             {
                 stage = CustomerStage.ATCOUNTER;
                 register.umHelloImACustomer = true;
             }
+            if (dis < 0.1f)
+            {
+                body.velocity = Vector3.zero;
+            }
         }
+
         // When at register wait for someone 2 take ur order
         if (stage == CustomerStage.ATCOUNTER)
         {
@@ -73,11 +112,15 @@ public class CustomerController1 : MonoBehaviour
                 stage = CustomerStage.INLINE;
             }
         }
+
         if (stage == CustomerStage.WAITING)
         {
-            target = pointsOfInterest[2].transform.position;
 
-            if (dis > 0.5f)
+            positionInLine = FindPosInLine(pointsOfInterest[2], 2, CustomerStage.WAITING);
+
+            target = pointsOfInterest[2].transform.position + new Vector3(0, 0, -positionInLine * 1.5f);
+
+            if (dis > 0.1f)
             {
                 body.velocity = transform.forward * speed;
             }
@@ -167,7 +210,14 @@ public class CustomerController1 : MonoBehaviour
         else if (stage == CustomerStage.LEAVING)
         {
             target = pointsOfInterest[3].transform.position;
+            dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.x, target.z));
+
             body.velocity = transform.forward * speed;
+
+            if (dis < 0.5f)
+            {
+                Destroy(this.gameObject);
+            }
         }
 
 /*        // Target should be just in front of a the register

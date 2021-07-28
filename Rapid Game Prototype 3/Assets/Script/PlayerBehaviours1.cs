@@ -693,13 +693,27 @@ public class PlayerBehaviours1 : MonoBehaviour
                                         //pickUp.RemoveDisplayOrder(i);
                                         //Destroy(obj.emptySlot.transform.GetChild(0).gameObject);
 
-                                        CustomerController1 customer = pickUp.CustomerParent.GetChild(0).GetComponent<CustomerController1>();
+                                        // Search for valid customer
+                                        for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
+                                        {
+                                            GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
+                                            CustomerController1 customerController = customer.GetComponent<CustomerController1>();
 
-                                        if (customer != null && customer.stage == CustomerStage.WAITING)
+                                            if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                            {
+                                                customerController.stage = CustomerStage.PICKUP;
+                                                customerController.pointsOfInterest.Add(obj.gameObject);
+                                                break;
+                                            }
+                                        }
+
+                                        //CustomerController1 customer = pickUp.CustomerParent.GetChild(0).GetComponent<CustomerController1>();
+
+                                        /*if (customer != null && customer.stage == CustomerStage.WAITING)
                                         {
                                             customer.stage = CustomerStage.PICKUP;
                                             customer.pointsOfInterest.Add(obj.gameObject);
-                                        }
+                                        }*/
 
                                         break;
                                     }
