@@ -2580,6 +2580,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1021854460955588738}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &443705248
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 443705249}
+  m_Layer: 0
+  m_Name: Car Leave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &443705249
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443705248}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10, y: 0, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 687811015}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &448315319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3838,6 +3868,9 @@ Transform:
   - {fileID: 537147818}
   - {fileID: 315685923}
   - {fileID: 1331335028}
+  - {fileID: 1983736305}
+  - {fileID: 1788564218}
+  - {fileID: 443705249}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6685,7 +6718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emptySlot: {fileID: 890259558}
   createObject: {fileID: 0}
-  type: 10
+  type: 11
 --- !u!114 &1066396672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6743,7 +6776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orderMenu: {fileID: 797896451}
-  CustomerParent: {fileID: 0}
+  CustomerParent: {fileID: 101461523}
 --- !u!1 &1070734902
 GameObject:
   m_ObjectHideFlags: 0
@@ -7633,13 +7666,24 @@ MonoBehaviour:
   customerParent: {fileID: 101461523}
   customerPrefab: {fileID: 9194769949133017236, guid: e8640065cdfeff941a363c2157b186b9,
     type: 3}
+  carPrefabs:
+  - {fileID: 2420337888723653524, guid: cabedb09b542c534aaec4c55f49fa4f9, type: 3}
+  - {fileID: 527288243162439622, guid: f8be73bc8bcd08740bf71572950a28c0, type: 3}
+  - {fileID: 7754584467163338337, guid: 9370cb718b5d45e448e9b89a46fcad65, type: 3}
+  - {fileID: 3936463888989645020, guid: d2c176811f2f05c4780f6647a852c00f, type: 3}
+  - {fileID: 3736017020968665771, guid: 08c87ba3b1ad0d748a88ec5fc00d5fd7, type: 3}
   pointsOfInterest:
   - {fileID: 537147817}
   - {fileID: 315685922}
   - {fileID: 1331335027}
+  carPointsOfInterest:
+  - {fileID: 1983736304}
+  - {fileID: 1788564217}
+  - {fileID: 443705248}
   registers:
   - {fileID: 44020049}
   - {fileID: 1811886270}
+  - {fileID: 1358837505}
 --- !u!114 &1207355769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10752,6 +10796,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1787264467}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1788564217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1788564218}
+  m_Layer: 0
+  m_Name: Car Go Zone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1788564218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788564217}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 687811015}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1790970139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11568,6 +11642,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65bc5afb42a26c942a5df98b62ecc8ec, type: 3}
+--- !u!1 &1983736304
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1983736305}
+  m_Layer: 0
+  m_Name: Car Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1983736305
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983736304}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10, y: 0, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 687811015}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1992719563 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5732611646055971396, guid: bf0f8b570a88c354bafd5af0b33f2167,

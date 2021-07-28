@@ -656,19 +656,59 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         PickUp pickUp = obj.GetComponent<PickUp>();
 
-                        /*if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
+                        // Put object on counter
+                        if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
                         {
-                            if (pickUp.CustomerParent.childCount > 0)
-                            {
-                                CustomerController1 customer = pickUp.CustomerParent.GetChild(0).GetComponent<CustomerController1>();
+                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
 
-                                if (customer != null)
+                            // Can put objects on counters if they're a food
+                            if (playersObject.CompareTag("Food"))
+                            {
+                                playersObject.transform.SetParent(obj.emptySlot.transform);
+                                playersObject.transform.localPosition = Vector3.zero;
+                                playersObject.transform.localRotation = Quaternion.identity;
+
+                                // Check for food to match orders
+                                for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
                                 {
-                                    customer.stage = CustomerStage.PICKUP;
-                                    customer.pointsOfInterest.Add(obj.gameObject);
+                                    GameObject order = pickUp.orderMenu.transform.GetChild(i).gameObject;
+
+                                    // If an order matches ur food
+                                    if (playersObject.name == order.name && pickUp.CustomerParent.childCount > 0)
+                                    {
+                                        // Search for valid customer
+                                        for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
+                                        {
+                                            GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
+                                            CustomerController1 customerController = customer.GetComponent<CustomerController1>();
+
+                                            if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                            {
+                                                customerController.stage = CustomerStage.PICKUP;
+                                                customerController.pointsOfInterest.Add(obj.gameObject);
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    }
                                 }
                             }
-                        }*/
+                        }
+
+                        // Take object from counter
+                        else if (counterHoldingNum > 0 && holdingNum == 0)
+                        {
+                            GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
+                            counterObject.transform.SetParent(empltySlot.transform);
+                            counterObject.transform.localPosition = Vector3.zero;
+                            counterObject.transform.localRotation = Quaternion.identity;
+                        }
+
+                    }
+
+                    else if (obj.type == Interactables.WINDOWCOUNTER)
+                    {
+                        PickUp pickUp = obj.GetComponent<PickUp>();
 
                         // Put object on counter
                         if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
@@ -690,31 +730,19 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     // If an order matches ur food
                                     if (playersObject.name == order.name && pickUp.CustomerParent.childCount > 0)
                                     {
-                                        //pickUp.RemoveDisplayOrder(i);
-                                        //Destroy(obj.emptySlot.transform.GetChild(0).gameObject);
-
                                         // Search for valid customer
                                         for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
                                         {
                                             GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
-                                            CustomerController1 customerController = customer.GetComponent<CustomerController1>();
+                                            CarController carController = customer.GetComponent<CarController>();
 
-                                            if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                            if (carController != null && carController.stage == CustomerStage.WAITING)
                                             {
-                                                customerController.stage = CustomerStage.PICKUP;
-                                                customerController.pointsOfInterest.Add(obj.gameObject);
+                                                carController.stage = CustomerStage.PICKUP;
+                                                carController.pointsOfInterest.Add(obj.gameObject);
                                                 break;
                                             }
                                         }
-
-                                        //CustomerController1 customer = pickUp.CustomerParent.GetChild(0).GetComponent<CustomerController1>();
-
-                                        /*if (customer != null && customer.stage == CustomerStage.WAITING)
-                                        {
-                                            customer.stage = CustomerStage.PICKUP;
-                                            customer.pointsOfInterest.Add(obj.gameObject);
-                                        }*/
-
                                         break;
                                     }
                                 }
@@ -729,7 +757,6 @@ public class PlayerBehaviours1 : MonoBehaviour
                             counterObject.transform.localPosition = Vector3.zero;
                             counterObject.transform.localRotation = Quaternion.identity;
                         }
-
                     }
                 }
             }

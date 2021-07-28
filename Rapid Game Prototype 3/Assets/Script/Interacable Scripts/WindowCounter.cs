@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUp : MonoBehaviour
+public class WindowCounter : MonoBehaviour
 {
     public Transform orderMenu;
     public Transform CustomerParent;
@@ -20,7 +20,7 @@ public class PickUp : MonoBehaviour
                 {
                     orderMenu.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * i, 500, 0);
                 }
-                else 
+                else
                 {
                     orderMenu.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * (i - 1), 500, 0);
                 }

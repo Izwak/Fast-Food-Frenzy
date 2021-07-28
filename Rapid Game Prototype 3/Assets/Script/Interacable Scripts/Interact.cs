@@ -14,6 +14,7 @@ public enum Interactables
     HEATER,
     NOTHING,
     PICKUP,
+    WINDOWCOUNTER,
 }
 public class Interact : MonoBehaviour
 {

@@ -185,15 +185,6 @@ public class CustomerController1 : MonoBehaviour
                                 break;
                             }
                         }
-
-
-                        /*GameObject item = counter.emptySlot.transform.GetChild(0).gameObject;
-
-                        item.transform.SetParent(emptySlot);
-                        item.transform.localPosition = Vector3.zero;
-                        item.transform.localRotation = Quaternion.identity;
-
-                        stage = CustomerStage.LEAVING;*/
                     }
                 }
 
