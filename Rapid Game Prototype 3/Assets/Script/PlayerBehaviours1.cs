@@ -104,9 +104,13 @@ public class PlayerBehaviours1 : MonoBehaviour
     void LookingAtObjects2()
     {
         RaycastHit newhit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(transform.position - new Vector3(0, 0.7f, 0), transform.forward, out newhit) )
+        //if (Physics.Raycast(transform.position - new Vector3(0, 0.7f, 0), transform.forward, out newhit))
+        if (Physics.Raycast(ray, out newhit, 1000))
         {
+            //if (newhit != null)
+                print(newhit.transform.name);
             target.position = newhit.point;
 
             // Deselect old Object if look new object is different
@@ -296,10 +300,15 @@ public class PlayerBehaviours1 : MonoBehaviour
         // Swap items In and out of counters
 
         RaycastHit hit;
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //if (Physics.Raycast(ray, out hit, 100))
 
         // Check if looking at an object
         if (Physics.Raycast(body.position - new Vector3(0, 0.7f, 0), transform.forward, out hit))
+        //if (Physics.Raycast(ray, out hit, 100))
         {
+            //Debug.Log(hit.transform.name);
+            //Debug.Log("hit");
             // Check if it's in reach
             if (hit.distance < 2)
             {
