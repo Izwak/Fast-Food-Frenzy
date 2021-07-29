@@ -43,8 +43,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;// idk if this might break something, just here to stop most parts of the game from playing.
         //menuScreen.SetActive(true);
         //customer = Instantiate(customerPrefab, customerPrefab.GetComponent<CustomerController>().spawnPos.position, Quaternion.identity);
-        slider.maxValue = 15;
-
+        slider.maxValue = 12;
     }
 
     // Update is called once per frame
@@ -65,12 +64,12 @@ public class GameManager : MonoBehaviour
 
                 if (score >= slider.maxValue)
                 {
-                    print("You Win");
+                    //print("You Win");
                     winScreen.SetActive(true);
                 }
                 else
                 {
-                    print("You Lose");
+                    //print("You Lose");
                     loseScreen.SetActive(true);
                 }
             }
@@ -87,10 +86,22 @@ public class GameManager : MonoBehaviour
         winScreen.SetActive(false);
         loseScreen.SetActive(false);
 
-        /*for (int i = 0; i < customers.transform.childCount; i++)
+        print("Customer Count: " + customers.transform.childCount);
+
+        /*if (customers.transform.childCount > 0)
+        {
+            customers.transform.GetChild(0);
+        }*/
+
+        for (int i = 0; i < customers.transform.childCount; i++)
         {
 
-            Destroy(customers.transform.GetChild(i));
+            Destroy(customers.transform.GetChild(i).gameObject);
+        }
+
+        /*for (int i = customers.transform.childCount; i > 0; i--)
+        {
+            Destroy(customers.transform.GetChild(i - 1).);
         }*/
     }
 

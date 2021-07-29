@@ -29,7 +29,7 @@ public class CustomerManager : MonoBehaviour
     {
         if (!gameManager.isPaused)
         {
-            if (customerParent.childCount < 10 && tick % 1000 == 0)
+            if (customerParent.childCount < 10 && tick % 1500 == 0)
             {
                 if (CountCars() < 2)
                 {
@@ -41,7 +41,7 @@ public class CustomerManager : MonoBehaviour
                 }
             }
 
-            tick ++;
+            tick +=2;
         }
     }
 
