@@ -354,6 +354,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                         // Checks that you have something to discard
                         if (holdingNum > 0)
                         {
+                            GameManager.score -= 2;
                             Destroy(empltySlot.transform.GetChild(holdingNum - 1).gameObject);
                         }
                     }

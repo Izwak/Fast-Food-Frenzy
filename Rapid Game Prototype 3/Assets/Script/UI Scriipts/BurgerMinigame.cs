@@ -50,7 +50,7 @@ public class BurgerMinigame : MonoBehaviour
 
         if (Won())
         {
-            print("Has Won");
+            //print("Has Won");
 
             ResetBoard();
         }

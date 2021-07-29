@@ -39,9 +39,6 @@ public class CustomerManager : MonoBehaviour
                 {
                     CreateCustomer(Random.Range(0, 2));
                 }
-
-
-                print("count" + customerParent.childCount);
             }
 
             tick ++;

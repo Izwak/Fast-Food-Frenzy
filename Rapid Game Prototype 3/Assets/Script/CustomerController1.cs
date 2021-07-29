@@ -129,6 +129,7 @@ public class CustomerController1 : MonoBehaviour
                 body.velocity = Vector3.zero;
             }
         }
+
         else if (stage == CustomerStage.PICKUP)
         {
             // K Heres what happens
@@ -173,7 +174,7 @@ public class CustomerController1 : MonoBehaviour
                         {
                             if (item.name == pickUp.orderMenu.GetChild(i).name)
                             {
-                                print(item.name);
+                                //print(item.name);
 
                                 item.transform.SetParent(emptySlot);
                                 item.transform.localPosition = Vector3.zero;
@@ -181,6 +182,8 @@ public class CustomerController1 : MonoBehaviour
 
                                 pickUp.RemoveDisplayOrder(i);
                                 stage = CustomerStage.LEAVING;
+
+                                GameManager.score++;
 
                                 break;
                             }
@@ -198,6 +201,7 @@ public class CustomerController1 : MonoBehaviour
                 }*/
             }
         }
+
         else if (stage == CustomerStage.LEAVING)
         {
             target = pointsOfInterest[3].transform.position;
@@ -208,6 +212,7 @@ public class CustomerController1 : MonoBehaviour
             if (dis < 0.5f)
             {
                 Destroy(this.gameObject);
+
             }
         }
 

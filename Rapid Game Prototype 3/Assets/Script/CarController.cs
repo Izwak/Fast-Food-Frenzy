@@ -68,7 +68,7 @@ public class CarController : MonoBehaviour
         {
             positionInLine = FindPosInLine(pointsOfInterest[0], 0, CustomerStage.ATCOUNTER) + FindPosInLine(pointsOfInterest[0], 0, CustomerStage.INLINE) + FindPosInLine(pointsOfInterest[0], 0, CustomerStage.WAITING);
             body.velocity = transform.forward * speed;
-            target = pointsOfInterest[2].transform.position + new Vector3(-5 * positionInLine, 0, 0); // Target to be infront of register but also stay in line
+            target = pointsOfInterest[2].transform.position + new Vector3(-10 * positionInLine, 0, 0); // Target to be infront of register but also stay in line
             dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.x, target.z));
 
 
@@ -118,6 +118,8 @@ public class CarController : MonoBehaviour
 
                         pickUp.RemoveDisplayOrder(i);
                         stage = CustomerStage.LEAVING;
+
+                        GameManager.score++;
 
                         break;
                     }
