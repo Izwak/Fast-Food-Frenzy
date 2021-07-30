@@ -14,22 +14,18 @@ public class CustomerManager : MonoBehaviour
     public List<GameObject> registers;
 
 
-    int tick = 0;
-
-    //public int customerCount = 0;
+    public int tick = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        if (!gameManager.isPaused)
+        if (gameManager.isRunning)
         {
-            if (customerParent.childCount < 10 && tick % 1500 == 0)
+            if (customerParent.childCount < 10 && tick % 180 == 0)
             {
                 if (CountCars() < 2)
                 {
@@ -40,9 +36,9 @@ public class CustomerManager : MonoBehaviour
                     CreateCustomer(Random.Range(0, 2));
                 }
             }
-
-            tick +=2;
         }
+
+        tick++;
     }
 
     int CountCars()

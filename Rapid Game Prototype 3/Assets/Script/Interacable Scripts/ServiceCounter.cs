@@ -36,15 +36,15 @@ public class ServiceCounter : MonoBehaviour
     {
         GameObject newOrder = Instantiate(orderManager.NewOrderObj(), orderMenu.transform);
 
-        newOrder.transform.localPosition = new Vector3(-1000 + 300 * (orderMenu.transform.childCount - 1), 500, 0);
+        newOrder.transform.localPosition = new Vector3(-1050 + 300 * (orderMenu.transform.childCount - 1), 500, 0);
 
         umHelloImACustomer = false;
 
-        if (orderMenu.transform.childCount > 7)
+        if (orderMenu.transform.childCount > 5)
         {
             for (int i = 0; i < orderMenu.transform.childCount; i++)
             {
-                orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (orderMenu.transform.childCount - 1)) * (i) , 500, 0);
+                orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1050 + (1200.0f / (orderMenu.transform.childCount - 1)) * (i) , 500, 0);
             }
         }
     }

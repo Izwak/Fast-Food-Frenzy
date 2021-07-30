@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerBehaviours1 : MonoBehaviour
 {
+    public GameManager gameManager;
     public bool isRunning = true;
 
     public GameObject empltySlot;
@@ -54,7 +55,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
             LookingAtObjects2();
 
-            if (Input.GetButtonDown("Interact"))
+            if (Input.GetButtonDown("Interact") && gameManager.isRunning)
             {
                 Interactions();
             }

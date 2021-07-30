@@ -14,102 +14,79 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
-    public bool isPaused;//if freezing time doesnt work then we can just use this
+    public static bool menuOnStart = true;
+    public bool isRunning;
 
     public GameState gameState;
 
     public PlayerBehaviours1 player;
 
     public GameObject menuScreen;
-    public GameObject gameOverlay;
-    public Transform OrderMenu;
+    public GameObject overlayScreen;
+    public GameObject orderScreen;
     public GameObject winScreen;
     public GameObject loseScreen;
     public GameObject customers;
 
-    public TextMeshProUGUI countdownText;
-    public Slider slider;
-
-    int tick = 0;
+    public int scoreGoal = 12;
 
     public float countdown = 100;
-    public static float score = 0;
-
+    public static float score = 0; // i might be cheating here but 2 lazy 2 not make static
 
     // Start is called before the first frame update
     void Start()
     {
-        isPaused = true;
-        Time.timeScale = 0;// idk if this might break something, just here to stop most parts of the game from playing.
-        //menuScreen.SetActive(true);
-        //customer = Instantiate(customerPrefab, customerPrefab.GetComponent<CustomerController>().spawnPos.position, Quaternion.identity);
-        slider.maxValue = 12;
+        if (menuOnStart)
+        {
+            menuScreen.SetActive(true);
+            isRunning = false;
+            Time.timeScale = 0;
+        }
+        else
+        {
+            isRunning = true;
+            overlayScreen.SetActive(true);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isPaused)
+        if (isRunning)
         {
-
-            tick++;
-
-            slider.value = score;
             countdown -= Time.deltaTime;
-            countdownText.text = Mathf.Round(countdown).ToString();
 
             if (countdown <= 0)
             {
-                gameOverlay.SetActive(false);
+                overlayScreen.SetActive(false);
+                isRunning = false;
+                orderScreen.SetActive(false);
 
-                if (score >= slider.maxValue)
+                if (score >= scoreGoal)
                 {
-                    //print("You Win");
                     winScreen.SetActive(true);
                 }
                 else
                 {
-                    //print("You Lose");
                     loseScreen.SetActive(true);
                 }
             }
-
-
         }
     }
 
-    public void Reset()
+
+    public void ResetToGameplay()
     {
         score = 0;
-        countdown = 100;
-        gameOverlay.SetActive(true);
-        winScreen.SetActive(false);
-        loseScreen.SetActive(false);
-
-        print("Customer Count: " + customers.transform.childCount);
-
-        /*if (customers.transform.childCount > 0)
-        {
-            customers.transform.GetChild(0);
-        }*/
-
-        for (int i = 0; i < customers.transform.childCount; i++)
-        {
-
-            Destroy(customers.transform.GetChild(i).gameObject);
-        }
-
-        /*for (int i = customers.transform.childCount; i > 0; i--)
-        {
-            Destroy(customers.transform.GetChild(i - 1).);
-        }*/
+        menuOnStart = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void LoadGameScene()
     {
         Time.timeScale = 1;
         menuScreen.SetActive(false);
-        gameOverlay.SetActive(true);
-        isPaused = false; 
+        overlayScreen.SetActive(true);
+        isRunning = true; 
     }
 }

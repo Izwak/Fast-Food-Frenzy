@@ -36,6 +36,11 @@ public class Cooking : MonoBehaviour
                 next.transform.localPosition = Vector3.zero;
                 next.transform.localRotation = Quaternion.identity;
 
+                if (next.name == "Paddy Burnt" || next.name == "Burnt Fries")
+                {
+                    GameManager.score -=2;
+                }
+
                 Cooking cooking = next.GetComponent<Cooking>();
                 if (cooking != null)
                 {
