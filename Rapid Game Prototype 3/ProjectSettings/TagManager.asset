@@ -15,14 +15,15 @@ TagManager:
   - Cooked Paddies
   - Cooked Fries
   - Bad
+  - Burnt Paddies
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Displays
   - Water
   - UI
-  - 
+  - Particals UI
   - 
   - 
   - 

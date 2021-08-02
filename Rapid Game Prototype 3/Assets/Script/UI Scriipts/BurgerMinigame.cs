@@ -10,8 +10,6 @@ public class BurgerMinigame : MonoBehaviour
 
     public bool[] correctPos;
 
-    public float SRange = 0.5f;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +21,7 @@ public class BurgerMinigame : MonoBehaviour
 
             // First point stays where it is
             // Starting rand pos
-            DObjects[i + 1].transform.position = new Vector3(Random.Range(100, 1820), Random.Range(100, 920), 0);
+            DObjects[i].transform.localPosition = new Vector3(Random.Range(100, 1820) - Screen.width / 2, Random.Range(100, 920) - Screen.width / 2, 0);
         }
     }
 
@@ -98,7 +96,7 @@ public class BurgerMinigame : MonoBehaviour
                 obj1.hasDropped = false; // Immediately switch it off again
 
 
-                float closestDis = 100;
+                float closestDis = 0.75f;
                 int closestElemnt = -1;
 
                 GameObject stackTop = obj1.gameObject;
@@ -178,7 +176,7 @@ public class BurgerMinigame : MonoBehaviour
             DObjects[i].SetParent(this.transform);
 
             if (i > 0) // Dont Rand first object
-                DObjects[i].transform.position = new Vector3(Random.Range(100, 1820), Random.Range(100, 920), 0);
+                DObjects[i].transform.localPosition = new Vector3(Random.Range(100, 1820) - Screen.width / 2, Random.Range(100, 920) - Screen.width / 2, 0);
 
             Stackable stackable = DObjects[i].GetComponent<Stackable>();
 
