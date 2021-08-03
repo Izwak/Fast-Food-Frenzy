@@ -21,11 +21,10 @@ public class Interact : MonoBehaviour
     public GameObject createObject;
     public Interactables type;
 
-
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
