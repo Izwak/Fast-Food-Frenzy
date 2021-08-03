@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9194769949133017234}
   - component: {fileID: 9194769949133017237}
   - component: {fileID: 9194769949133017230}
-  - component: {fileID: 2380695891688400268}
+  - component: {fileID: 7533011372413724462}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -116,7 +116,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &2380695891688400268
+--- !u!114 &7533011372413724462
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,19 +125,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 9194769949133017236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e99f09ebb0527e4984e8018b07bdf01, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c9e2c8002afb9748853ee572b44bb31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPos: {fileID: 3401273659413001185, guid: b29560f8c7e78a448a62d10b5f036517,
-    type: 3}
-  orderPos: {fileID: 9010010633588012715, guid: 3e6fb4efd608b904b84ce3b848b1e489,
-    type: 3}
-  waitingPos: {fileID: 3807167039661102242, guid: 876b48274ea116a44a4e00524bd3c61d,
-    type: 3}
-  leavingPos: {fileID: 3301694317524935734, guid: d689cf7df8e8f644ab91fcdf8785bcf8,
-    type: 3}
-  step: 1
-  timer: 5
+  emptySlot: {fileID: 9194769950546008307}
+  pointsOfInterest:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  stage: 0
+  dis: 0
+  angle: 0
+  positionInLine: 0
 --- !u!1 &9194769949637383945
 GameObject:
   m_ObjectHideFlags: 0

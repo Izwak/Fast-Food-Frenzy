@@ -10,8 +10,6 @@ public class BurgerMinigame : MonoBehaviour
 
     public bool[] correctPos;
 
-    public float SRange = 0.5f;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +21,7 @@ public class BurgerMinigame : MonoBehaviour
 
             // First point stays where it is
             // Starting rand pos
-            DObjects[i + 1].transform.position = new Vector3(Random.Range(100, 1820), Random.Range(100, 920), 0);
+            DObjects[i].transform.localPosition = new Vector3(Random.Range(100, 1820) - Screen.width / 2, Random.Range(100, 920) - Screen.width / 2, 0);
         }
     }
 
@@ -42,6 +40,7 @@ public class BurgerMinigame : MonoBehaviour
         //  - obj2's snapping point becomes obj1's 1
         //      - this can be broken by moving obj1
         //      - if obj1 has no snapping point then so does obj2
+        //  - obj1 cannot snap to a child of itself
 
         JustMoved();
 
@@ -49,7 +48,7 @@ public class BurgerMinigame : MonoBehaviour
 
         if (Won())
         {
-            print("Has Won");
+            //print("Has Won");
 
             ResetBoard();
         }
@@ -88,17 +87,25 @@ public class BurgerMinigame : MonoBehaviour
         // Check for has drops
         for (int i = 0; i < 7; i++)
         {
-            DragWindow dragRect1 = DObjects[i].GetComponent<DragWindow>();
+            DragWindow obj1 = DObjects[i].GetComponent<DragWindow>();
 
 
             // Only runs on has drops
-            if (dragRect1 != null && dragRect1.hasDropped)
+            if (obj1 != null && obj1.hasDropped)
             {
-                dragRect1.hasDropped = false; // Immediately switch it off again
+                obj1.hasDropped = false; // Immediately switch it off again
 
 
-                float closestDis = 100;
+                float closestDis = 0.75f;
                 int closestElemnt = -1;
+
+                GameObject stackTop = obj1.gameObject;
+
+                // Find the ingredient on the top of the stack
+                while (stackTop.transform.childCount > 1)
+                {
+                    stackTop = stackTop.transform.GetChild(1).gameObject;
+                }
 
                 // Check Obj 2
                 for (int j = 0; j < 7; j++)
@@ -110,8 +117,8 @@ public class BurgerMinigame : MonoBehaviour
                     {
                         float distance = Vector3.Distance(DObjects[i].position, stackable2.snappingPoint.position);
 
-
-                        if (distance < closestDis && i != j && stackable2.isActive1)
+                        // Dont try to stack on itself
+                        if (distance < closestDis && i != j && stackable2.isActive1 && DObjects[j].gameObject != stackTop)
                         {
                             closestDis = distance;
                             closestElemnt = j;
@@ -119,9 +126,9 @@ public class BurgerMinigame : MonoBehaviour
                     }
                 }
 
+                // If a closest element candidate is found
                 if (closestElemnt != -1)
                 {
-
                     Stackable closeStack = DObjects[closestElemnt].GetComponent<Stackable>();
 
                     if (closeStack != null)
@@ -133,7 +140,7 @@ public class BurgerMinigame : MonoBehaviour
                         closeStack.isActive1 = false;
                     }
 
-                    print("elements " + i + " " + closestElemnt);
+                    //print("elements " + i + " " + closestElemnt);
 
                     if (i == closestElemnt + 1)
                     {
@@ -144,6 +151,8 @@ public class BurgerMinigame : MonoBehaviour
             }
         }
     }
+
+
 
     bool Won()
     {
@@ -167,7 +176,7 @@ public class BurgerMinigame : MonoBehaviour
             DObjects[i].SetParent(this.transform);
 
             if (i > 0) // Dont Rand first object
-                DObjects[i].transform.position = new Vector3(Random.Range(100, 1820), Random.Range(100, 920), 0);
+                DObjects[i].transform.localPosition = new Vector3(Random.Range(100, 1820) - Screen.width / 2, Random.Range(100, 920) - Screen.width / 2, 0);
 
             Stackable stackable = DObjects[i].GetComponent<Stackable>();
 
@@ -183,7 +192,7 @@ public class BurgerMinigame : MonoBehaviour
         }
 
         gameManager.gameState = GameState.GAMEPLAY;
-        gameManager.pb1.isRunning = true;
+        gameManager.player.isRunning = true;
         this.gameObject.SetActive(false);
     }
 }

@@ -5,18 +5,7 @@ using UnityEngine;
 public class PickUp : MonoBehaviour
 {
     public Transform orderMenu;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Transform CustomerParent;
 
     public void RemoveDisplayOrder(int index)
     {
@@ -29,22 +18,22 @@ public class PickUp : MonoBehaviour
             {
                 if (i < index)
                 {
-                    orderMenu.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * i, 500, 0);
+                    orderMenu.transform.GetChild(i).localPosition = new Vector3(-1050 + 300 * i, 500, 0);
                 }
                 else 
                 {
-                    orderMenu.transform.GetChild(i).localPosition = new Vector3(-1000 + 300 * (i - 1), 500, 0);
+                    orderMenu.transform.GetChild(i).localPosition = new Vector3(-1050 + 300 * (i - 1), 500, 0);
                 }
 
-                if (orderMenu.transform.childCount > 7)
+                if (orderMenu.transform.childCount > 6)
                 {
                     if (i < index)
                     {
-                        orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (orderMenu.transform.childCount - 2)) * (i), 500, 0);
+                        orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1050 + (1200.0f / (orderMenu.transform.childCount - 2)) * (i), 500, 0);
                     }
                     else
                     {
-                        orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1000 + (2000.0f / (orderMenu.transform.childCount - 2)) * (i - 1), 500, 0);
+                        orderMenu.transform.GetChild(i).transform.localPosition = new Vector3(-1050 + (1200.0f / (orderMenu.transform.childCount - 2)) * (i - 1), 500, 0);
                     }
                 }
             }

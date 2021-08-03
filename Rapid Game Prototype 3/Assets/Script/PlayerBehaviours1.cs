@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerBehaviours1 : MonoBehaviour
 {
+    public GameManager gameManager;
     public bool isRunning = true;
 
     public GameObject empltySlot;
@@ -39,7 +40,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                 tartgetPoint = tartgetPoint.normalized * speed;
             }
 
-            body.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * speed;
+            body.velocity = new Vector3(Input.GetAxis("Horizontal") * speed, body.velocity.y, Input.GetAxis("Vertical") * speed);
             transform.rotation = Quaternion.Euler(0, angle, 0);
 
 
@@ -54,7 +55,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
             LookingAtObjects2();
 
-            if (Input.GetButtonDown("Interact"))
+            if (Input.GetButtonDown("Interact") && gameManager.isRunning)
             {
                 Interactions();
             }
@@ -363,6 +364,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                         // Checks that you have something to discard
                         if (holdingNum > 0)
                         {
+                            GameManager.score -= 2;
                             Destroy(empltySlot.transform.GetChild(holdingNum - 1).gameObject);
                         }
                     }
@@ -655,10 +657,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         ServiceCounter service = obj.GetComponent<ServiceCounter>();
 
-                        if (service != null && holdingNum == 0)
+                        if (service != null && holdingNum == 0 && service.umHelloImACustomer)
                         {
-                            OrderMechanics.CreateNewOrder();
-
                             service.AddOrdersToScreen();
                         }
                     }
@@ -670,7 +670,6 @@ public class PlayerBehaviours1 : MonoBehaviour
                         // Put object on counter
                         if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
                         {
-
                             GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
 
                             // Can put objects on counters if they're a food
@@ -680,15 +679,81 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
 
+                                // Check for food to match orders
                                 for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
                                 {
                                     GameObject order = pickUp.orderMenu.transform.GetChild(i).gameObject;
 
-                                    if (playersObject.name == order.name)
+                                    // If an order matches ur food
+                                    if (playersObject.name == order.name && pickUp.CustomerParent.childCount > 0)
                                     {
-                                        pickUp.RemoveDisplayOrder(i);
-                                        OrderMechanics.orders.RemoveAt(i);
-                                        Destroy(obj.emptySlot.transform.GetChild(0).gameObject);
+                                        // Search for valid customer
+                                        for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
+                                        {
+                                            GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
+                                            CustomerController1 customerController = customer.GetComponent<CustomerController1>();
+
+                                            if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                            {
+                                                customerController.stage = CustomerStage.PICKUP;
+                                                customerController.pointsOfInterest.Add(obj.gameObject);
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Take object from counter
+                        else if (counterHoldingNum > 0 && holdingNum == 0)
+                        {
+                            GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
+                            counterObject.transform.SetParent(empltySlot.transform);
+                            counterObject.transform.localPosition = Vector3.zero;
+                            counterObject.transform.localRotation = Quaternion.identity;
+                        }
+
+                    }
+
+                    else if (obj.type == Interactables.WINDOWCOUNTER)
+                    {
+                        PickUp pickUp = obj.GetComponent<PickUp>();
+
+                        // Put object on counter
+                        if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
+                        {
+                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+
+                            // Can put objects on counters if they're a food
+                            if (playersObject.CompareTag("Food"))
+                            {
+                                playersObject.transform.SetParent(obj.emptySlot.transform);
+                                playersObject.transform.localPosition = Vector3.zero;
+                                playersObject.transform.localRotation = Quaternion.identity;
+
+                                // Check for food to match orders
+                                for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
+                                {
+                                    GameObject order = pickUp.orderMenu.transform.GetChild(i).gameObject;
+
+                                    // If an order matches ur food
+                                    if (playersObject.name == order.name && pickUp.CustomerParent.childCount > 0)
+                                    {
+                                        // Search for valid customer
+                                        for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
+                                        {
+                                            GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
+                                            CarController carController = customer.GetComponent<CarController>();
+
+                                            if (carController != null && carController.stage == CustomerStage.WAITING)
+                                            {
+                                                carController.stage = CustomerStage.PICKUP;
+                                                carController.pointsOfInterest.Add(obj.gameObject);
+                                                break;
+                                            }
+                                        }
                                         break;
                                     }
                                 }

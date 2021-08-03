@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public enum GameState
 {
@@ -12,56 +14,79 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
-    public bool paused;//if freezing time doesnt work then we can just use this
+    public static bool menuOnStart = true;
+    public bool isRunning;
 
     public GameState gameState;
 
+    public PlayerBehaviours1 player;
 
     public GameObject menuScreen;
+    public GameObject overlayScreen;
+    public GameObject orderScreen;
+    public GameObject winScreen;
+    public GameObject loseScreen;
+    public GameObject customers;
 
-    public GameObject customerPrefab;
+    public int scoreGoal = 12;
 
-    public PlayerBehaviours1 pb1;
+    public float countdown = 100;
+    public static float score = 0; // i might be cheating here but 2 lazy 2 not make static
 
-    public
-
-    //for testing, can remove
-    float timer = 10;
-
-    GameObject customer;
     // Start is called before the first frame update
-
     void Start()
     {
-        paused = true;
-        Time.timeScale = 0;// idk if this might break something, just here to stop most parts of the game from playing.
-        //menuScreen.SetActive(true);
-        //customer = Instantiate(customerPrefab, customerPrefab.GetComponent<CustomerController>().spawnPos.position, Quaternion.identity);
-
-
+        if (menuOnStart)
+        {
+            menuScreen.SetActive(true);
+            isRunning = false;
+            Time.timeScale = 0;
+        }
+        else
+        {
+            isRunning = true;
+            overlayScreen.SetActive(true);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-/*        if (gameState == GameState.TITLE)
+        if (isRunning)
         {
-            pb1.isRunning = false;
+            countdown -= Time.deltaTime;
+
+            if (countdown <= 0)
+            {
+                overlayScreen.SetActive(false);
+                isRunning = false;
+                orderScreen.SetActive(false);
+
+                if (score >= scoreGoal)
+                {
+                    winScreen.SetActive(true);
+                }
+                else
+                {
+                    loseScreen.SetActive(true);
+                }
+            }
         }
-        if (gameState == GameState.GAMEPLAY)
-        {
-            pb1.isRunning = true;
-        }
-        if (gameState == GameState.MINIGAME)
-        {
-            pb1.isRunning = false;
-        }*/
+    }
+
+
+    public void ResetToGameplay()
+    {
+        score = 0;
+        menuOnStart = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void LoadGameScene()
     {
         Time.timeScale = 1;
         menuScreen.SetActive(false);
-        paused = false;
+        overlayScreen.SetActive(true);
+        isRunning = true; 
     }
 }
