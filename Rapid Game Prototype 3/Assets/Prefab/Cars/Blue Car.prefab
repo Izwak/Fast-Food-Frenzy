@@ -38,7 +38,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3936463888989645020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 001daebf222119645bf350af370204e2, type: 3}
+  m_Script: {fileID: 11500000, guid: 7eabba162fb0fc14d91d9edaed448598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pointsOfInterest:
@@ -115,7 +115,7 @@ PrefabInstance:
     - target: {fileID: 7666172239299087468, guid: c2122042d3617904387e81f77f9d136b,
         type: 3}
       propertyPath: m_Name
-      value: RTI_Midnight
+      value: Blue Car
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2122042d3617904387e81f77f9d136b, type: 3}

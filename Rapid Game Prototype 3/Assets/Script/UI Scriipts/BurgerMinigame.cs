@@ -192,7 +192,7 @@ public class BurgerMinigame : MonoBehaviour
         }
 
         gameManager.gameState = GameState.GAMEPLAY;
-        gameManager.player.isRunning = true;
+        gameManager.player1.isRunning = true;
         this.gameObject.SetActive(false);
     }
 }

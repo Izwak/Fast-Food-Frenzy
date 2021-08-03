@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     public GameState gameState;
 
-    public PlayerBehaviours1 player;
+    public PlayerBehaviours1 player1;
 
     public GameObject menuScreen;
     public GameObject overlayScreen;
@@ -87,6 +87,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         menuScreen.SetActive(false);
         overlayScreen.SetActive(true);
-        isRunning = true; 
+        isRunning = true;
     }
 }

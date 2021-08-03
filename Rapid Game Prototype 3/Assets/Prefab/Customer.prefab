@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9194769949133017234}
   - component: {fileID: 9194769949133017237}
   - component: {fileID: 9194769949133017230}
-  - component: {fileID: 7533011372413724462}
+  - component: {fileID: 6458032203678898958}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -116,7 +116,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &7533011372413724462
+--- !u!114 &6458032203678898958
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9194769949133017236}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c9e2c8002afb9748853ee572b44bb31, type: 3}
+  m_Script: {fileID: 11500000, guid: ed7c5b12a7dd94a4a943ab2305d955fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   emptySlot: {fileID: 9194769950546008307}

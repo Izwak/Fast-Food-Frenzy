@@ -30,7 +30,7 @@ public class GrillParticleController : MonoBehaviour
                 clone.SetActive(true);
             }
         }
-        if (emptySlot.transform.childCount < 0)
+        if (emptySlot.transform.childCount <= 0)
             clone.SetActive(false);
     }
 }

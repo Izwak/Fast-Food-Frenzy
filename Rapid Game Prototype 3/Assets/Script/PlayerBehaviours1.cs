@@ -53,7 +53,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                 speed = 5;
             }
 
-            LookingAtObjects2();
+            LookingAtObjects3();
 
             if (Input.GetButtonDown("Interact") && gameManager.isRunning)
             {
@@ -99,6 +99,198 @@ public class PlayerBehaviours1 : MonoBehaviour
         if (outline != null)
         {
             outline.enabled = false;
+        }
+    }
+
+
+    void LookingAtObjects3()
+    {
+        RaycastHit newhit;
+
+        if (Physics.Raycast(transform.position - new Vector3(0, 0.7f, 0), transform.forward, out newhit))
+        {
+            target.position = newhit.point;
+
+            // Deselect old Object if look new object is different
+            if (hit.transform != null)
+            {
+                GameObject oldObj = hit.transform.parent.gameObject;
+
+                if (!newhit.transform.Equals(hit.transform) && oldObj != null)
+                {
+                    Outline oldOutline = oldObj.GetComponent<Outline>();
+                    Pointer pointer = oldObj.GetComponent<Pointer>();
+                    DisplayIcon displayIcon = oldObj.GetComponent<DisplayIcon>();
+
+                    if (oldOutline != null)
+                        oldOutline.enabled = false;
+                    if (pointer != null)
+                        pointer.pointer.gameObject.SetActive(false);
+                    if (displayIcon != null)
+                        displayIcon.icon.gameObject.SetActive(false);
+                }
+            }
+
+            Interact obj = newhit.transform.GetComponentInParent<Interact>();
+
+            if (obj != null)
+            {
+                int holdingNum = empltySlot.transform.childCount;
+                int counterHoldingNum = obj.emptySlot.transform.childCount;
+
+                Pointer pointer = newhit.transform.GetComponentInParent<Pointer>();
+                DisplayIcon displayIcon = newhit.transform.GetComponentInParent<DisplayIcon>();
+
+                RenderOutline(newhit);
+
+                // If objects have a icon whether or not it's displays
+                if (displayIcon != null && newhit.distance < 2)
+                {
+                    displayIcon.icon.gameObject.SetActive(true);
+
+                    if (holdingNum > 0 || counterHoldingNum > 0)
+                    {
+                        displayIcon.icon.gameObject.SetActive(false);
+                    }
+                }
+
+                // Interactable types
+                if (obj.type == Interactables.NOTHING)
+                {
+                    DisableOutline(newhit);
+                }
+                if (obj.type == Interactables.COUNTER || obj.type == Interactables.PICKUP)
+                {
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Food"))
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.HOTPLATE)
+                {
+                    if (holdingNum > 0)
+                    {
+                        if (counterHoldingNum > 0 && obj.emptySlot.transform.GetChild(0).CompareTag("Raw Paddies"))
+                        {
+                            DisableOutline(newhit);
+                        }
+                        if (!empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") && !empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") &&
+                            !empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
+                        {
+                            DisableOutline(newhit);
+                        }
+                        if (empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") || empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") ||
+                            empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
+                        {
+                            if (counterHoldingNum > 0)
+                            {
+                                if (empltySlot.transform.GetChild(0).tag != obj.emptySlot.transform.GetChild(0).tag)
+                                {
+                                    DisableOutline(newhit);
+                                }
+                                else if (holdingNum >= 2)
+                                {
+                                    DisableOutline(newhit);
+                                }
+                            }
+                            else if (!empltySlot.transform.GetChild(0).CompareTag("Raw Paddies"))
+                            {
+                                DisableOutline(newhit);
+                            }
+                        }
+                    }
+                }
+                if (obj.type == Interactables.FRIDGE)
+                {
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Raw Paddies"))
+                    {
+                        DisableOutline(newhit);
+
+                    }
+
+                    if (holdingNum >= 2)
+                    {
+                        DisableOutline(newhit);
+                    }
+
+                    /*if (holdingNum >= 2 || (holdingNum >= 1 && !obj.createObject.gameObject.CompareTag("Raw Paddies")))
+                    {
+                        DisableOutline(newhit);
+                    }*/
+                }
+                if (obj.type == Interactables.SERVICECOUNTER)
+                {
+                    if (holdingNum > 0)
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.BURGERSTATION)
+                {
+                    if (holdingNum > 0)
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.FRYSTATION)
+                {
+                    FryStation fryStation = newhit.transform.GetComponentInParent<FryStation>();
+
+                    if (fryStation != null)
+                    {
+                        if (fryStation.fryLvl > 1 && holdingNum > 0)
+                        {
+                            DisableOutline(newhit);
+                        }
+                    }
+
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Cooked Fries"))
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.FRIER)
+                {
+                    Frier frier = newhit.transform.GetComponentInParent<Frier>();
+
+                    if (frier != null)
+                    {
+                        if (frier.isFull() && holdingNum > 0)
+                        {
+                            DisableOutline(newhit);
+                        }
+                    }
+
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Raw Fries"))
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+                if (obj.type == Interactables.HEATER)
+                {
+                    if (counterHoldingNum >= 3)
+                    {
+                        DisableOutline(newhit);
+                    }
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                    {
+                        DisableOutline(newhit);
+                    }
+                }
+            }
+        }
+        // If i do see anything deselect last object
+        else
+        {
+            // Deselect old Object if not looking at any object
+            if (hit.transform != null)
+            {
+                Outline oldOutline = hit.transform.GetComponentInParent<Outline>();
+                if (oldOutline != null)
+                {
+                    oldOutline.enabled = false;
+                }
+            }
         }
     }
 
