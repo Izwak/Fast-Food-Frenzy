@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerBehaviours1 : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class PlayerBehaviours1 : MonoBehaviour
 
     float speed = 5;
     float angle;
+
+    public float holdCoolDown = 0;
+    bool rewritethisbtr = false;
 
     RaycastHit hit;
 
@@ -35,6 +39,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
             angle = Mathf.Atan2(tartgetPoint.x, tartgetPoint.y) * Mathf.Rad2Deg;
 
+            // Sets a position for the player to be looking at makes turning less jerky
             if (tartgetPoint.magnitude > speed)
             {
                 tartgetPoint = tartgetPoint.normalized * speed;
@@ -42,7 +47,6 @@ public class PlayerBehaviours1 : MonoBehaviour
 
             body.velocity = new Vector3(Input.GetAxis("Horizontal") * speed, body.velocity.y, Input.GetAxis("Vertical") * speed);
             transform.rotation = Quaternion.Euler(0, angle, 0);
-
 
             if (Input.GetButtonDown("Fire3"))
             {
@@ -55,9 +59,26 @@ public class PlayerBehaviours1 : MonoBehaviour
 
             LookingAtObjects3();
 
-            if (Input.GetButtonDown("Interact") && gameManager.isRunning)
+            if (Input.GetButton("Interact") && gameManager.isRunning)
             {
-                Interactions();
+                holdCoolDown += Time.deltaTime;
+
+                if (holdCoolDown >= 0.3 && !rewritethisbtr)
+                {
+                    print("Held");
+                    HoldInteractions();
+                    rewritethisbtr = true;
+                }
+            }
+            if (Input.GetButtonUp("Interact") && gameManager.isRunning)
+            {
+                if (holdCoolDown < 0.3)
+                {
+                    Interactions();
+                }
+
+                holdCoolDown = 0;
+                rewritethisbtr = false;
             }
         }
     }
@@ -128,6 +149,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                         pointer.pointer.gameObject.SetActive(false);
                     if (displayIcon != null)
                         displayIcon.icon.gameObject.SetActive(false);
+
+                    gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
                 }
             }
 
@@ -161,9 +184,52 @@ public class PlayerBehaviours1 : MonoBehaviour
                 }
                 if (obj.type == Interactables.COUNTER || obj.type == Interactables.PICKUP)
                 {
-                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Food"))
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Food") && !empltySlot.transform.GetChild(0).CompareTag("Tray"))
                     {
                         DisableOutline(newhit);
+                    }
+
+                    // When u can pick up tray display take tray tip
+                    if (counterHoldingNum > 0 && holdingNum == 0)
+                    {
+                        Tray tray = obj.emptySlot.transform.GetChild(0).GetComponent<Tray>();
+
+                        if (tray != null)
+                        {
+                            GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+
+                            overlay.waitThenDisplay("Hold Space to take tray");
+                        }
+                    }
+                    // When u can pick up tray display take tray tip
+                    else if (counterHoldingNum == 0 && holdingNum > 0)
+                    {
+                        Tray tray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
+
+                        if (tray != null)
+                        {
+                            GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+
+                            overlay.waitThenDisplay("Hold Space to place tray");
+                        }
+                    }
+                    else if (counterHoldingNum > 0 && holdingNum > 0)
+                    {
+
+                        Tray playerTray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
+                        Tray counterTray = obj.emptySlot.transform.GetChild(0).GetComponent<Tray>();
+
+                        if (playerTray != null && counterTray != null)
+                        {
+                            GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+
+                            Dispencer dispencer = obj.GetComponent<Dispencer>();
+
+                            if (dispencer != null && playerTray.emptySlot.transform.childCount + counterTray.emptySlot.transform.childCount == 0)
+                                overlay.waitThenDisplay("Hold Space to put back"); 
+                            else
+                                overlay.waitThenDisplay("Hold Space to swap tray");
+                        }
                     }
                 }
                 if (obj.type == Interactables.HOTPLATE)
@@ -212,11 +278,6 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         DisableOutline(newhit);
                     }
-
-                    /*if (holdingNum >= 2 || (holdingNum >= 1 && !obj.createObject.gameObject.CompareTag("Raw Paddies")))
-                    {
-                        DisableOutline(newhit);
-                    }*/
                 }
                 if (obj.type == Interactables.SERVICECOUNTER)
                 {
@@ -491,17 +552,11 @@ public class PlayerBehaviours1 : MonoBehaviour
     void Interactions()
     {
         // Swap items In and out of counters
-
         RaycastHit hit;
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //if (Physics.Raycast(ray, out hit, 100))
 
         // Check if looking at an object
         if (Physics.Raycast(body.position - new Vector3(0, 0.7f, 0), transform.forward, out hit))
-        //if (Physics.Raycast(ray, out hit, 100))
         {
-            //Debug.Log(hit.transform.name);
-            //Debug.Log("hit");
             // Check if it's in reach
             if (hit.distance < 2)
             {
@@ -522,10 +577,9 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                     if (obj.type == Interactables.COUNTER )
                     {
-                        // Swap object from hand to counter
+                        // Put object on counter
                         if (holdingNum > 0 && counterHoldingNum == 0)
                         {
-
                             GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
 
                             // Can put objects on counters if they're a food
@@ -536,18 +590,84 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
                             }
+                            // Put food from hand tray onto counter
+                            if (playersObject.CompareTag("Tray"))
+                            {
+                                Tray tray = playersObject.GetComponent<Tray>();
+                                if (tray != null && tray.emptySlot.transform.childCount > 0)
+                                {
+                                    //print("Put food from hand tray onto counter");
 
+                                    GameObject food = tray.emptySlot.transform.GetChild(tray.emptySlot.transform.childCount - 1).gameObject;
+
+                                    food.transform.SetParent(obj.emptySlot.transform);
+                                    food.transform.localPosition = Vector3.zero;
+                                    food.transform.localRotation = Quaternion.identity;
+                                }
+                            }
                         }
 
-                        // Swap object from counter to hand
+                        // Put object onto tray
+                        else if (holdingNum > 0 && counterHoldingNum == 1)
+                        {
+                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+                            GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
+
+                            if (playersObject != null && counterObject != null)
+                            {
+                                Tray counterTray = counterObject.GetComponent<Tray>();
+                                Tray handTray = playersObject.GetComponent<Tray>();
+
+                                // Put food from Counter Tray into hand
+                                if (counterTray != null && counterTray.emptySlot.transform.childCount < 4 && playersObject.CompareTag("Food"))
+                                {
+                                    //print("Put food from Counter Tray into hand");
+
+                                    playersObject.transform.SetParent(counterTray.emptySlot.transform);
+                                    playersObject.transform.localPosition = Vector3.zero;
+                                    playersObject.transform.localRotation = Quaternion.identity;
+                                }
+
+                                // Put food from hand tray onto counter
+                                if (handTray != null && handTray.emptySlot.transform.childCount < 4 && counterObject.CompareTag("Food"))
+                                {
+                                    //print("Put food from hand tray onto counter");
+
+                                    counterObject.transform.SetParent(handTray.emptySlot.transform);
+                                    counterObject.transform.localPosition = Vector3.zero;
+                                    counterObject.transform.localRotation = Quaternion.identity;
+                                }
+                            }
+                        }
+
+                        // Take object from Counter
                         else if (counterHoldingNum > 0 && holdingNum == 0)
                         {
-                            print("swap counter with hand");
-
                             GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
-                            counterObject.transform.SetParent(empltySlot.transform);
-                            counterObject.transform.localPosition = Vector3.zero;
-                            counterObject.transform.localRotation = Quaternion.identity;
+
+                            // Pick up Food
+                            if (!counterObject.CompareTag("Tray"))
+                            {
+                                counterObject.transform.SetParent(empltySlot.transform);
+                                counterObject.transform.localPosition = Vector3.zero;
+                                counterObject.transform.localRotation = Quaternion.identity;
+                            }
+                            // Pick up Food from Counter tray
+                            else
+                            {
+                                Tray tray = counterObject.GetComponent<Tray>();
+
+                                if (tray != null && tray.emptySlot.transform.childCount > 0)
+                                {
+                                    //print("Pick up Food from Counter tray");
+
+                                    GameObject trayObject = tray.emptySlot.transform.GetChild(tray.emptySlot.transform.childCount - 1).gameObject;
+
+                                    trayObject.transform.SetParent(empltySlot.transform);
+                                    trayObject.transform.localPosition = Vector3.zero;
+                                    trayObject.transform.localRotation = Quaternion.identity;
+                                }
+                            }
                         }
                     }
 
@@ -556,9 +676,29 @@ public class PlayerBehaviours1 : MonoBehaviour
                         // Checks that you have something to discard
                         if (holdingNum > 0)
                         {
-                            GameManager.score -= 2;
-                            Destroy(empltySlot.transform.GetChild(holdingNum - 1).gameObject);
+                            GameObject playerObj = empltySlot.transform.GetChild(holdingNum - 1).gameObject;
+                            Tray tray = playerObj.GetComponent<Tray>();
+
+                            // If holding tray dont throw in bin
+                            if (tray != null)
+                            {
+                                int trayNum = tray.emptySlot.transform.childCount;
+
+                                // If the tray has food on it throw that in bin
+                                if (trayNum > 0)
+                                {
+                                    GameManager.score -= 1;
+                                    Destroy(tray.emptySlot.transform.GetChild(trayNum - 1).gameObject);
+                                }
+                            }
+                            // If not a tray throw in bin
+                            else
+                            {
+                                GameManager.score -= 1;
+                                Destroy(playerObj);
+                            }
                         }
+
                     }
 
                     else if (obj.type == Interactables.FRIER)
@@ -909,7 +1049,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                     }
 
-                    else if (obj.type == Interactables.WINDOWCOUNTER)
+                    else if (obj.type == Interactables.WINDOWPICKUP)
                     {
                         PickUp pickUp = obj.GetComponent<PickUp>();
 
@@ -959,6 +1099,149 @@ public class PlayerBehaviours1 : MonoBehaviour
                             counterObject.transform.SetParent(empltySlot.transform);
                             counterObject.transform.localPosition = Vector3.zero;
                             counterObject.transform.localRotation = Quaternion.identity;
+                        }
+                    }
+
+                    else if (obj.type == Interactables.TRAYDISPENCER)
+                    {
+                        if (counterHoldingNum > 0)
+                        {
+                            Tray tray = obj.emptySlot.transform.GetChild(0).GetComponent<Tray>();
+
+                            if (tray != null)
+                            {
+                                int trayNum = tray.emptySlot.transform.childCount;
+
+                                // Put item onto tray
+                                if (holdingNum > 0 && trayNum < 4)
+                                {
+                                    GameObject playersObj = empltySlot.transform.GetChild(0).gameObject;
+
+                                    // Can put objects on tray if they're a food
+                                    if (playersObj.CompareTag("Food"))
+                                    {
+                                        //print("Food put on tray");
+                                        playersObj.transform.SetParent(tray.emptySlot.transform);
+                                        playersObj.transform.localPosition = Vector3.zero;
+                                        playersObj.transform.localRotation = Quaternion.identity;
+                                    }
+                                }
+
+                                // Take item from tray
+                                else if (trayNum > 0 && holdingNum == 0)
+                                {
+                                    //print("Food taken from tray");
+
+                                    GameObject trayObj = tray.emptySlot.transform.GetChild(trayNum - 1).gameObject;
+                                    trayObj.transform.SetParent(empltySlot.transform);
+                                    trayObj.transform.localPosition = Vector3.zero;
+                                    trayObj.transform.localRotation = Quaternion.identity;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void HoldInteractions()
+    {
+        RaycastHit hit;
+
+        // Check if looking at an object
+        if (Physics.Raycast(body.position - new Vector3(0, 0.7f, 0), transform.forward, out hit))
+        //if (Physics.Raycast(ray, out hit, 100))
+        {
+            // Check if it's in reach
+            if (hit.distance < 2)
+            {
+                // Check if it's a Interactable
+                Interact obj = hit.transform.GetComponentInParent<Interact>();
+
+                if (obj != null)
+                {
+                    int holdingNum = empltySlot.transform.childCount;
+                    int counterHoldingNum = obj.emptySlot.transform.childCount;
+                    
+                    if (obj.type == Interactables.COUNTER)
+                    {
+                        // Put tray on counter
+                        if (holdingNum > 0 && counterHoldingNum == 0)
+                        {
+                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+                            Tray tray = playersObject.GetComponent<Tray>();
+
+
+                            // Can put objects on counters if they're a food
+                            if (tray != null)
+                            {
+                                playersObject.transform.SetParent(obj.emptySlot.transform);
+                                playersObject.transform.localPosition = Vector3.zero;
+                                playersObject.transform.localRotation = Quaternion.identity;
+
+                                gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
+                            }
+                        }
+                        // Take tray from counter
+                        else if (holdingNum == 0 && counterHoldingNum > 0)
+                        {
+
+                            GameObject playersObject = obj.emptySlot.transform.GetChild(0).gameObject;
+                            Tray tray = playersObject.GetComponent<Tray>();
+
+                            if (tray != null)
+                            {
+                                playersObject.transform.SetParent(empltySlot.transform);
+                                playersObject.transform.localPosition = Vector3.zero;
+                                playersObject.transform.localRotation = Quaternion.identity;
+
+                                gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
+                            }
+                        }
+                        // Both player and counter have Trays
+                        else if (holdingNum > 0 && counterHoldingNum > 0)
+                        {
+                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+                            GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
+
+                            Tray playersTray = playersObject.GetComponent<Tray>();
+                            Tray counterTray = counterObject.GetComponent<Tray>();
+                            Dispencer dispencer = obj.GetComponent<Dispencer>();
+
+                            if (playersTray != null && counterTray != null)
+                            {
+                                // If its a dispence and neither trays have food on them put back in stack
+                                if (dispencer != null && playersTray.emptySlot.transform.childCount + counterTray.emptySlot.transform.childCount == 0)
+                                {
+                                    Destroy(playersTray.gameObject);
+                                }
+                                // Swap Trays (Put hand tray on counter put counter tray in hands)
+                                else
+                                {
+                                    playersObject.transform.SetParent(obj.emptySlot.transform);
+                                    playersObject.transform.localPosition = Vector3.zero;
+                                    playersObject.transform.localRotation = Quaternion.identity;
+                                    counterTray.transform.SetParent(empltySlot.transform);
+                                    counterTray.transform.localPosition = Vector3.zero;
+                                    counterTray.transform.localRotation = Quaternion.identity;
+                                }
+
+                                gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
+                            }
+                        }
+                    }
+
+                    else if (obj.type == Interactables.BIN)
+                    {
+                        // Put tray in bin
+                        if (holdingNum > 0)
+                        {
+                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+
+                            Destroy(playersObject);
+
+                            GameManager.score--;
                         }
                     }
                 }

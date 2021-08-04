@@ -12,8 +12,12 @@ public class GameOverlay : MonoBehaviour
     public Slider scoreNegative;
 
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI tipText;
 
     public int UrMum;
+
+    float tick;
+
 
     // Start is called before the first frame update
     void Start()
@@ -26,5 +30,22 @@ public class GameOverlay : MonoBehaviour
     {
         scoreSlider.value = GameManager.score;
         timerText.text = Mathf.Round(gameManager.countdown).ToString();
+    }
+    public void waitThenDisplay(string text)
+    {
+        tick += Time.deltaTime;
+
+        if (tick > .3)
+        {
+            tipText.gameObject.SetActive(true);
+            tipText.text = text;
+            tipText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = text;
+        }
+    }
+
+    public void hideTip()
+    {
+        tick = 0;
+        tipText.gameObject.SetActive(false);
     }
 }

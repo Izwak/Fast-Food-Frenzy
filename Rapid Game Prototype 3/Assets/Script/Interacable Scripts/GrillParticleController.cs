@@ -22,10 +22,10 @@ public class GrillParticleController : MonoBehaviour
     {
         if (emptySlot.transform.childCount > 0)
         {
-            print("yes patties");
+            //print("yes patties");
             if (emptySlot.transform.GetChild(0) != null)
             {
-                print("particles");
+                //print("particles");
                 //clone.transform.position = gameObject.transform.position;//so we can offset the position to be more correct
                 clone.SetActive(true);
             }

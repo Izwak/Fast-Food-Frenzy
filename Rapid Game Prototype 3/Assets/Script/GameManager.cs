@@ -39,13 +39,15 @@ public class GameManager : MonoBehaviour
         if (menuOnStart)
         {
             menuScreen.SetActive(true);
+            overlayScreen.SetActive(false);
             isRunning = false;
             Time.timeScale = 0;
         }
         else
         {
-            isRunning = true;
+            menuScreen.SetActive(false);
             overlayScreen.SetActive(true);
+            isRunning = true;
         }
     }
 
