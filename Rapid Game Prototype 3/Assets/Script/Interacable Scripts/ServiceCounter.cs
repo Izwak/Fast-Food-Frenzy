@@ -34,9 +34,12 @@ public class ServiceCounter : MonoBehaviour
 
     public void AddOrdersToScreen()
     {
-        GameObject newOrder = Instantiate(orderManager.NewOrderObj(), orderMenu.transform);
+        //GameObject newOrder = Instantiate(orderManager.NewOrderObj(), orderMenu.transform);
+        GameObject newOrder = orderManager.NewOrderObj();
 
+        newOrder.transform.SetParent(orderMenu.transform);
         newOrder.transform.localPosition = new Vector3(-1050 + 300 * (orderMenu.transform.childCount - 1), 500, 0);
+        newOrder.transform.localScale = new Vector3(1, 1, 1);
 
         umHelloImACustomer = false;
 

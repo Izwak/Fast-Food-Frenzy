@@ -18,9 +18,9 @@ public class Dispencer : MonoBehaviour
         if (interact != null && interact.emptySlot.transform.childCount == 0)
         {
             GameObject newTray = Instantiate(interact.createObject);
+            newTray.transform.SetParent(interact.emptySlot.transform);
             newTray.transform.localPosition = Vector3.zero;
             newTray.transform.localRotation = Quaternion.identity;
-            newTray.transform.SetParent(interact.emptySlot.transform);
         }
     }
 }

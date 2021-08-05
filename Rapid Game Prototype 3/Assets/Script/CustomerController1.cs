@@ -172,21 +172,16 @@ public class CustomerController1 : MonoBehaviour
                         // Check if there is an order in the menu that matches the 1 on the counter
                         for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
                         {
-                            if (item.name == pickUp.orderMenu.GetChild(i).name)
-                            {
-                                //print(item.name);
+                            item.transform.SetParent(emptySlot);
+                            item.transform.localPosition = Vector3.zero;
+                            item.transform.localRotation = Quaternion.identity;
 
-                                item.transform.SetParent(emptySlot);
-                                item.transform.localPosition = Vector3.zero;
-                                item.transform.localRotation = Quaternion.identity;
+                            //pickUp.RemoveDisplayOrder(i);
+                            stage = CustomerStage.LEAVING;
 
-                                pickUp.RemoveDisplayOrder(i);
-                                stage = CustomerStage.LEAVING;
+                            GameManager.score++;
 
-                                GameManager.score++;
-
-                                break;
-                            }
+                            break;
                         }
                     }
                 }

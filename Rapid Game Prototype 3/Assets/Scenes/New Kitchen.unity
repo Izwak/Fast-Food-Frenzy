@@ -3262,6 +3262,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c112c5c0b382c5e4382cdb94be18932e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HappyMeal: {fileID: 7417756605722995068, guid: 0c569681395265e47a2de3a00cc0e737,
+    type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
 --- !u!1 &418676386
@@ -4427,7 +4429,7 @@ PrefabInstance:
     - target: {fileID: 8326808376122378344, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
       propertyPath: type
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d748c8e7920a21e46aee85ee5f7e4d3a, type: 3}
@@ -8484,6 +8486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c112c5c0b382c5e4382cdb94be18932e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HappyMeal: {fileID: 0}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
 --- !u!1 &1070734902
@@ -14626,9 +14629,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orders:
-  - {fileID: 6928343357131188425, guid: 2ec3e93ea43f0da4fb67cfee593e51d3, type: 3}
-  - {fileID: 8227029928181951403, guid: f0169d4388775a0448f8c4124dfde407, type: 3}
-  - {fileID: 7830107906889900265, guid: cb8200b1c0ed13a4d8e29444cd0d5405, type: 3}
+  - {fileID: 7706008145847301483, guid: 2c5aa2d3b6b1c9a40aec7ed45e533c7a, type: 3}
+  - {fileID: 1103235839320479095, guid: 029f1d6c4664e3145b21dc71c1cb3f55, type: 3}
+  - {fileID: 5664143595251253034, guid: bd3e8f8135ad45841b7abac3f52a0c78, type: 3}
+  - {fileID: 6807306384298915934, guid: b68c5b29379f0054ea1c99da00d9d1be, type: 3}
 --- !u!4 &1207815266 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3518397648946928415, guid: 3ad57cfcc17652b4884af0a8d79d34cf,
@@ -15423,7 +15427,7 @@ PrefabInstance:
     - target: {fileID: 8326808376122378344, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
       propertyPath: type
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d748c8e7920a21e46aee85ee5f7e4d3a, type: 3}
@@ -16259,6 +16263,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c112c5c0b382c5e4382cdb94be18932e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HappyMeal: {fileID: 7417756605722995068, guid: 0c569681395265e47a2de3a00cc0e737,
+    type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
 --- !u!1 &1460112056 stripped
@@ -16373,7 +16379,7 @@ PrefabInstance:
     - target: {fileID: 8326808376122378344, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
       propertyPath: type
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d748c8e7920a21e46aee85ee5f7e4d3a, type: 3}
@@ -19285,6 +19291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c112c5c0b382c5e4382cdb94be18932e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HappyMeal: {fileID: 7417756605722995068, guid: 0c569681395265e47a2de3a00cc0e737,
+    type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
 --- !u!1 &1842149403 stripped

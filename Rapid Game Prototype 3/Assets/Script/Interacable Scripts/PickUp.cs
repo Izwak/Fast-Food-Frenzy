@@ -4,10 +4,47 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
+    public GameObject HappyMeal;
+
     public Transform orderMenu;
     public Transform CustomerParent;
 
+    public int DoesOrderMatch(GameObject orderObj)
+    {
+        for (int i = 0; i < orderMenu.transform.childCount; i++)
+        {
+            GameObject order = orderMenu.transform.GetChild(i).gameObject;
+            int orderSize = order.transform.childCount;
+
+            if (orderObj.CompareTag("Food") && orderSize == 1)
+            {
+                //print(orderObj.name + " =? " + order.transform.GetChild(0).name);
+
+                if (orderObj.name == order.transform.GetChild(0).name)
+                {
+                    return i;
+                }
+            }
+            else if (orderObj.CompareTag("Tray"))
+            {
+                //for ()
+            }
+        }
+
+
+
+        return -1;
+    }
+
     public void RemoveDisplayOrder(int index)
+    {
+        if (orderMenu.transform.childCount >= index)
+        {
+
+        }
+    }
+
+    public void RemoveDisplayOrder2(int index)
     {
         if (orderMenu.transform.childCount >= index)
         {

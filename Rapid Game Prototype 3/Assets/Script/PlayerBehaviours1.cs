@@ -646,14 +646,14 @@ public class PlayerBehaviours1 : MonoBehaviour
                             GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
 
                             // Pick up Food
-                            if (!counterObject.CompareTag("Tray"))
+                            if (counterObject.CompareTag("Food"))
                             {
                                 counterObject.transform.SetParent(empltySlot.transform);
                                 counterObject.transform.localPosition = Vector3.zero;
                                 counterObject.transform.localRotation = Quaternion.identity;
                             }
                             // Pick up Food from Counter tray
-                            else
+                            else if (counterObject.CompareTag("Tray"))
                             {
                                 Tray tray = counterObject.GetComponent<Tray>();
 
@@ -666,6 +666,44 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     trayObject.transform.SetParent(empltySlot.transform);
                                     trayObject.transform.localPosition = Vector3.zero;
                                     trayObject.transform.localRotation = Quaternion.identity;
+                                }
+                            }
+                        }
+
+                        PickUp pickUp = obj.transform.GetComponent<PickUp>();
+
+                        if (pickUp != null && obj.emptySlot.transform.childCount == 1)
+                        {
+                            print("Do the pickup thing");
+
+                            GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
+
+                            if (pickUp.DoesOrderMatch(counterObject) != -1)
+                            {
+                                print("We Got A Match");
+
+                                // Search for valid customer
+                                for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
+                                {
+                                    GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
+                                    CustomerController1 customerController = customer.GetComponent<CustomerController1>();
+
+                                    if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                    {
+                                        pickUp.RemoveDisplayOrder2(pickUp.DoesOrderMatch(counterObject));
+
+                                        customerController.stage = CustomerStage.PICKUP;
+                                        customerController.pointsOfInterest.Add(obj.gameObject);
+
+                                        Destroy(counterObject);
+
+
+                                        GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
+                                        happyMeal.transform.localPosition = Vector3.zero;
+                                        happyMeal.transform.localRotation = Quaternion.identity;
+
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -1229,6 +1267,13 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                 gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
                             }
+                        }
+
+                        PickUp pickUp = obj.transform.GetComponent<PickUp>();
+
+                        if (pickUp != null && obj.emptySlot.transform.childCount == 1)
+                        {
+                            print("Do the pickup thing");
                         }
                     }
 
