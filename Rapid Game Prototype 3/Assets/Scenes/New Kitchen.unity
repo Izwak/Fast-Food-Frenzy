@@ -2417,7 +2417,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 315685922}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.53, y: 0.09035665, z: -16.61}
+  m_LocalPosition: {x: -2.53, y: 0.09035665, z: -16.681}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 687811015}
@@ -3266,6 +3266,7 @@ MonoBehaviour:
     type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
+  isDriveTru: 0
 --- !u!1 &418676386
 GameObject:
   m_ObjectHideFlags: 0
@@ -4127,7 +4128,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 537147817}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.48, y: 0.603, z: -22.99}
+  m_LocalPosition: {x: 0, y: 0.603, z: -28.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 687811015}
@@ -4364,7 +4365,7 @@ PrefabInstance:
     - target: {fileID: 6118713131993989417, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.6
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 6373140172459599160, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
@@ -8429,7 +8430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emptySlot: {fileID: 890259558}
   createObject: {fileID: 0}
-  type: 11
+  type: 0
 --- !u!114 &1066396672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8486,9 +8487,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c112c5c0b382c5e4382cdb94be18932e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HappyMeal: {fileID: 0}
+  HappyMeal: {fileID: 7417756605722995068, guid: 0c569681395265e47a2de3a00cc0e737,
+    type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
+  isDriveTru: 1
 --- !u!1 &1070734902
 GameObject:
   m_ObjectHideFlags: 0
@@ -14566,7 +14569,7 @@ MonoBehaviour:
   loseScreen: {fileID: 2081025128}
   customers: {fileID: 101461522}
   scoreGoal: 12
-  countdown: 100
+  countdown: 200
 --- !u!4 &1207355767
 Transform:
   m_ObjectHideFlags: 0
@@ -15062,7 +15065,7 @@ BoxCollider:
   m_GameObject: {fileID: 1305289207}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -15267,7 +15270,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1331335027}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.36, y: 0.63, z: -23.268}
+  m_LocalPosition: {x: 0, y: 0.63, z: -28.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 687811015}
@@ -15362,7 +15365,7 @@ PrefabInstance:
     - target: {fileID: 6118713131993989417, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.6
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 6373140172459599160, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
@@ -16267,6 +16270,7 @@ MonoBehaviour:
     type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
+  isDriveTru: 0
 --- !u!1 &1460112056 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2980899609559641712, guid: 956c614bac70a28448652bddaa5cf75e,
@@ -16314,7 +16318,7 @@ PrefabInstance:
     - target: {fileID: 6118713131993989417, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.6
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 6373140172459599160, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
         type: 3}
@@ -19295,6 +19299,7 @@ MonoBehaviour:
     type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
+  isDriveTru: 0
 --- !u!1 &1842149403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2278742939289191446, guid: bf0f8b570a88c354bafd5af0b33f2167,
@@ -19689,6 +19694,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1809494683}
     m_Modifications:
+    - target: {fileID: 704618717, guid: 65bc5afb42a26c942a5df98b62ecc8ec, type: 3}
+      propertyPath: createObject
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1681720076, guid: 65bc5afb42a26c942a5df98b62ecc8ec, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

@@ -80,7 +80,7 @@ public class CustomerController1 : MonoBehaviour
             positionInLine = FindPosInLine(pointsOfInterest[0], 0, CustomerStage.ATCOUNTER) + FindPosInLine(pointsOfInterest[0], 0, CustomerStage.INLINE);
 
             body.velocity = transform.forward * speed; 
-            target = pointsOfInterest[0].transform.position + new Vector3(0, 0, -2 - positionInLine * 1.5f); // Target to be infront of register but also stay in line
+            target = pointsOfInterest[0].transform.position + new Vector3(0, 0, -1.8f - positionInLine * 1.5f); // Target to be infront of register but also stay in line
 
             if (dis < 0.1f && positionInLine == 0)
             {
@@ -169,31 +169,15 @@ public class CustomerController1 : MonoBehaviour
                     {
                         GameObject item = counter.emptySlot.transform.GetChild(0).gameObject;
 
-                        // Check if there is an order in the menu that matches the 1 on the counter
-                        for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
-                        {
-                            item.transform.SetParent(emptySlot);
-                            item.transform.localPosition = Vector3.zero;
-                            item.transform.localRotation = Quaternion.identity;
+                        item.transform.SetParent(emptySlot);
+                        item.transform.localPosition = Vector3.zero;
+                        item.transform.localRotation = Quaternion.identity;
 
-                            //pickUp.RemoveDisplayOrder(i);
-                            stage = CustomerStage.LEAVING;
+                        stage = CustomerStage.LEAVING;
 
-                            GameManager.score++;
-
-                            break;
-                        }
+                        GameManager.score++;
                     }
                 }
-
-
-
-                /*PickUp pickUp = pointsOfInterest[1].GetComponent<PickUp>();
-
-                if (pickUp != null)
-                {
-                    pickUp.RemoveDisplayOrder(i);
-                }*/
             }
         }
 
@@ -210,38 +194,5 @@ public class CustomerController1 : MonoBehaviour
 
             }
         }
-
-/*        // Target should be just in front of a the register
-        Vector3 target = pos[1].transform.position + new Vector3(0, 0, -2);
-
-        dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.x, target.z));
-
-        angle = Mathf.Atan2(target.x - transform.position.x, target.z - transform.position.z) * Mathf.Rad2Deg;
-
-        ServiceCounter register = pos[1].GetComponent<ServiceCounter>();
-
-        if ()
-
-        if (dis > 0.1f)
-        {
-            body.velocity = transform.forward * speed;
-            transform.rotation = Quaternion.Euler(0, angle, 0);
-        }
-        else if (body.velocity != Vector3.zero)
-        {
-            body.velocity = Vector3.zero;
-
-            register.umHelloImACustomer = true;
-        }
-        else if (!register.umHelloImACustomer)
-        {
-
-        }
-        else
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), 0.01f);
-        }*/
-
-        
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+
 
 public class PlayerBehaviours1 : MonoBehaviour
 {
@@ -123,14 +123,21 @@ public class PlayerBehaviours1 : MonoBehaviour
         }
     }
 
-
     void LookingAtObjects3()
     {
         RaycastHit newhit;
 
-        if (Physics.Raycast(transform.position - new Vector3(0, 0.7f, 0), transform.forward, out newhit))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out newhit, 1000))
         {
             target.position = newhit.point;
+        }
+
+        if (Physics.Raycast(transform.position - new Vector3(0, 0.7f, 0), transform.forward, out newhit))
+        
+        //if (Physics.Raycast(ray, out newhit, 1000))
+        {
 
             // Deselect old Object if look new object is different
             if (hit.transform != null)
@@ -226,7 +233,9 @@ public class PlayerBehaviours1 : MonoBehaviour
                             Dispencer dispencer = obj.GetComponent<Dispencer>();
 
                             if (dispencer != null && playerTray.emptySlot.transform.childCount + counterTray.emptySlot.transform.childCount == 0)
-                                overlay.waitThenDisplay("Hold Space to put back"); 
+                                overlay.waitThenDisplay("Hold Space to put back");
+                            else if (dispencer != null && playerTray.emptySlot.transform.childCount > 0 && counterTray.emptySlot.transform.childCount == 0)
+                                overlay.waitThenDisplay("Hold Space to put back");
                             else
                                 overlay.waitThenDisplay("Hold Space to swap tray");
                         }
@@ -674,35 +683,60 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                         if (pickUp != null && obj.emptySlot.transform.childCount == 1)
                         {
-                            print("Do the pickup thing");
-
                             GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
 
+                            // Check if order matcheds
                             if (pickUp.DoesOrderMatch(counterObject) != -1)
                             {
-                                print("We Got A Match");
-
-                                // Search for valid customer
+                                // Get closest avalible customer
                                 for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
                                 {
                                     GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
                                     CustomerController1 customerController = customer.GetComponent<CustomerController1>();
+                                    CarController carController = customer.GetComponent<CarController>();
 
-                                    if (customerController != null && customerController.stage == CustomerStage.WAITING)
+
+                                    if (!pickUp.isDriveTru)
                                     {
-                                        pickUp.RemoveDisplayOrder2(pickUp.DoesOrderMatch(counterObject));
+                                        // Check Customer State
+                                        if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                        {
+                                            // Order Completed, Customer Picks up order and removes it from display
+                                            pickUp.RemoveDisplayOrder2(pickUp.DoesOrderMatch(counterObject));
 
-                                        customerController.stage = CustomerStage.PICKUP;
-                                        customerController.pointsOfInterest.Add(obj.gameObject);
+                                            customerController.stage = CustomerStage.PICKUP;
+                                            customerController.pointsOfInterest.Add(obj.gameObject);
 
-                                        Destroy(counterObject);
+                                            Destroy(counterObject);
 
+                                            // Turn order into a happy meal
+                                            GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
+                                            happyMeal.transform.localPosition = Vector3.zero;
+                                            happyMeal.transform.localRotation = Quaternion.identity;
 
-                                        GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
-                                        happyMeal.transform.localPosition = Vector3.zero;
-                                        happyMeal.transform.localRotation = Quaternion.identity;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Check Car Customer State
+                                        if (carController != null && carController.stage == CustomerStage.WAITING)
+                                        {
+                                            // Order Completed, Customer Picks up order and removes it from display
+                                            pickUp.RemoveDisplayOrder2(pickUp.DoesOrderMatch(counterObject));
 
-                                        break;
+                                            carController.stage = CustomerStage.PICKUP;
+                                            carController.pointsOfInterest.Add(obj.gameObject);
+
+                                            Destroy(counterObject);
+
+                                            // Turn order into a happy meal
+                                            GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
+                                            happyMeal.transform.localPosition = Vector3.zero;
+                                            happyMeal.transform.localRotation = Quaternion.identity;
+
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -1033,60 +1067,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                         }
                     }
 
-                    else if (obj.type == Interactables.PICKUP)
-                    {
-                        PickUp pickUp = obj.GetComponent<PickUp>();
-
-                        // Put object on counter
-                        if (holdingNum > 0 && counterHoldingNum == 0 && pickUp != null)
-                        {
-                            GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
-
-                            // Can put objects on counters if they're a food
-                            if (playersObject.CompareTag("Food"))
-                            {
-                                playersObject.transform.SetParent(obj.emptySlot.transform);
-                                playersObject.transform.localPosition = Vector3.zero;
-                                playersObject.transform.localRotation = Quaternion.identity;
-
-                                // Check for food to match orders
-                                for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
-                                {
-                                    GameObject order = pickUp.orderMenu.transform.GetChild(i).gameObject;
-
-                                    // If an order matches ur food
-                                    if (playersObject.name == order.name && pickUp.CustomerParent.childCount > 0)
-                                    {
-                                        // Search for valid customer
-                                        for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
-                                        {
-                                            GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
-                                            CustomerController1 customerController = customer.GetComponent<CustomerController1>();
-
-                                            if (customerController != null && customerController.stage == CustomerStage.WAITING)
-                                            {
-                                                customerController.stage = CustomerStage.PICKUP;
-                                                customerController.pointsOfInterest.Add(obj.gameObject);
-                                                break;
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        // Take object from counter
-                        else if (counterHoldingNum > 0 && holdingNum == 0)
-                        {
-                            GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
-                            counterObject.transform.SetParent(empltySlot.transform);
-                            counterObject.transform.localPosition = Vector3.zero;
-                            counterObject.transform.localRotation = Quaternion.identity;
-                        }
-
-                    }
-
+                    /*
                     else if (obj.type == Interactables.WINDOWPICKUP)
                     {
                         PickUp pickUp = obj.GetComponent<PickUp>();
@@ -1111,6 +1092,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     // If an order matches ur food
                                     if (playersObject.name == order.name && pickUp.CustomerParent.childCount > 0)
                                     {
+
+
                                         // Search for valid customer
                                         for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
                                         {
@@ -1139,7 +1122,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             counterObject.transform.localRotation = Quaternion.identity;
                         }
                     }
-
+                    */
                     else if (obj.type == Interactables.TRAYDISPENCER)
                     {
                         if (counterHoldingNum > 0)
@@ -1254,6 +1237,15 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 {
                                     Destroy(playersTray.gameObject);
                                 }
+                                // Put player tray on top of stack
+                                else if (dispencer != null && playersTray.emptySlot.transform.childCount > 0 && counterTray.emptySlot.transform.childCount == 0)
+                                {
+                                    playersObject.transform.SetParent(obj.emptySlot.transform);
+                                    playersObject.transform.localPosition = Vector3.zero;
+                                    playersObject.transform.localRotation = Quaternion.identity;
+
+                                    Destroy(counterTray.gameObject);
+                                }
                                 // Swap Trays (Put hand tray on counter put counter tray in hands)
                                 else
                                 {
@@ -1271,9 +1263,67 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                         PickUp pickUp = obj.transform.GetComponent<PickUp>();
 
+                        // Have Customers pick up tray
                         if (pickUp != null && obj.emptySlot.transform.childCount == 1)
                         {
-                            print("Do the pickup thing");
+                            GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
+
+                            // Check if order matcheds
+                            if (pickUp.DoesOrderMatch(counterObject) != -1)
+                            {
+
+                                // Get closest avalible customer
+                                for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
+                                {
+                                    GameObject customer = pickUp.CustomerParent.GetChild(j).gameObject;
+                                    CustomerController1 customerController = customer.GetComponent<CustomerController1>();
+                                    CarController carController = customer.GetComponent<CarController>();
+
+
+                                    if (!pickUp.isDriveTru)
+                                    {
+                                        // Check Customer State
+                                        if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                        {
+                                            // Order Completed, Customer Picks up order and removes it from display
+                                            pickUp.RemoveDisplayOrder2(pickUp.DoesOrderMatch(counterObject));
+
+                                            customerController.stage = CustomerStage.PICKUP;
+                                            customerController.pointsOfInterest.Add(obj.gameObject);
+
+                                            Destroy(counterObject);
+
+                                            // Turn order into a happy meal
+                                            GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
+                                            happyMeal.transform.localPosition = Vector3.zero;
+                                            happyMeal.transform.localRotation = Quaternion.identity;
+
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Check Car Customer State
+                                        if (carController != null && carController.stage == CustomerStage.WAITING)
+                                        {
+                                            // Order Completed, Customer Picks up order and removes it from display
+                                            pickUp.RemoveDisplayOrder2(pickUp.DoesOrderMatch(counterObject));
+
+                                            carController.stage = CustomerStage.PICKUP;
+                                            carController.pointsOfInterest.Add(obj.gameObject);
+
+                                            Destroy(counterObject);
+
+                                            // Turn order into a happy meal
+                                            GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
+                                            happyMeal.transform.localPosition = Vector3.zero;
+                                            happyMeal.transform.localRotation = Quaternion.identity;
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 

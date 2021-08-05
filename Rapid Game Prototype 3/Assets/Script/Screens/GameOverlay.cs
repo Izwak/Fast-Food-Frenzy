@@ -18,7 +18,6 @@ public class GameOverlay : MonoBehaviour
 
     float tick;
 
-
     // Start is called before the first frame update
     void Start()
     {

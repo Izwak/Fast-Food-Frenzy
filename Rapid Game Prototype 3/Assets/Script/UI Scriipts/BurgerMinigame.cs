@@ -96,7 +96,7 @@ public class BurgerMinigame : MonoBehaviour
                 obj1.hasDropped = false; // Immediately switch it off again
 
 
-                float closestDis = 0.75f;
+                float closestDis = 1f;
                 int closestElemnt = -1;
 
                 GameObject stackTop = obj1.gameObject;

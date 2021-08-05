@@ -107,22 +107,15 @@ public class CarController : MonoBehaviour
             {
                 GameObject item = counter.emptySlot.transform.GetChild(0).gameObject;
 
-                // Check if there is an order in the menu that matches the 1 on the counter
-                for (int i = 0; i < pickUp.orderMenu.transform.childCount; i++)
+                if (item.CompareTag("Happy Meal"))
                 {
-                    if (item.name == pickUp.orderMenu.GetChild(i).name)
-                    {
-                        print(item.name);
+                    print(item.name);
 
-                        Destroy(item);
+                    Destroy(item);
 
-                        pickUp.RemoveDisplayOrder(i);
-                        stage = CustomerStage.LEAVING;
+                    stage = CustomerStage.LEAVING;
 
-                        GameManager.score++;
-
-                        break;
-                    }
+                    GameManager.score++;
                 }
             }
         }
