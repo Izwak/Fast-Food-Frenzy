@@ -218,7 +218,6 @@ public class PickUp : MonoBehaviour
                             {
                                 foodTypeLogged = true;
                                 numFoodOnTray[j]++;
-                                break;
                             }
                         }
                     }
@@ -233,12 +232,11 @@ public class PickUp : MonoBehaviour
                 }
 
                 // Show whats on the tray
+                print("TRAY");
                 for (int i = 0; i < foodOnTray.Count; i++)
                 {
                     print("Num of " + foodOnTray[i] + " = " + numFoodOnTray[i]);
                 }
-
-                //print("FIRST ORDER");
 
                 // Get all the elements the orders in the menu list
                 for (int orderNum = 0; orderNum < orderMenu.transform.childCount; orderNum++)
@@ -248,12 +246,13 @@ public class PickUp : MonoBehaviour
                     List<string> foodInOrder = new List<string>();
                     List<int> numFoodInOrder = new List<int>();
 
-                    bool foodTypeLogged = false;
 
-                    // Get all food from order
+                    // Run through each order in order menu
 
-                    for (int foodNUm = 0; foodNUm < order.transform.childCount; foodNUm++)
+                    for (int foodNum = 0; foodNum < order.transform.childCount; foodNum++)
                     {
+                        bool foodTypeLogged = false;
+
                         // Log food
 
                         // Check if food type is in system
@@ -262,11 +261,10 @@ public class PickUp : MonoBehaviour
                             for (int foodType = 0; foodType < foodInOrder.Count; foodType++)
                             {
                                 // Food is in system so add
-                                if (order.transform.GetChild(foodNUm).name == foodInOrder[foodType])
+                                if (order.transform.GetChild(foodNum).name == foodInOrder[foodType])
                                 {
                                     foodTypeLogged = true;
                                     numFoodInOrder[foodType]++;
-                                    break;
                                 }
                             }
                         }
@@ -274,10 +272,18 @@ public class PickUp : MonoBehaviour
                         // If its a new food create add it to database
                         if (!foodTypeLogged)
                         {
-                            foodInOrder.Add(order.transform.GetChild(foodNUm).name);
+                            foodInOrder.Add(order.transform.GetChild(foodNum).name);
                             numFoodInOrder.Add(1);
                         }
                     }
+
+                    // Print all orders
+                    print("ORDER " + orderNum + ", SIZE: " + order.transform.childCount);
+                    for (int i = 0; i < foodInOrder.Count; i++)
+                    {
+                        print("Num of " + foodInOrder[i] + " = " + numFoodInOrder[i]);
+                    }
+
 
                     // Compare order to tray
 
@@ -290,7 +296,6 @@ public class PickUp : MonoBehaviour
                         // Compare each value
                         for (int j = 0; j < foodOnTray.Count; j++)
                         {
-
                             // Go through the food on the tray
                             for (int k = 0; k < foodInOrder.Count; k++)
                             {
