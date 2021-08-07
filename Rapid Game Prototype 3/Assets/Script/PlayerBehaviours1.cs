@@ -278,15 +278,43 @@ public class PlayerBehaviours1 : MonoBehaviour
                 }
                 if (obj.type == Interactables.FRIDGE)
                 {
-                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Raw Paddies"))
+                    if (holdingNum > 0)
                     {
-                        DisableOutline(newhit);
+                        GameObject playerObj = empltySlot.transform.GetChild(0).gameObject;
+                        Tray tray = playerObj.GetComponent<Tray>();
 
-                    }
-
-                    if (holdingNum >= 2)
-                    {
-                        DisableOutline(newhit);
+                        if (obj.createObject.CompareTag("Raw Paddies"))
+                        {
+                            if (playerObj.CompareTag("Raw Paddies"))
+                            {
+                                if (holdingNum >= 2)
+                                {
+                                    DisableOutline(newhit);
+                                }
+                            }
+                            else
+                            {
+                                DisableOutline(newhit);
+                            }
+                        }
+                        else if (obj.createObject.CompareTag("Food"))
+                        {
+                            if (tray != null)
+                            {
+                                if (tray.emptySlot.transform.childCount >= 4)
+                                {
+                                    DisableOutline(newhit);
+                                }
+                            }
+                            else
+                            {
+                                DisableOutline(newhit);
+                            }
+                        }
+                        else
+                        {
+                            DisableOutline(newhit);
+                        }
                     }
                 }
                 if (obj.type == Interactables.SERVICECOUNTER)
@@ -307,18 +335,32 @@ public class PlayerBehaviours1 : MonoBehaviour
                 {
                     FryStation fryStation = newhit.transform.GetComponentInParent<FryStation>();
 
-                    if (fryStation != null)
+                    if (fryStation != null && holdingNum > 0)
                     {
-                        if (fryStation.fryLvl > 1 && holdingNum > 0)
+                        GameObject playerObject = empltySlot.transform.GetChild(0).gameObject;
+
+                        Tray tray = playerObject.GetComponent<Tray>();
+
+                        if (playerObject.CompareTag("Cooked Fries"))
+                        {
+                            if (fryStation.fryLvl > 1)
+                            {
+                                DisableOutline(newhit);
+                            }
+                        }
+                        else if (tray != null)
+                        {
+                            if (tray.emptySlot.transform.childCount >= 4)
+                            {
+                                DisableOutline(newhit);
+                            }
+                        }
+                        else
                         {
                             DisableOutline(newhit);
                         }
                     }
 
-                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Cooked Fries"))
-                    {
-                        DisableOutline(newhit);
-                    }
                 }
                 if (obj.type == Interactables.FRIER)
                 {
@@ -507,7 +549,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     CarController carController = customer.GetComponent<CarController>();
 
 
-                                    if (!pickUp.isDriveTru)
+                                    if (pickUp.type == CustomerType.TAKEAWAY)
                                     {
                                         // Check Customer State
                                         if (customerController != null && customerController.stage == CustomerStage.WAITING)
@@ -528,7 +570,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                             break;
                                         }
                                     }
-                                    else
+                                    else if (pickUp.type == CustomerType.DRIVETHRU)
                                     {
                                         // Check Car Customer State
                                         if (carController != null && carController.stage == CustomerStage.WAITING)
@@ -711,6 +753,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             if (holdingNum > 0)
                             {
                                 GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+                                Tray tray = playersObject.GetComponent<Tray>();
 
                                 if (playersObject.CompareTag("Cooked Fries"))
                                 {
@@ -718,6 +761,25 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     {
                                         fryStation.fryLvl++;
                                         Destroy(playersObject);
+                                    }
+                                }
+                                // Put fries on tray
+                                if (tray != null && tray.emptySlot.transform.childCount < 4)
+                                {
+                                    if (fryStation.fryLvl > 0)
+                                    {
+                                        GameObject newFries = Instantiate(obj.createObject);
+                                        newFries.transform.SetParent(tray.emptySlot.transform);
+                                        newFries.transform.localPosition = Vector3.zero;
+                                        newFries.transform.forward = transform.forward;
+
+
+                                        fryStation.fryLvl -= 0.25f;
+
+                                        if (pointer != null)
+                                        {
+                                            pointer.pointer.gameObject.SetActive(false);
+                                        }
                                     }
                                 }
                             }
@@ -757,17 +819,27 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                             food.transform.forward = transform.forward;
                         }
-                        else if (holdingNum == 1 && obj.createObject.CompareTag("Raw Paddies"))
+                        else if (holdingNum == 1)
                         {
-                            if (empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") )
-                            {
+                            GameObject playerObject = empltySlot.transform.GetChild(0).gameObject;
+                            Tray tray = playerObject.GetComponent<Tray>();
 
+                            if (playerObject.CompareTag("Raw Paddies" ) && obj.createObject.CompareTag("Raw Paddies"))
+                            {
                                 GameObject food = Instantiate(obj.createObject);
                                 food.transform.SetParent(empltySlot.transform);
                                 food.transform.localPosition = new Vector3(0, 0.1f, 0);
                                 food.transform.localRotation = Quaternion.identity;
                             }
+                            else if (tray != null && tray.emptySlot.transform.childCount < 4)
+                            {
+                                GameObject food = Instantiate(obj.createObject);
+                                food.transform.SetParent(tray.emptySlot.transform);
+                                food.transform.localPosition = new Vector3(0, 0.1f, 0);
+                                food.transform.localRotation = Quaternion.identity;
+                            }
                         }
+
                     }
                     
                     else if (obj.type == Interactables.BURGERSTATION)
@@ -860,10 +932,14 @@ public class PlayerBehaviours1 : MonoBehaviour
                             if (paddy.CompareTag("Cooked Paddies"))
                             {
                                 paddy.transform.SetParent(obj.emptySlot.transform);
+                                paddy.transform.SetAsFirstSibling();
                                 paddy.transform.localRotation = Quaternion.identity;
 
-
-                                paddy.transform.localPosition = new Vector3(0, counterHoldingNum * 0.3f, 0);
+                                // Reset paddies Pos
+                                for (int i = 0; i < obj.HoldingNum(); i ++)
+                                {
+                                    obj.emptySlot.transform.GetChild(i).transform.localPosition = new Vector3(0, i * 0.3f, 0);
+                                }
                             }
                         }
                     }
@@ -872,9 +948,9 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         ServiceCounter service = obj.GetComponent<ServiceCounter>();
 
-                        if (service != null && holdingNum == 0 && service.umHelloImACustomer)
+                        if (service != null && holdingNum == 0 && service.customerAtRegister != CustomerType.NONE)
                         {
-                            service.AddOrdersToScreen();
+                            service.AddOrdersToScreen(false);
                         }
                     }
 
@@ -1035,7 +1111,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     CarController carController = customer.GetComponent<CarController>();
 
 
-                                    if (!pickUp.isDriveTru)
+                                    if (pickUp.type == CustomerType.TAKEAWAY)
                                     {
                                         // Check Customer State
                                         if (customerController != null && customerController.stage == CustomerStage.WAITING)

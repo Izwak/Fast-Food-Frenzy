@@ -75,7 +75,7 @@ public class CarController : MonoBehaviour
             if (dis < 0.1f && positionInLine == 0)
             {
                 stage = CustomerStage.ATCOUNTER;
-                register.umHelloImACustomer = true;
+                register.customerAtRegister = CustomerType.DRIVETHRU;
             }
             if (dis < 0.1f)
             {
@@ -86,7 +86,7 @@ public class CarController : MonoBehaviour
         {
             body.velocity = Vector3.zero;
 
-            if (!register.umHelloImACustomer)
+            if (register.customerAtRegister != CustomerType.NONE)
             {
                 stage = CustomerStage.WAITING;
             }

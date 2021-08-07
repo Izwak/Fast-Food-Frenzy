@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CustomerType
+{
+    NONE,
+    TAKEAWAY,
+    DRIVETHRU,
+    DINEIN
+}
 public class CustomerManager : MonoBehaviour
 {
     public GameManager gameManager;
@@ -25,7 +32,7 @@ public class CustomerManager : MonoBehaviour
     {
         if (gameManager.isRunning)
         {
-            if (customerParent.childCount < 10 && tick % 180 == 0)
+            if (customerParent.childCount < 10 && tick % 300 == 0)
             {
                 if (CountCars() < 2)
                 {

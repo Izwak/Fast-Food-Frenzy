@@ -6,13 +6,16 @@ using UnityEngine.UI;
 public class OrderBehaviour : MonoBehaviour
 {
     public GameObject emptySlot;
+    public Slider bar;
+
+    public CustomerType type;
+
     public GameObject alertYellow;
     public GameObject alertRed;
 
-    public Slider bar;
-    public Image barColor;
-
-    float timer = 0;
+    public GameObject takeAway;
+    public GameObject driveThru;
+    public GameObject dineIn;
 
     public int GetFoodCount()
     {
@@ -28,43 +31,38 @@ public class OrderBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        bar.value = timer;
+        // Increate timer
+        bar.value += Time.deltaTime;
 
-
-        if (bar.value >= bar.maxValue)
-        {
-            // Do the code here
-        }
-        else if (bar.value > bar.maxValue * 5/6)
+        // Alert Activation
+        if (bar.value > bar.maxValue * 5/6)
         {
             alertRed.SetActive(true);
             alertYellow.SetActive(false);
-            barColor.color = Color.red;
         }
         else if (bar.value > bar.maxValue * 2/3)
         {
-
             alertYellow.SetActive(true);
-            barColor.color = Color.yellow;
-
-            //barColor.color = Color.Lerp(Color.yellow, Color.Red, (bar.value - bar.maxValue / 2) / (bar.maxValue / 6));
         }
-        else if (bar.value < bar.maxValue / 2)
+
+        // Display order type
+
+        if (type == CustomerType.DRIVETHRU)
         {
-
-            //barColor.color = Color.Lerp(Color.green, Color.yellow, (bar.value - bar.maxValue / 2) / (bar.maxValue / 6));
+            driveThru.SetActive(true);
         }
-
-        if (bar.value < bar.maxValue / 2)
+        else if (type == CustomerType.TAKEAWAY)
         {
-            barColor.color = Color.Lerp(Color.green, Color.yellow, bar.value / (bar.maxValue / 2));
+            takeAway.SetActive(true);
         }
-        else
+        else if (type == CustomerType.DINEIN)
         {
-            barColor.color = Color.Lerp(Color.yellow, Color.red, (bar.value - (bar.maxValue / 2)) / (bar.maxValue / 2));
+            dineIn.SetActive(true);
         }
 
+        // Set Colour
+        if (bar.value < bar.maxValue / 2) { bar.image.color = Color.Lerp(Color.green, Color.yellow, bar.value / (bar.maxValue / 2)); }
+        else { bar.image.color = Color.Lerp(Color.yellow, Color.red, (bar.value - (bar.maxValue / 2)) / (bar.maxValue / 2)); }
 
         // Organises the how the food is displayed in the order
         for (int i = 0; i < GetFoodCount(); i++)

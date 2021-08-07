@@ -376,7 +376,7 @@ MonoBehaviour:
   orderMenu: {fileID: 797896451}
   orderManager: {fileID: 1207355769}
   alert: {fileID: 1290068727}
-  umHelloImACustomer: 0
+  customerAtRegister: 0
 --- !u!1 &58209231
 GameObject:
   m_ObjectHideFlags: 0
@@ -3266,7 +3266,7 @@ MonoBehaviour:
     type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
-  isDriveTru: 0
+  type: 1
 --- !u!1 &418676386
 GameObject:
   m_ObjectHideFlags: 0
@@ -8496,7 +8496,7 @@ MonoBehaviour:
     type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
-  isDriveTru: 1
+  type: 2
 --- !u!1 &1070734902
 GameObject:
   m_ObjectHideFlags: 0
@@ -14636,7 +14636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22116ecf22a50f244ae8361bd8382dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Customers: {fileID: 101461522}
+  customers: {fileID: 101461522}
   orderMenu: {fileID: 797896450}
   orderPrefabs:
   - {fileID: 7706008145847301483, guid: 2c5aa2d3b6b1c9a40aec7ed45e533c7a, type: 3}
@@ -15462,7 +15462,7 @@ MonoBehaviour:
   orderMenu: {fileID: 797896451}
   orderManager: {fileID: 1207355769}
   alert: {fileID: 1217565536}
-  umHelloImACustomer: 0
+  customerAtRegister: 0
 --- !u!1 &1364008785
 GameObject:
   m_ObjectHideFlags: 0
@@ -16277,7 +16277,7 @@ MonoBehaviour:
     type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
-  isDriveTru: 0
+  type: 1
 --- !u!1 &1460112056 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2980899609559641712, guid: 956c614bac70a28448652bddaa5cf75e,
@@ -19177,7 +19177,7 @@ MonoBehaviour:
   orderMenu: {fileID: 797896451}
   orderManager: {fileID: 1207355769}
   alert: {fileID: 1546987888}
-  umHelloImACustomer: 0
+  customerAtRegister: 0
 --- !u!4 &1821321843 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6373140172459599160, guid: d748c8e7920a21e46aee85ee5f7e4d3a,
@@ -19306,7 +19306,7 @@ MonoBehaviour:
     type: 3}
   orderMenu: {fileID: 797896451}
   CustomerParent: {fileID: 101461523}
-  isDriveTru: 0
+  type: 1
 --- !u!1 &1842149403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2278742939289191446, guid: bf0f8b570a88c354bafd5af0b33f2167,

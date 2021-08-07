@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OrderManager : MonoBehaviour
 {
-    public GameObject Customers;
+    public GameObject customers;
     public GameObject orderMenu;
 
     // These are the different bits that make up the order
@@ -42,6 +42,45 @@ public class OrderManager : MonoBehaviour
                 {
                     if (order.bar.value >= order.bar.maxValue)
                     {
+
+                        // Get closest avalible customer of the same tyoe
+                        if (order.type == CustomerType.TAKEAWAY)
+                        {
+                            for (int j = 0; j < customers.transform.childCount; j++)
+                            {
+                                GameObject customer = customers.transform.GetChild(j).gameObject;
+                                CustomerController1 customerController = customer.GetComponent<CustomerController1>();
+
+                                // Check Customer State
+                                if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                {
+                                    // Order Completed, Customer Picks up order and removes it from display
+
+                                    customerController.stage = CustomerStage.LEAVING;
+                                    break;
+                                }
+
+                            }
+                        }
+                        else if (order.type == CustomerType.DRIVETHRU)
+                        {
+                            for (int j = 0; j < customers.transform.childCount; j++)
+                            {
+                                GameObject customer = customers.transform.GetChild(j).gameObject;
+                                CarController customerController = customer.GetComponent<CarController>();
+
+                                // Check Customer State
+                                if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                {
+                                    // Order Completed, Customer Picks up order and removes it from display
+
+                                    customerController.stage = CustomerStage.LEAVING;
+                                    break;
+                                }
+
+                            }
+                        }
+
                         RemoveDisplayOrder(i);
                         GameManager.score--;
                     }

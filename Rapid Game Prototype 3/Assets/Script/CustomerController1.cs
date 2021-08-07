@@ -85,7 +85,7 @@ public class CustomerController1 : MonoBehaviour
             if (dis < 0.1f && positionInLine == 0)
             {
                 stage = CustomerStage.ATCOUNTER;
-                register.umHelloImACustomer = true;
+                register.customerAtRegister = CustomerType.TAKEAWAY;
             }
             if (dis < 0.1f)
             {
@@ -100,7 +100,7 @@ public class CustomerController1 : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
 
             // If your order was taken go to pick up area
-            if (!register.umHelloImACustomer)
+            if (register.customerAtRegister == CustomerType.NONE)
             {
                 stage = CustomerStage.WAITING;
             }
@@ -108,7 +108,7 @@ public class CustomerController1 : MonoBehaviour
             // If pushed away from countetr get back in line
             if (dis > 0.3f)
             {
-                register.umHelloImACustomer = false;
+                register.customerAtRegister = CustomerType.NONE;
                 stage = CustomerStage.INLINE;
             }
         }

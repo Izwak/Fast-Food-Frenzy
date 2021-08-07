@@ -9,7 +9,9 @@ public class PickUp : MonoBehaviour
     public Transform orderMenu;
     public Transform CustomerParent;
 
-    public bool isDriveTru;
+    //public bool isDriveTru;
+
+    public CustomerType type;
 
     public int DoesOrderMatch(GameObject orderObj)
     {
@@ -84,9 +86,10 @@ public class PickUp : MonoBehaviour
                     List<string> foodInOrder = new List<string>();
                     List<int> numFoodInOrder = new List<int>();
 
+                    CustomerType orderType = CustomerType.NONE;
 
-                    // Run through each order in order menu
 
+                    // Count the number of different foods in the order
                     for (int foodNum = 0; foodNum < order.GetFoodCount(); foodNum++)
                     {
                         bool foodTypeLogged = false;
@@ -96,6 +99,7 @@ public class PickUp : MonoBehaviour
                         // Check if food type is in system
                         if (foodInOrder.Count > 0)
                         {
+                            orderType = order.type;
                             for (int foodType = 0; foodType < foodInOrder.Count; foodType++)
                             {
                                 // Food is in system so add
@@ -126,7 +130,7 @@ public class PickUp : MonoBehaviour
                     // Compare order to tray
 
                     // Check if the order values match those of the tray
-                    if (foodOnTray.Count == foodInOrder.Count)
+                    if (foodOnTray.Count == foodInOrder.Count && orderType == type)
                     {
                         // Yes this varible has a confusing name i am confused and tired just know it works
                         int numOfMatchingRows = 0;

@@ -34,7 +34,13 @@ public class Interact : MonoBehaviour
     {
         if (emptySlot.transform.childCount > 0)
         {
-            emptySlot.transform.GetChild(0).transform.localPosition = Vector3.zero;
+            // IDK WAT THIS WOULD BE USED FOR?
+            //emptySlot.transform.GetChild(0).transform.localPosition = Vector3.zero;
         }
+    }
+
+    public int HoldingNum()
+    {
+        return emptySlot.transform.childCount;
     }
 }

@@ -10,8 +10,7 @@ public class ServiceCounter : MonoBehaviour
 
     public GameObject alert;
 
-    public bool umHelloImACustomer;
-
+    public CustomerType customerAtRegister = CustomerType.NONE;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +21,7 @@ public class ServiceCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (umHelloImACustomer)
+        if (customerAtRegister != CustomerType.NONE)
         {
             alert.SetActive(true);
         }
@@ -32,17 +31,23 @@ public class ServiceCounter : MonoBehaviour
         }
     }
 
-    public void AddOrdersToScreen()
+    public void AddOrdersToScreen(bool isDriveThru)
     {
-        //GameObject newOrder = Instantiate(orderManager.NewOrderObj(), orderMenu.transform);
+        // Create new order and set it to the menu
         GameObject newOrder = orderManager.NewOrderObj();
 
         newOrder.transform.SetParent(orderMenu.transform);
         newOrder.transform.localPosition = new Vector3(-1050 + 300 * (orderMenu.transform.childCount - 1), 500, 0);
-        newOrder.transform.localScale = new Vector3(1, 1, 1);
+        newOrder.transform.localScale = Vector3.one;
 
-        umHelloImACustomer = false;
+        // Set Order Type
+        OrderBehaviour orderBehaviour = newOrder.GetComponent<OrderBehaviour>();
+        orderBehaviour.type = customerAtRegister;
 
+        // Reset Register
+        customerAtRegister = CustomerType.NONE;
+
+        // Setting pos
         if (orderMenu.transform.childCount > 5)
         {
             for (int i = 0; i < orderMenu.transform.childCount; i++)
