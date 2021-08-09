@@ -64,7 +64,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                 if (holdCoolDown >= 0.3 && !rewritethisbtr)
                 {
-                    print("Held");
+                    //print("Held");
                     HoldInteractions();
                     rewritethisbtr = true;
                 }
@@ -197,48 +197,51 @@ public class PlayerBehaviours1 : MonoBehaviour
                         DisableOutline(newhit);
                     }
 
-                    // When u can pick up tray display take tray tip
-                    if (counterHoldingNum > 0 && holdingNum == 0)
+                    if (newhit.distance < 2)
                     {
-                        Tray tray = obj.emptySlot.transform.GetChild(0).GetComponent<Tray>();
-
-                        if (tray != null)
+                        // When u can pick up tray display take tray tip
+                        if (counterHoldingNum > 0 && holdingNum == 0)
                         {
-                            GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+                            Tray tray = obj.emptySlot.transform.GetChild(0).GetComponent<Tray>();
 
-                            overlay.waitThenDisplay("Hold Space to take tray");
+                            if (tray != null)
+                            {
+                                GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+
+                                overlay.waitThenDisplay("Hold Space to take tray");
+                            }
                         }
-                    }
-                    // When u can pick up tray display take tray tip
-                    else if (counterHoldingNum == 0 && holdingNum > 0)
-                    {
-                        Tray tray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
-
-                        if (tray != null)
+                        // When u can pick up tray display take tray tip
+                        else if (counterHoldingNum == 0 && holdingNum > 0)
                         {
-                            GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+                            Tray tray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
 
-                            overlay.waitThenDisplay("Hold Space to place tray");
+                            if (tray != null)
+                            {
+                                GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+
+                                overlay.waitThenDisplay("Hold Space to place tray");
+                            }
                         }
-                    }
-                    else if (counterHoldingNum > 0 && holdingNum > 0)
-                    {
-
-                        Tray playerTray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
-                        Tray counterTray = obj.emptySlot.transform.GetChild(0).GetComponent<Tray>();
-
-                        if (playerTray != null && counterTray != null)
+                        else if (counterHoldingNum > 0 && holdingNum > 0)
                         {
-                            GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
 
-                            Dispencer dispencer = obj.GetComponent<Dispencer>();
+                            Tray playerTray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
+                            Tray counterTray = obj.emptySlot.transform.GetChild(0).GetComponent<Tray>();
 
-                            if (dispencer != null && playerTray.emptySlot.transform.childCount + counterTray.emptySlot.transform.childCount == 0)
-                                overlay.waitThenDisplay("Hold Space to put back");
-                            else if (dispencer != null && playerTray.emptySlot.transform.childCount > 0 && counterTray.emptySlot.transform.childCount == 0)
-                                overlay.waitThenDisplay("Hold Space to put back");
-                            else
-                                overlay.waitThenDisplay("Hold Space to swap tray");
+                            if (playerTray != null && counterTray != null)
+                            {
+                                GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+
+                                Dispencer dispencer = obj.GetComponent<Dispencer>();
+
+                                if (dispencer != null && playerTray.emptySlot.transform.childCount + counterTray.emptySlot.transform.childCount == 0)
+                                    overlay.waitThenDisplay("Hold Space to put back");
+                                else if (dispencer != null && playerTray.emptySlot.transform.childCount > 0 && counterTray.emptySlot.transform.childCount == 0)
+                                    overlay.waitThenDisplay("Hold Space to put back");
+                                else
+                                    overlay.waitThenDisplay("Hold Space to swap tray");
+                            }
                         }
                     }
                 }
@@ -328,7 +331,19 @@ public class PlayerBehaviours1 : MonoBehaviour
                 {
                     if (holdingNum > 0)
                     {
-                        DisableOutline(newhit);
+                        Tray tray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
+
+                        if (tray != null)
+                        {
+                            if (tray.emptySlot.transform.childCount >= 4)
+                            {
+                                DisableOutline(newhit);
+                            }
+                        }
+                        else
+                        {
+                            DisableOutline(newhit);
+                        }
                     }
                 }
                 if (obj.type == Interactables.FRYSTATION)
@@ -431,9 +446,21 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                     Pointer pointer = obj.GetComponent<Pointer>();
 
-                    if (pointer != null && (holdingNum == 0 && counterHoldingNum == 0))
+                    if (pointer != null)
                     {
-                        pointer.pointer.gameObject.SetActive(true);
+                        if (holdingNum == 0 && counterHoldingNum == 0)
+                        {
+                            pointer.pointer.gameObject.SetActive(true);
+                        }
+                        else if (counterHoldingNum == 0 && holdingNum > 0)
+                        {
+                            Tray tray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
+
+                            if (tray != null && tray.emptySlot.transform.childCount < 4 && obj.createObject != null && obj.createObject.CompareTag("Food"))
+                            {
+                                pointer.pointer.gameObject.SetActive(true);
+                            }
+                        }
                     }
 
                     if (obj.type == Interactables.COUNTER )
@@ -831,7 +858,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 food.transform.localPosition = new Vector3(0, 0.1f, 0);
                                 food.transform.localRotation = Quaternion.identity;
                             }
-                            else if (tray != null && tray.emptySlot.transform.childCount < 4)
+                            else if (tray != null && tray.emptySlot.transform.childCount < 4 && obj.createObject.CompareTag("Food"))
                             {
                                 GameObject food = Instantiate(obj.createObject);
                                 food.transform.SetParent(tray.emptySlot.transform);
@@ -846,9 +873,9 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         BurgerStation burgerStation = obj.GetComponent<BurgerStation>();
 
-                        if (holdingNum == 0 && burgerStation != null)
+                        if (burgerStation != null && burgerStation.paddyHeater.childCount > 0)
                         {
-                            if (burgerStation.paddyHeater.childCount > 0)
+                            if (holdingNum == 0)
                             {
                                 GameObject newBurger = Instantiate(obj.createObject);
                                 newBurger.transform.SetParent(empltySlot.transform);
@@ -861,6 +888,26 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 if (pointer != null)
                                 {
                                     pointer.pointer.gameObject.SetActive(false);
+                                }
+                            }
+                            else
+                            {
+                                Tray tray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
+
+                                if (tray != null && tray.emptySlot.transform.childCount < 4)
+                                {
+                                    GameObject newBurger = Instantiate(obj.createObject);
+                                    newBurger.transform.SetParent(tray.emptySlot.transform);
+                                    newBurger.transform.localPosition = Vector3.zero;
+                                    newBurger.transform.forward = transform.forward;
+
+                                    burgerStation.TakePaddy();
+                                    isRunning = false;
+
+                                    if (pointer != null)
+                                    {
+                                        pointer.pointer.gameObject.SetActive(false);
+                                    }
                                 }
                             }
                         }
@@ -904,9 +951,11 @@ public class PlayerBehaviours1 : MonoBehaviour
                         }
 
                         // Can grab 2 paddies at a time
-                        else if (counterHoldingNum > 0 && holdingNum == 1)
+                        else if (counterHoldingNum > 0 && holdingNum > 0)
                         {
-                            if (empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") || empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
+                            // Only take off what you are already holding
+                            if ((empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") && obj.emptySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
+                                || empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies") && obj.emptySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
                             {
                                 Transform cookedPaddy = obj.emptySlot.transform.GetChild(0).transform;
                                 cookedPaddy.SetParent(empltySlot.transform);
@@ -927,7 +976,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         if (holdingNum > 0 && counterHoldingNum < 3)
                         {
-                            GameObject paddy = empltySlot.transform.GetChild(0).gameObject;
+                            GameObject paddy = empltySlot.transform.GetChild(empltySlot.transform.childCount - 1).gameObject;
 
                             if (paddy.CompareTag("Cooked Paddies"))
                             {
@@ -1095,14 +1144,13 @@ public class PlayerBehaviours1 : MonoBehaviour
                         PickUp pickUp = obj.transform.GetComponent<PickUp>();
 
                         // Have Customers pick up tray
-                        if (pickUp != null && obj.emptySlot.transform.childCount == 1)
+                        if (pickUp != null && obj.emptySlot.transform.childCount > 0)
                         {
                             GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
 
                             // Check if order matcheds
                             if (pickUp.DoesOrderMatch(counterObject) != -1)
                             {
-
                                 // Get closest avalible customer
                                 for (int j = 0; j < pickUp.CustomerParent.childCount; j++)
                                 {

@@ -111,4 +111,23 @@ public class OrderBehaviour : MonoBehaviour
             }
         }
     }
+
+    public void PulseIcon()
+    {
+        StartCoroutine(waitThenDisableIcon(takeAway, 1));
+        StartCoroutine(waitThenDisableIcon(driveThru, 1));
+        StartCoroutine(waitThenDisableIcon(dineIn, 1));
+    }
+
+    IEnumerator waitThenDisableIcon(GameObject orderType, float time)
+    {
+        Throb throbIcon = orderType.GetComponent<Throb>();
+
+        throbIcon.enabled = true;
+
+        yield return new WaitForSeconds(time);
+
+        throbIcon.enabled = false;
+        orderType.transform.localScale = Vector3.one;
+    }
 }

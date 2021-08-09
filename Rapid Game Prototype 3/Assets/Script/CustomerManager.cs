@@ -32,7 +32,7 @@ public class CustomerManager : MonoBehaviour
     {
         if (gameManager.isRunning)
         {
-            if (customerParent.childCount < 10 && tick % 300 == 0)
+            if (customerParent.childCount < 10 && tick % 400 == 0)
             {
                 if (CountCars() < 2)
                 {

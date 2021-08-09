@@ -18,18 +18,28 @@ public class PickUp : MonoBehaviour
         Tray tray = orderObj.GetComponent<Tray>();
         int numOforders = orderMenu.transform.childCount;
 
+        int orderButWrongType = -1;
+
         if (numOforders > 0)
         {
             // If you placed food on the counter
             if (orderObj.CompareTag("Food"))
             {
-                for (int i = 0; i < numOforders; i++)
+                for (int orderNum = 0; orderNum < numOforders; orderNum++)
                 {
-                    OrderBehaviour order = orderMenu.transform.GetChild(i).gameObject.GetComponent<OrderBehaviour>();
+                    OrderBehaviour order = orderMenu.transform.GetChild(orderNum).gameObject.GetComponent<OrderBehaviour>();
 
                     if (order.GetFoodCount() == 1 && orderObj.name == order.emptySlot.transform.GetChild(0).name)
                     {
-                        return i;
+                        if (order.type == type)
+                        {
+                            return orderNum;
+                        }
+                        else if (orderButWrongType == -1)
+                        {
+                            // So close
+                            orderButWrongType = orderNum;
+                        }
                     }
                 }
             }
@@ -96,10 +106,11 @@ public class PickUp : MonoBehaviour
 
                         // Log food
 
+                        orderType = order.type;
+
                         // Check if food type is in system
                         if (foodInOrder.Count > 0)
                         {
-                            orderType = order.type;
                             for (int foodType = 0; foodType < foodInOrder.Count; foodType++)
                             {
                                 // Food is in system so add
@@ -120,17 +131,16 @@ public class PickUp : MonoBehaviour
                     }
 
                     // Print all orders
-                    print("ORDER " + orderNum + ", SIZE: " + order.GetFoodCount());
+                    /*print("ORDER " + orderNum + ", SIZE: " + order.GetFoodCount());
                     for (int i = 0; i < foodInOrder.Count; i++)
                     {
                         print("Num of " + foodInOrder[i] + " = " + numFoodInOrder[i]);
-                    }
-
+                    }*/
 
                     // Compare order to tray
 
                     // Check if the order values match those of the tray
-                    if (foodOnTray.Count == foodInOrder.Count && orderType == type)
+                    if (foodOnTray.Count == foodInOrder.Count)
                     {
                         // Yes this varible has a confusing name i am confused and tired just know it works
                         int numOfMatchingRows = 0;
@@ -145,7 +155,7 @@ public class PickUp : MonoBehaviour
                                 {
                                     numOfMatchingRows++;
 
-                                    print("Same num of " + foodOnTray[j] + " in order and tray = " + numFoodOnTray[j]);
+                                    //print("Same num of " + foodOnTray[j] + " in order and tray = " + numFoodOnTray[j]);
                                 }
                             }
                         }
@@ -153,13 +163,21 @@ public class PickUp : MonoBehaviour
                         // This is where is says it works
                         if (numOfMatchingRows == foodInOrder.Count)
                         {
-                            print("U FOUND A MATCH");
-                                                        
-                            return orderNum;
+                            //print("U FOUND A MATCH");
+
+                            if (orderType == type)
+                            {
+                                return orderNum;
+                            }
+                            else if (orderButWrongType == -1)
+                            {
+                                // So close
+                                orderButWrongType = orderNum;
+                            }
                         }
                         else
                         {
-                            print("NO DICE");
+                            //print("NO DICE");
                         }
                     }
                 }
@@ -167,6 +185,17 @@ public class PickUp : MonoBehaviour
         }
 
         // If codes gotten to this point there was no matches
+
+        // If there was almost a match pulse that order to idicate it was the wrong type
+        if (orderButWrongType != -1)
+        {
+
+            OrderBehaviour order = orderMenu.transform.GetChild(orderButWrongType).gameObject.GetComponent<OrderBehaviour>();
+
+            order.PulseIcon();
+            print("SAME ORDER WRONG TYPE");
+        }
+
         return -1;
     }
 

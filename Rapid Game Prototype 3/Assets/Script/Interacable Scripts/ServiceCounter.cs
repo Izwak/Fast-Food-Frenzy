@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ServiceCounter : MonoBehaviour
 {
     public Transform orderMenu;
+    public Transform customers;
 
     public OrderManager orderManager;
 
     public GameObject alert;
+    public Slider slider;
 
     public CustomerType customerAtRegister = CustomerType.NONE;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        slider.maxValue = 30;
     }
 
     // Update is called once per frame
@@ -24,10 +27,102 @@ public class ServiceCounter : MonoBehaviour
         if (customerAtRegister != CustomerType.NONE)
         {
             alert.SetActive(true);
+            slider.value += Time.deltaTime;
         }
         else
         {
             alert.SetActive(false);
+        }
+
+        // Set Colour
+        if (slider.value < slider.maxValue / 2) { slider.image.color = Color.Lerp(Color.green, Color.yellow, slider.value / (slider.maxValue / 2)); }
+        else { slider.image.color = Color.Lerp(Color.yellow, Color.red, (slider.value - (slider.maxValue / 2)) / (slider.maxValue / 2)); }
+
+        // Customer leaves if bar is full
+        if (slider.value >= slider.maxValue)
+        {
+            CusomerGetsMadAndLeaves();
+        }
+    }
+
+    void CusomerGetsMadAndLeaves()
+    {
+        if (customerAtRegister == CustomerType.TAKEAWAY)
+        {
+            if (customers.childCount > 0)
+            {
+                bool isCustomerAtCounterYet = false;
+                for (int i = 0; i < customers.childCount; i++)
+                {
+                    CustomerController1 customer = customers.GetChild(i).GetComponent<CustomerController1>();
+
+                    if (customer != null && customer.stage == CustomerStage.ATCOUNTER)
+                    {
+                        GameManager.score--;
+                        slider.value = 0;
+                        customer.stage = CustomerStage.LEAVING;
+                        customerAtRegister = CustomerType.NONE;
+                        isCustomerAtCounterYet = true;
+                        break;
+                    }
+                }
+                if (!isCustomerAtCounterYet)
+                {
+                    for (int i = 0; i < customers.childCount; i++)
+                    {
+                        CustomerController1 customer = customers.GetChild(i).GetComponent<CustomerController1>();
+
+                        if (customer != null && customer.stage == CustomerStage.INLINE)
+                        {
+                            GameManager.score--;
+                            slider.value = 0;
+                            customer.stage = CustomerStage.LEAVING;
+                            customerAtRegister = CustomerType.NONE;
+                            isCustomerAtCounterYet = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else if (customerAtRegister == CustomerType.DRIVETHRU)
+        {
+            if (customers.childCount > 0)
+            {
+                bool isCustomerAtCounterYet = false;
+
+                for (int i = 0; i < customers.childCount; i++)
+                {
+                    CarController customer = customers.GetChild(i).GetComponent<CarController>();
+
+                    if (customer != null && customer.stage == CustomerStage.WAITING)
+                    {
+                        GameManager.score--;
+                        slider.value = 0;
+                        customer.stage = CustomerStage.LEAVING;
+                        customerAtRegister = CustomerType.NONE;
+                        isCustomerAtCounterYet = true;
+                        break;
+                    }
+                }
+                if (!isCustomerAtCounterYet)
+                {
+                    for (int i = 0; i < customers.childCount; i++)
+                    {
+                        CarController customer = customers.GetChild(i).GetComponent<CarController>();
+
+                        if (customer != null && customer.stage == CustomerStage.INLINE)
+                        {
+                            GameManager.score--;
+                            slider.value = 0;
+                            customer.stage = CustomerStage.LEAVING;
+                            customerAtRegister = CustomerType.NONE;
+                            isCustomerAtCounterYet = true;
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -46,6 +141,7 @@ public class ServiceCounter : MonoBehaviour
 
         // Reset Register
         customerAtRegister = CustomerType.NONE;
+        slider.value = 0;
 
         // Setting pos
         if (orderMenu.transform.childCount > 5)

@@ -12,6 +12,7 @@ public class GrillParticleController : MonoBehaviour
     void Start()
     {
         clone = Instantiate(pattyParticles, emptySlot.transform.position, Quaternion.identity);
+        clone.transform.SetParent(this.transform);
         clone.transform.Rotate(new Vector3(-90, 0, 0));
         //clone.transform.Translate(new Vector3(0, 0, 1));
         clone.SetActive(false);

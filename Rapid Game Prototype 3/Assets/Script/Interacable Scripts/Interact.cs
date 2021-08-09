@@ -26,7 +26,7 @@ public class Interact : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // Edit THIS IS THE 1
     }
 
     // Update is called once per frame

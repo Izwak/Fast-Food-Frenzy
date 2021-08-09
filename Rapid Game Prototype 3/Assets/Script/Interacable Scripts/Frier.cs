@@ -42,6 +42,7 @@ public class Frier : MonoBehaviour
         {
             particleClone = Instantiate(particles, traySlots[i].transform.position, Quaternion.identity);//instantiate the 4 clones
             particleClone.transform.Rotate(new Vector3(-90, 0));
+            particleClone.transform.SetParent(this.transform);
             particleList[i] = particleClone;//assign them to their proper slots
             particleList[i].SetActive(false);//disable them for now
         }
