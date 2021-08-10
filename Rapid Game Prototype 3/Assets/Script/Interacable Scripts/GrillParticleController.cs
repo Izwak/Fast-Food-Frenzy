@@ -8,14 +8,18 @@ public class GrillParticleController : MonoBehaviour
     public GameObject pattyParticles;
     GameObject clone;
 
+    AudioSource audioController;
+    AudioClip sizzle;
+    bool playingAudio = false;
+
     // Start is called before the first frame update
     void Start()
     {
         clone = Instantiate(pattyParticles, emptySlot.transform.position, Quaternion.identity);
         clone.transform.SetParent(this.transform);
         clone.transform.Rotate(new Vector3(-90, 0, 0));
-        //clone.transform.Translate(new Vector3(0, 0, 1));
         clone.SetActive(false);
+        audioController = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -23,15 +27,21 @@ public class GrillParticleController : MonoBehaviour
     {
         if (emptySlot.transform.childCount > 0)
         {
-            //print("yes patties");
             if (emptySlot.transform.GetChild(0) != null)
             {
-                //print("particles");
-                //clone.transform.position = gameObject.transform.position;//so we can offset the position to be more correct
                 clone.SetActive(true);
+                if (!playingAudio)
+                {
+                    audioController.Play();
+                    playingAudio = true;
+                }
             }
         }
         if (emptySlot.transform.childCount <= 0)
+        {
             clone.SetActive(false);
+            audioController.Stop();
+            playingAudio = false;
+        }
     }
 }

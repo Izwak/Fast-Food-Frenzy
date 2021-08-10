@@ -10,6 +10,9 @@ public class Frier : MonoBehaviour
     GameObject particleClone;
     GameObject[] particleList = new GameObject[4];
     Transform[] trayTransforms = new Transform[4];
+    bool isPlaying;
+
+    AudioSource audioController;
 
     public bool isFull ()
     {
@@ -37,6 +40,8 @@ public class Frier : MonoBehaviour
 
     private void Start()
     {
+        isPlaying = false;
+        audioController = GetComponent<AudioSource>();
         //because its easier to do it automatically
         for (int i = 0; i < 4; i++)
         {
@@ -49,14 +54,28 @@ public class Frier : MonoBehaviour
     }
     private void Update()
     {
+        bool isEmpty = true;
         for (int i = 0; i < 4; i++)
         {
             if (traySlots[i].transform.childCount > 0)
             {
                 particleList[i].SetActive(true);
+                isEmpty = false;
             }
             else
+            {
                 particleList[i].SetActive(false);
+            }
+        }
+        if (!isEmpty && !isPlaying)
+        {
+            audioController.Play();
+            isPlaying = true;
+        }
+        else if (isEmpty)
+        {
+            audioController.Stop();
+            isPlaying = false;
         }
         //if (isFull())
         //    particles.SetActive(true);
