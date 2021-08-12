@@ -14,21 +14,38 @@ public class GameOverlay : MonoBehaviour
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI tipText;
 
-    public int UrMum;
+
+    public int scoreGoal;
+    public int scoreMin;
+
 
     float tick;
 
     // Start is called before the first frame update
     void Start()
     {
-        scoreSlider.maxValue = gameManager.scoreGoal;
+        scoreSlider.maxValue = scoreGoal;
+        scoreNegative.maxValue = scoreMin;
     }
 
     // Update is called once per frame
     void Update()
     {
         scoreSlider.value = GameManager.score;
-        timerText.text = Mathf.Round(gameManager.countdown).ToString();
+        scoreNegative.value = -GameManager.score;
+
+        timerText.text = Mathf.Round(gameManager.timer).ToString();
+
+        if (GameManager.score >= 0)
+        {
+            scoreSlider.gameObject.SetActive(true);
+            scoreNegative.gameObject.SetActive(false);
+        }
+        else if (GameManager.score < 0)
+        {
+            scoreSlider.gameObject.SetActive(false);
+            scoreNegative.gameObject.SetActive(true);
+        }
     }
     public void waitThenDisplay(string text)
     {

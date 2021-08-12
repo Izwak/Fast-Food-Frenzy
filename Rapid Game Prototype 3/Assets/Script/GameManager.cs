@@ -21,32 +21,28 @@ public class GameManager : MonoBehaviour
 
     public PlayerBehaviours1 player1;
 
-    public GameObject menuScreen;
-    public GameObject overlayScreen;
-    public GameObject orderScreen;
-    public GameObject winScreen;
-    public GameObject loseScreen;
-    public GameObject customers;
+    public ScreenManager screen;
 
-    public int scoreGoal = 12;
-
-    public float countdown = 100;
+    public float timer = 100;
     public static float score = 0; // i might be cheating here but 2 lazy 2 not make static
+
+    public List<string> name;
+    public List<string> time;
 
     // Start is called before the first frame update
     void Start()
     {
         if (menuOnStart)
         {
-            menuScreen.SetActive(true);
-            overlayScreen.SetActive(false);
+            screen.menu.gameObject.SetActive(true);
+            screen.overlay.gameObject.SetActive(false);
             isRunning = false;
             Time.timeScale = 0;
         }
         else
         {
-            menuScreen.SetActive(false);
-            overlayScreen.SetActive(true);
+            screen.menu.gameObject.SetActive(false);
+            screen.overlay.gameObject.SetActive(true);
             isRunning = true;
         }
     }
@@ -56,22 +52,29 @@ public class GameManager : MonoBehaviour
     {
         if (isRunning)
         {
-            countdown -= Time.deltaTime;
+            timer += Time.deltaTime;
 
-            if (countdown <= 0)
+            if (score >= screen.overlay.scoreGoal)
             {
-                overlayScreen.SetActive(false);
+                screen.overlay.gameObject.SetActive(false);
                 isRunning = false;
-                orderScreen.SetActive(false);
+                screen.orders.gameObject.SetActive(false);
 
-                if (score >= scoreGoal)
+                if (timer < 300)
                 {
-                    winScreen.SetActive(true);
+                    screen.win.gameObject.SetActive(true);
                 }
                 else
                 {
-                    loseScreen.SetActive(true);
+                    screen.lose.gameObject.SetActive(true);
                 }
+
+            }
+            if (GameManager.score <= -screen.overlay.scoreMin)
+            {
+                screen.overlay.gameObject.SetActive(false);
+                screen.fired.gameObject.SetActive(true);
+                isRunning = false;
             }
         }
     }
@@ -87,8 +90,34 @@ public class GameManager : MonoBehaviour
     public void LoadGameScene()
     {
         Time.timeScale = 1;
-        menuScreen.SetActive(false);
-        overlayScreen.SetActive(true);
+        screen.menu.gameObject.SetActive(false);
+        screen.overlay.gameObject.SetActive(true);
         isRunning = true;
+    }
+
+    public void LoadLeaderboard()
+    {
+        PlayerData data = Saving.LoadData();
+
+        if (data != null)
+        {
+            name = data.name;
+            time = data.time;
+        }
+
+
+        screen.menu.gameObject.SetActive(false);
+        screen.leaderboard.gameObject.SetActive(true);
+
+        screen.leaderboard.DisplayScore();
+    }
+
+    public void ResetToMenu()
+    {
+        Saving.SaveData(this);
+
+        score = 0;
+        menuOnStart = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

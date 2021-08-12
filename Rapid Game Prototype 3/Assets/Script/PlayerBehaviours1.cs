@@ -157,7 +157,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                     if (displayIcon != null)
                         displayIcon.icon.gameObject.SetActive(false);
 
-                    gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
+                    gameManager.screen.overlay.hideTip();
                 }
             }
 
@@ -206,9 +206,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                             if (tray != null)
                             {
-                                GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
-
-                                overlay.waitThenDisplay("Hold Space to take tray");
+                                gameManager.screen.overlay.waitThenDisplay("Hold Space to take tray");
                             }
                         }
                         // When u can pick up tray display take tray tip
@@ -218,9 +216,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                             if (tray != null)
                             {
-                                GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
-
-                                overlay.waitThenDisplay("Hold Space to place tray");
+                                gameManager.screen.overlay.waitThenDisplay("Hold Space to place tray");
                             }
                         }
                         else if (counterHoldingNum > 0 && holdingNum > 0)
@@ -231,7 +227,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                             if (playerTray != null && counterTray != null)
                             {
-                                GameOverlay overlay = gameManager.overlayScreen.GetComponent<GameOverlay>();
+                                GameOverlay overlay = gameManager.screen.overlay;
 
                                 Dispencer dispencer = obj.GetComponent<Dispencer>();
 
@@ -1081,7 +1077,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
 
-                                gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
+                                gameManager.screen.overlay.hideTip();
                             }
                         }
                         // Take tray from counter
@@ -1097,7 +1093,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
 
-                                gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
+                                gameManager.screen.overlay.hideTip();
                             }
                         }
                         // Both player and counter have Trays
@@ -1137,7 +1133,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     counterTray.transform.localRotation = Quaternion.identity;
                                 }
 
-                                gameManager.overlayScreen.GetComponent<GameOverlay>().hideTip();
+                                gameManager.screen.overlay.hideTip();
                             }
                         }
 
@@ -1212,6 +1208,14 @@ public class PlayerBehaviours1 : MonoBehaviour
                         if (holdingNum > 0)
                         {
                             GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
+
+                            Tray tray = playersObject.GetComponent<Tray>();
+
+
+                            if (tray != null)
+                            {
+                                GameManager.score -= tray.emptySlot.transform.childCount;
+                            }
 
                             Destroy(playersObject);
 
