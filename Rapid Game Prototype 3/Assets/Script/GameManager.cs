@@ -105,7 +105,6 @@ public class GameManager : MonoBehaviour
             time = data.time;
         }
 
-
         screen.menu.gameObject.SetActive(false);
         screen.leaderboard.gameObject.SetActive(true);
 

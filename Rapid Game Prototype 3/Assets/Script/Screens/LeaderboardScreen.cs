@@ -29,10 +29,8 @@ public class LeaderboardScreen : MonoBehaviour
     {
         if (gameManager.name.Count > 0)
         {
-            print("Display");
-            for (int i = 0; i > gameManager.name.Count; i++)
+            for (int i = 0; i < gameManager.name.Count; i++)
             {
-                print("Display 2");
                 GameObject score = Instantiate(scorePrefab, scorePos.transform);
                 score.transform.localPosition = new Vector3(0, (scorePos.transform.childCount - 1) * -100, 0);
 
