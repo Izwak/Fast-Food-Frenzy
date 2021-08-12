@@ -13,11 +13,16 @@ public class ServiceCounter : MonoBehaviour
     public GameObject alert;
     public Slider slider;
 
+    AudioSource bellDing;
+    bool hasPlayed;
+
     public CustomerType customerAtRegister = CustomerType.NONE;
 
     // Start is called before the first frame update
     void Start()
     {
+        hasPlayed = false;
+        bellDing = GetComponent<AudioSource>();
         slider.maxValue = 30;
     }
 
@@ -28,10 +33,17 @@ public class ServiceCounter : MonoBehaviour
         {
             alert.SetActive(true);
             slider.value += Time.deltaTime;
+            if (!hasPlayed)
+            {
+                bellDing.time = 3.0f;
+                bellDing.Play();
+                hasPlayed = true;
+            }
         }
         else
         {
             alert.SetActive(false);
+            hasPlayed = false;
         }
 
         // Set Colour

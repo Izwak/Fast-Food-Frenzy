@@ -27,12 +27,17 @@ public class CustomerController1 : MonoBehaviour
     public float angle;
     public int positionInLine;
 
+    AudioSource bell;
+    bool soundPlayed;
+
     // Start is called before the first frame update
     void Start()
     {
         stage = CustomerStage.INLINE;
         body = GetComponent<Rigidbody>(); 
         register = pointsOfInterest[0].GetComponent<ServiceCounter>();
+        bell = GetComponent<AudioSource>();
+        soundPlayed = false;
     }
 
     int FindPosInLine(GameObject PointOfInterest, int interestElement, CustomerStage stage) 
@@ -193,6 +198,15 @@ public class CustomerController1 : MonoBehaviour
                 Destroy(this.gameObject);
 
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Door") && !soundPlayed)
+        {
+            bell.Play();
+            soundPlayed = true;
         }
     }
 }
