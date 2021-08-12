@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4614318305170763182}
   - component: {fileID: 4614318305170763176}
   - component: {fileID: 4614318305170763183}
-  - component: {fileID: 7248890155934677428}
+  - component: {fileID: 6511087351555725052}
   m_Layer: 5
   m_Name: Entery
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7248890155934677428
+--- !u!114 &6511087351555725052
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

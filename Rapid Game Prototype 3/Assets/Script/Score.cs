@@ -8,20 +8,4 @@ public class Score : MonoBehaviour
     public TextMeshProUGUI posText;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI timeText;
-
-    int pos;
-    string name;
-    float time;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

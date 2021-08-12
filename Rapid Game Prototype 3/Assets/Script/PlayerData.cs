@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerData
 {
     public List<string> name;
-    public List<string> time;
+    public List<float> time;
 
     public PlayerData(GameManager gameManager)
     {

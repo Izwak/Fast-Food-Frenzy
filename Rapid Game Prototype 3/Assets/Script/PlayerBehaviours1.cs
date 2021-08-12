@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerBehaviours1 : MonoBehaviour
 {
     public GameManager gameManager;
-    public bool isRunning = true;
+    public bool isRunning;
 
     public GameObject empltySlot;
 
