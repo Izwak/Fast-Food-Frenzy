@@ -7,17 +7,17 @@ using TMPro;
 
 public enum GameState
 {
-    TITLE,
+    MAIN_MENU,
+    MENU,
     GAMEPLAY,
-    MINIGAME
 }
 
 public class GameManager : MonoBehaviour
 {
-    public static bool menuOnStart = true;
-    public bool isRunning = false;
+    public static GameState gameState;
+    public GameState test;
 
-    public GameState gameState;
+    public bool isRunning = false;
 
     public PlayerBehaviours1 player1;
 
@@ -32,68 +32,80 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (menuOnStart)
+        screen.leaderboard.gameObject.SetActive(false);
+
+        if (gameState == GameState.MAIN_MENU)
         {
             screen.menu.gameObject.SetActive(true);
             screen.overlay.gameObject.SetActive(false);
             isRunning = false;
             player1.isRunning = false;
+            //gameState = GameState.MENU;
         }
-        else
+        else if (gameState == GameState.GAMEPLAY || gameState == GameState.MENU)
         {
             screen.menu.gameObject.SetActive(false);
             screen.overlay.gameObject.SetActive(true);
             isRunning = true;
             player1.isRunning = true;
+            gameState = GameState.GAMEPLAY;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (score >= screen.overlay.scoreGoal)
+        test = gameState;
+
+        if (gameState == GameState.GAMEPLAY)
         {
-            isRunning = false;
-            screen.overlay.gameObject.SetActive(false);
-            screen.orders.gameObject.SetActive(false);
-            screen.leaderboard.gameObject.SetActive(true);
-
-            screen.leaderboard.isEnteringName = true;
-
-
-            if (timer < 300)
+            if (isRunning)
             {
-                screen.win.gameObject.SetActive(true);
-            }
-            else
-            {
-                screen.lose.gameObject.SetActive(true);
+                timer += Time.deltaTime;
             }
 
+            if (score >= screen.overlay.scoreGoal)
+            {
+                isRunning = false;
+                screen.overlay.gameObject.SetActive(false);
+                screen.orders.gameObject.SetActive(false);
+
+                screen.leaderboard.isEnteringName = true;
+
+                if (timer < 300)
+                {
+                    screen.win.gameObject.SetActive(true);
+                }
+                else
+                {
+                    screen.lose.gameObject.SetActive(true);
+                }
+
+                gameState = GameState.MENU;
+            }
+            else if (GameManager.score <= -screen.overlay.scoreMin)
+            {
+                isRunning = false;
+                screen.overlay.gameObject.SetActive(false);
+                screen.fired.gameObject.SetActive(true);
+
+                screen.leaderboard.isEnteringName = true;
+
+                gameState = GameState.MENU;
+            }
         }
-        else if (GameManager.score <= -screen.overlay.scoreMin)
+        else if (gameState == GameState.MENU)
         {
-            isRunning = false;
-            screen.overlay.gameObject.SetActive(false);
-            screen.fired.gameObject.SetActive(true);
-
-            screen.leaderboard.isEnteringName = true;
-        }
-
-
-        if (isRunning)
-        {
-            timer += Time.deltaTime;
+            print("Menu");
         }
     }
-
 
     public void ResetToGameplay()
     {
         score = 0;
-        menuOnStart = false;
+        gameState = GameState.MENU;
+        print(gameState + " BEFORE THE CHANGE");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        player1.isRunning = true;
     }
 
     public void LoadGameScene()
@@ -102,13 +114,20 @@ public class GameManager : MonoBehaviour
         screen.overlay.gameObject.SetActive(true);
         isRunning = true;
         player1.isRunning = true;
+        gameState = GameState.GAMEPLAY;
     }
 
     public void LoadLeaderboard(bool isEntering)
     {
+        screen.menu.gameObject.SetActive(false);
+        screen.fired.gameObject.SetActive(false);
+        screen.lose.gameObject.SetActive(false);
+        screen.win.gameObject.SetActive(false);
+
+
+
         player1.isRunning = false; 
 
-        print("It should be doing the thing");
         PlayerData data = Saving.LoadData();
 
         if (data != null)
@@ -118,8 +137,7 @@ public class GameManager : MonoBehaviour
         }
 
         screen.leaderboard.DisplayScore();
-
-        screen.menu.gameObject.SetActive(false);
+        screen.leaderboard.OrganiseScore();
         screen.leaderboard.gameObject.SetActive(true);
 
         screen.leaderboard.isEnteringName = isEntering;
@@ -127,10 +145,10 @@ public class GameManager : MonoBehaviour
 
     public void ResetToMenu()
     {
-        Saving.SaveData(this);
+        //Saving.SaveData(this);
 
         score = 0;
-        menuOnStart = true;
+        gameState = GameState.MAIN_MENU;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         player1.isRunning = false;
     }

@@ -469,7 +469,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             // Can put objects on counters if they're a food
                             if (playersObject.CompareTag("Food"))
                             {
-                                print("swap hand with counter");
+                                //print("swap hand with counter");
                                 playersObject.transform.SetParent(obj.emptySlot.transform);
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
