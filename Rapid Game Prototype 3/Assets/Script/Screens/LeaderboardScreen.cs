@@ -51,7 +51,7 @@ public class LeaderboardScreen : MonoBehaviour
                 score.transform.localPosition = new Vector3(0, (scoreTab.transform.childCount - 1) * -100, 0);
 
                 Score scoreScore = score.GetComponent<Score>();
-                scoreScore.posText.text = scoreTab.transform.childCount.ToString();
+                scoreScore.posText.text = (i + 1).ToString();
                 scoreScore.nameText.text = gameManager.name[i];
                 scoreScore.timeText.text = gameManager.time[i].ToString();
             }
@@ -128,5 +128,33 @@ public class LeaderboardScreen : MonoBehaviour
                 score.posText.text = (i + 1).ToString();
             }
         }
+    }
+
+    public void SaveAmdReload()
+    {
+        Saving.SaveData(gameManager);
+
+        /*int didICauseAnInfiniteLoop = 0;
+        while (scoreTab.transform.childCount > 0)
+        {
+            Destroy(scoreTab.transform.GetChild(0).gameObject);
+            didICauseAnInfiniteLoop++;
+
+            if (didICauseAnInfiniteLoop > 1000)
+            {
+                Debug.LogError("You ducc at programming " + scoreTab.transform.childCount);
+                break;
+            }
+        }*/
+
+        if (scoreTab.transform.childCount > 0)
+        {
+            for (int i = scoreTab.transform.childCount - 1; i > - 1; i--)
+            {
+                Destroy(scoreTab.transform.GetChild(i).gameObject);
+            }
+        }
+
+        DisplayScore();
     }
 }
