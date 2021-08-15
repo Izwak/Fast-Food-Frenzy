@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class OrderManager : MonoBehaviour
 {
+    public GameManager gameManager;
     public GameObject customers;
     public GameObject orderMenu;
 
@@ -57,6 +58,7 @@ public class OrderManager : MonoBehaviour
                                     // Order Completed, Customer Picks up order and removes it from display
 
                                     customerController.stage = CustomerStage.LEAVING;
+                                    gameManager.numCustomersPissed++;
                                     break;
                                 }
 
@@ -75,6 +77,7 @@ public class OrderManager : MonoBehaviour
                                     // Order Completed, Customer Picks up order and removes it from display
 
                                     customerController.stage = CustomerStage.LEAVING;
+                                    gameManager.numCustomersPissed++;
                                     break;
                                 }
 

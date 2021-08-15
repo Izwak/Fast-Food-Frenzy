@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
+    public GameManager gameManager;
     public List<GameObject> pointsOfInterest;
 
     public CustomerStage stage;

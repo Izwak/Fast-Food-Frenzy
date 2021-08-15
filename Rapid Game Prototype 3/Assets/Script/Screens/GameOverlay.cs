@@ -34,7 +34,7 @@ public class GameOverlay : MonoBehaviour
         scoreSlider.value = GameManager.score;
         scoreNegative.value = -GameManager.score;
 
-        timerText.text = Mathf.Round(gameManager.timer).ToString();
+        timerText.text = FloatToMinutes(gameManager.timer);
 
         if (GameManager.score >= 0)
         {
@@ -63,5 +63,20 @@ public class GameOverlay : MonoBehaviour
     {
         tick = 0;
         tipText.gameObject.SetActive(false);
+    }
+
+    string FloatToMinutes(float time)
+    {
+        int minutes = Mathf.FloorToInt(time / 60);
+        int seconds = Mathf.FloorToInt(time % 60);
+        int millisec = Mathf.FloorToInt((time * 10) % 10);
+
+        if (time > 60)
+            return string.Format("{0}:{1:00}", minutes, seconds);
+        //else if (time > 0)
+        else
+            return string.Format("{0}.{1}", seconds, millisec);
+        //else
+        //    return "0.0";
     }
 }

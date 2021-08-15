@@ -7,10 +7,12 @@ public class PlayerData
 {
     public List<string> name;
     public List<float> time;
+    public List<int> score;
 
     public PlayerData(GameManager gameManager)
     {
-        name = gameManager.name;
-        time = gameManager.time;
+        name = gameManager.names;
+        time = gameManager.times;
+        score = gameManager.scores;
     }
 }

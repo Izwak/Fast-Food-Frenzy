@@ -27,33 +27,28 @@ public class LeaderboardScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isEnteringName)
-        {
-            enterTab.SetActive(true);
-            replayTab.SetActive(false);
-            backTab.SetActive(false);
-        }
-        else
-        {
-            enterTab.SetActive(false);
-            replayTab.SetActive(false);
-            backTab.SetActive(true);
-        }
     }
 
     public void DisplayScore()
     {
-        if (gameManager.name.Count > 0)
+        if (gameManager.names.Count > 0)
         {
-            for (int i = 0; i < gameManager.name.Count; i++)
+            if (gameManager.names.Count == scoreTab.transform.childCount)
+            {
+                print("This should only fire when the score are alredy displayed");
+                return;
+            }
+
+            for (int i = 0; i < gameManager.names.Count; i++)
             {
                 GameObject score = Instantiate(scorePrefab, scoreTab.transform);
                 score.transform.localPosition = new Vector3(0, (scoreTab.transform.childCount - 1) * -100, 0);
 
                 Score scoreScore = score.GetComponent<Score>();
                 scoreScore.posText.text = (i + 1).ToString();
-                scoreScore.nameText.text = gameManager.name[i];
-                scoreScore.timeText.text = gameManager.time[i].ToString();
+                scoreScore.nameText.text = gameManager.names[i];
+                scoreScore.timeText.text = gameManager.times[i].ToString();
+                scoreScore.scoreText.text = gameManager.scores[i].ToString();
             }
         }
     }
@@ -70,16 +65,23 @@ public class LeaderboardScreen : MonoBehaviour
             scoreScore.posText.text = scoreTab.transform.childCount.ToString();
             scoreScore.nameText.text = inputField.text;
             scoreScore.timeText.text = (Mathf.Round(gameManager.timer * 10) / 10.0f).ToString();
+            scoreScore.scoreText.text = gameManager.finalScore.ToString();
 
-            gameManager.name.Add(inputField.text);
-            gameManager.time.Add(Mathf.Round(gameManager.timer * 10) / 10.0f);
+            gameManager.names.Add(inputField.text);
+            gameManager.times.Add(Mathf.Round(gameManager.timer * 10) / 10.0f);
+            gameManager.scores.Add(gameManager.finalScore);
 
-            isEnteringName = false;
+            enterTab.SetActive(false);
+            replayTab.SetActive(true);
+
 
             inputField.text = "";
 
             OrganiseScore();
             Saving.SaveData(gameManager);
+
+            enterTab.SetActive(false);
+            replayTab.SetActive(true);
         }
     }
 
@@ -100,15 +102,19 @@ public class LeaderboardScreen : MonoBehaviour
 
                 GameObject score = scoreTab.transform.GetChild(i).gameObject;
 
-                if (gameManager.time[i] < gameManager.time[i - 1])
+                if (gameManager.scores[i] > gameManager.scores[i - 1])
                 {
-                    float test = gameManager.time[i];
-                    gameManager.time[i] = gameManager.time[i - 1];
-                    gameManager.time[i - 1] = test;
+                    float test = gameManager.times[i];
+                    gameManager.times[i] = gameManager.times[i - 1];
+                    gameManager.times[i - 1] = test;
 
-                    string test2 = gameManager.name[i];
-                    gameManager.name[i] = gameManager.name[i - 1];
-                    gameManager.name[i - 1] = test2;
+                    string test2 = gameManager.names[i];
+                    gameManager.names[i] = gameManager.names[i - 1];
+                    gameManager.names[i - 1] = test2;
+
+                    int test3 = gameManager.scores[i];
+                    gameManager.scores[i] = gameManager.scores[i - 1];
+                    gameManager.scores[i - 1] = test3;
 
 
                     score.transform.SetSiblingIndex(i - 1);
@@ -133,19 +139,6 @@ public class LeaderboardScreen : MonoBehaviour
     public void SaveAmdReload()
     {
         Saving.SaveData(gameManager);
-
-        /*int didICauseAnInfiniteLoop = 0;
-        while (scoreTab.transform.childCount > 0)
-        {
-            Destroy(scoreTab.transform.GetChild(0).gameObject);
-            didICauseAnInfiniteLoop++;
-
-            if (didICauseAnInfiniteLoop > 1000)
-            {
-                Debug.LogError("You ducc at programming " + scoreTab.transform.childCount);
-                break;
-            }
-        }*/
 
         if (scoreTab.transform.childCount > 0)
         {

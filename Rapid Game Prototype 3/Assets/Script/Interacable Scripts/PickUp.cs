@@ -81,11 +81,11 @@ public class PickUp : MonoBehaviour
                 }
 
                 // Show whats on the tray
-                print("TRAY");
-                for (int i = 0; i < foodOnTray.Count; i++)
+                //print("TRAY");
+                /*for (int i = 0; i < foodOnTray.Count; i++)
                 {
                     print("Num of " + foodOnTray[i] + " = " + numFoodOnTray[i]);
-                }
+                }*/
 
                 // Get all the elements the orders in the menu list
                 for (int orderNum = 0; orderNum < orderMenu.transform.childCount; orderNum++)
@@ -193,7 +193,7 @@ public class PickUp : MonoBehaviour
             OrderBehaviour order = orderMenu.transform.GetChild(orderButWrongType).gameObject.GetComponent<OrderBehaviour>();
 
             order.PulseIcon();
-            print("SAME ORDER WRONG TYPE");
+            //print("SAME ORDER WRONG TYPE");
         }
 
         return -1;

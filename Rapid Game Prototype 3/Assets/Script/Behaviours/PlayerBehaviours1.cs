@@ -585,6 +585,8 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                             Destroy(counterObject);
 
+                                            gameManager.numCustomersServed++;
+
                                             // Turn order into a happy meal
                                             GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
                                             happyMeal.transform.localPosition = Vector3.zero;
@@ -605,6 +607,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                                             carController.pointsOfInterest.Add(obj.gameObject);
 
                                             Destroy(counterObject);
+
+                                            gameManager.numCustomersServed++;
 
                                             // Turn order into a happy meal
                                             GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
@@ -636,6 +640,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 if (trayNum > 0)
                                 {
                                     GameManager.score -= 1;
+                                    gameManager.numFoodWasted++;
+
                                     Destroy(tray.emptySlot.transform.GetChild(trayNum - 1).gameObject);
                                 }
                             }
@@ -643,6 +649,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                             else
                             {
                                 GameManager.score -= 1;
+                                gameManager.numFoodWasted++;
+
                                 Destroy(playerObj);
                             }
                         }
@@ -1168,6 +1176,8 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                             Destroy(counterObject);
 
+                                            gameManager.numCustomersServed++;
+
                                             // Turn order into a happy meal
                                             GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
                                             happyMeal.transform.localPosition = Vector3.zero;
@@ -1188,6 +1198,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                                             carController.pointsOfInterest.Add(obj.gameObject);
 
                                             Destroy(counterObject);
+
+                                            gameManager.numCustomersServed++;
 
                                             // Turn order into a happy meal
                                             GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
@@ -1211,15 +1223,18 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                             Tray tray = playersObject.GetComponent<Tray>();
 
-
+                            // For every object in the tray
                             if (tray != null)
                             {
                                 GameManager.score -= tray.emptySlot.transform.childCount;
+                                gameManager.numFoodWasted += tray.emptySlot.transform.childCount;
                             }
 
-                            Destroy(playersObject);
-
+                            // For thee tray itself
                             GameManager.score--;
+                            gameManager.numFoodWasted++;
+
+                            Destroy(playersObject);
                         }
                     }
                 }

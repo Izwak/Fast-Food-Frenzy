@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ServiceCounter : MonoBehaviour
 {
+    public GameManager gameManager;
     public Transform orderMenu;
     public Transform customers;
 
@@ -29,22 +30,26 @@ public class ServiceCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (customerAtRegister != CustomerType.NONE)
+        if (gameManager.isRunning)
         {
-            alert.SetActive(true);
-            slider.value += Time.deltaTime;
-            if (!hasPlayed)
+            if (customerAtRegister != CustomerType.NONE)
             {
-                bellDing.time = 3.0f;
-                bellDing.Play();
-                hasPlayed = true;
+                alert.SetActive(true);
+                slider.value += Time.deltaTime;
+                if (!hasPlayed)
+                {
+                    bellDing.time = 3.0f;
+                    bellDing.Play();
+                    hasPlayed = true;
+                }
+            }
+            else
+            {
+                alert.SetActive(false);
+                hasPlayed = false;
             }
         }
-        else
-        {
-            alert.SetActive(false);
-            hasPlayed = false;
-        }
+        
 
         // Set Colour
         if (slider.value < slider.maxValue / 2) { slider.image.color = Color.Lerp(Color.green, Color.yellow, slider.value / (slider.maxValue / 2)); }
@@ -73,6 +78,7 @@ public class ServiceCounter : MonoBehaviour
                         GameManager.score--;
                         slider.value = 0;
                         customer.stage = CustomerStage.LEAVING;
+                        customer.gameManager.numCustomersPissed++;
                         customerAtRegister = CustomerType.NONE;
                         isCustomerAtCounterYet = true;
                         break;
@@ -89,6 +95,7 @@ public class ServiceCounter : MonoBehaviour
                             GameManager.score--;
                             slider.value = 0;
                             customer.stage = CustomerStage.LEAVING;
+                            customer.gameManager.numCustomersPissed++;
                             customerAtRegister = CustomerType.NONE;
                             isCustomerAtCounterYet = true;
                             break;
@@ -110,6 +117,7 @@ public class ServiceCounter : MonoBehaviour
                     if (customer != null && customer.stage == CustomerStage.WAITING)
                     {
                         GameManager.score--;
+                        customer.gameManager.numCustomersPissed++;
                         slider.value = 0;
                         customer.stage = CustomerStage.LEAVING;
                         customerAtRegister = CustomerType.NONE;
@@ -126,6 +134,7 @@ public class ServiceCounter : MonoBehaviour
                         if (customer != null && customer.stage == CustomerStage.INLINE)
                         {
                             GameManager.score--;
+                            customer.gameManager.numCustomersPissed++;
                             slider.value = 0;
                             customer.stage = CustomerStage.LEAVING;
                             customerAtRegister = CustomerType.NONE;

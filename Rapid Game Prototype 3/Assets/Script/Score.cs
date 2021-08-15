@@ -8,4 +8,5 @@ public class Score : MonoBehaviour
     public TextMeshProUGUI posText;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI timeText;
+    public TextMeshProUGUI scoreText;
 }

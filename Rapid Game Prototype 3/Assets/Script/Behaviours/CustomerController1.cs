@@ -13,6 +13,7 @@ public enum CustomerStage
 
 public class CustomerController1 : MonoBehaviour
 {
+    public GameManager gameManager;
     public Transform emptySlot;
     public List<GameObject> pointsOfInterest;
 
