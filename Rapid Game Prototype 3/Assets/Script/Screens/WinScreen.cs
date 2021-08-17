@@ -113,7 +113,7 @@ public class WinScreen : MonoBehaviour
 
         float score = served * 100 - pissed * 50 - wasted * 25 + timer * 10;
 
-        SetText(numberTexts[4], "0.0");
+        SetText(numberTexts[4], "0");
         SetText(rating, SetLetterGrade((int)score));
 
         gameManager.finalScore = (int)score;
