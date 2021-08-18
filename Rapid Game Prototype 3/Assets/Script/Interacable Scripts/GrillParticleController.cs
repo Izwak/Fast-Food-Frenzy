@@ -35,10 +35,14 @@ public class GrillParticleController : MonoBehaviour
                     audioController.Play();
                     playingAudio = true;
                 }
+                if(emptySlot.transform.GetChild(0).tag == "Fire Paddies") {
+                    GetComponent<FireParticleController>().onfire = true;
+                }
             }
         }
         if (emptySlot.transform.childCount <= 0)
         {
+            GetComponent<FireParticleController>().onfire = false;
             clone.SetActive(false);
             audioController.Stop();
             playingAudio = false;
