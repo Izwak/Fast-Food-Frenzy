@@ -143,10 +143,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   stage: 0
   dis: 0
   angle: 0
   positionInLine: 0
+  currentTarget: 0
 --- !u!1001 &52500316826521588
 PrefabInstance:
   m_ObjectHideFlags: 0

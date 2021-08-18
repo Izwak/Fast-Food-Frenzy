@@ -32,9 +32,9 @@ public class CustomerManager : MonoBehaviour
     {
         if (gameManager.isRunning)
         {
-            if (customerParent.childCount < 10 && tick % 400 == 0)
+            if (customerParent.childCount < 13 && tick % 400 == 0)
             {
-                if (CountCars() < 2)
+                if (CountCars() < 5)
                 {
                     CreateCustomer(Random.Range(0, 3));
                 }
@@ -76,7 +76,7 @@ public class CustomerManager : MonoBehaviour
             newCustomer.GetComponent<CarController>().pointsOfInterest[0] = registers[registerNum];
             newCustomer.GetComponent<CarController>().gameManager = gameManager;
 
-            for (int i = 0; i < pointsOfInterest.Count; i++)
+            for (int i = 0; i < carPointsOfInterest.Count; i++)
             {
                 newCustomer.GetComponent<CarController>().pointsOfInterest[i + 1] = carPointsOfInterest[i];
             }

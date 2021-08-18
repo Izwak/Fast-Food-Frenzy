@@ -8,7 +8,6 @@ public class OrderManager : MonoBehaviour
     public GameObject customers;
     public GameObject orderMenu;
 
-    AudioSource angry;
 
     // These are the different bits that make up the order
     public List<GameObject> orderPrefabs;
@@ -35,7 +34,7 @@ public class OrderManager : MonoBehaviour
 
     private void Start()
     {
-        angry = GetComponent<AudioSource>();
+
     }
 
     private void Update()
@@ -65,7 +64,8 @@ public class OrderManager : MonoBehaviour
                                     // Order Completed, Customer Picks up order and removes it from display
 
                                     customerController.stage = CustomerStage.LEAVING;
-                                    angry.Play();
+                                    gameManager.audio.Play("Angry");
+                                    //angry.Play();
                                     gameManager.numCustomersPissed++;
                                     break;
                                 }
@@ -77,14 +77,14 @@ public class OrderManager : MonoBehaviour
                             for (int j = 0; j < customers.transform.childCount; j++)
                             {
                                 GameObject customer = customers.transform.GetChild(j).gameObject;
-                                CarController customerController = customer.GetComponent<CarController>();
+                                CarController carController = customer.GetComponent<CarController>();
 
                                 // Check Customer State
-                                if (customerController != null && customerController.stage == CustomerStage.WAITING)
+                                if (carController != null && carController.stage == CustomerStage.WAITING)
                                 {
                                     // Order Completed, Customer Picks up order and removes it from display
 
-                                    customerController.stage = CustomerStage.LEAVING;
+                                    carController.stage = CustomerStage.LEAVING;
                                     gameManager.numCustomersPissed++;
                                     break;
                                 }

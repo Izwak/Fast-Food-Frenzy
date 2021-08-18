@@ -9,7 +9,7 @@ public class CarController : MonoBehaviour
 
     public CustomerStage stage;
 
-    AudioSource honk;
+    public AudioSource honk;
     float timer = 20;
 
     Rigidbody body;
@@ -20,6 +20,7 @@ public class CarController : MonoBehaviour
     public float dis;
     public float angle;
     public int positionInLine;
+    public int currentTarget;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class CarController : MonoBehaviour
         stage = CustomerStage.INLINE;
         register = pointsOfInterest[0].GetComponent<ServiceCounter>();
         honk = GetComponent<AudioSource>();
+        currentTarget = 3;
     }
 
 
@@ -68,7 +70,7 @@ public class CarController : MonoBehaviour
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
-            honk.Play();
+            //honk.Play();
             timer = 20;
         }
 
@@ -79,7 +81,7 @@ public class CarController : MonoBehaviour
 
         if (stage == CustomerStage.INLINE)
         {
-            positionInLine = FindPosInLine(pointsOfInterest[0], 0, CustomerStage.ATCOUNTER) + FindPosInLine(pointsOfInterest[0], 0, CustomerStage.INLINE) + FindPosInLine(pointsOfInterest[0], 0, CustomerStage.WAITING);
+            positionInLine = FindPosInLine(pointsOfInterest[0], 0, CustomerStage.ATCOUNTER) + FindPosInLine(pointsOfInterest[0], 0, CustomerStage.INLINE);
             body.velocity = transform.forward * speed;
             target = pointsOfInterest[2].transform.position + new Vector3(-10 * positionInLine, 0, 0); // Target to be infront of register but also stay in line
             dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.x, target.z));
@@ -99,21 +101,50 @@ public class CarController : MonoBehaviour
         {
             body.velocity = Vector3.zero;
 
-            if (register.customerAtRegister != CustomerType.NONE)
+
+            if (dis > 0.5)
+            {
+                stage = CustomerStage.INLINE;
+                register.customerAtRegister = CustomerType.NONE;
+            }
+            // If your order was taken go to pick up area
+            if (register.customerAtRegister == CustomerType.NONE)
             {
                 stage = CustomerStage.WAITING;
             }
         }
         if (stage == CustomerStage.WAITING)
         {
-            //if (pointsOfInterest[0])
+            positionInLine = FindPosInLine(pointsOfInterest[5], currentTarget, CustomerStage.WAITING) + FindPosInLine(pointsOfInterest[4], currentTarget, CustomerStage.WAITING);
+            target = pointsOfInterest[currentTarget].transform.position + new Vector3(0, 0, 5 * positionInLine);
+            dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.x, target.z));
+
+            if (currentTarget < 4)
+            {
+                body.velocity = transform.forward * speed;
+                if (dis < 0.5)
+                {
+                    currentTarget++;
+                }
+            }
+            else
+            {
+                if (dis > 0.5)
+                {
+                    body.velocity = transform.forward * speed;
+                }
+                else
+                {
+                    body.velocity = Vector3.zero;
+                }
+            }
         }
         if (stage == CustomerStage.PICKUP)
         {
             //GameObject item = pointsOfInterest[4].GetComponent<Interact>().emptySlot.transform.GetChild(0).gameObject;
 
-            Interact counter = pointsOfInterest[4].GetComponent<Interact>();
-            PickUp pickUp = pointsOfInterest[4].GetComponent<PickUp>();
+            Interact counter = pointsOfInterest[6].GetComponent<Interact>();
+            PickUp pickUp = pointsOfInterest[6].GetComponent<PickUp>();
 
             // If theres an item on the pick up counter
             if (counter != null && pickUp != null && counter.emptySlot.transform.childCount > 0)
@@ -134,11 +165,17 @@ public class CarController : MonoBehaviour
         }
         if (stage == CustomerStage.LEAVING)
         {
+            speed = 7;
             body.velocity = transform.forward * speed;
-            target = pointsOfInterest[3].transform.position;
+            target = pointsOfInterest[currentTarget].transform.position + new Vector3(2, 0, 0);
             dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.x, target.z));
 
+
             if (dis < 0.1f)
+            {
+                currentTarget++;
+            }
+            if (currentTarget == 6)
             {
                 Destroy(this.gameObject);
             }
