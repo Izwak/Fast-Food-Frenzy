@@ -9,6 +9,9 @@ public class CarController : MonoBehaviour
 
     public CustomerStage stage;
 
+    AudioSource honk;
+    float timer = 20;
+
     Rigidbody body;
     Vector3 target;
     ServiceCounter register;
@@ -24,6 +27,7 @@ public class CarController : MonoBehaviour
         body = GetComponent<Rigidbody>();
         stage = CustomerStage.INLINE;
         register = pointsOfInterest[0].GetComponent<ServiceCounter>();
+        honk = GetComponent<AudioSource>();
     }
 
 
@@ -60,6 +64,14 @@ public class CarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //play a honk sound every 20 seconds
+        timer -= Time.deltaTime;
+        if (timer <= 0)
+        {
+            honk.Play();
+            timer = 20;
+        }
+
         // Always do this
         angle = Mathf.Atan2(target.x - transform.position.x, target.z - transform.position.z) * Mathf.Rad2Deg;
         dis = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.x, target.z));
