@@ -138,6 +138,8 @@ GameObject:
   - component: {fileID: 6756996403664951695}
   - component: {fileID: 6756996403664951688}
   - component: {fileID: 6756996403664951699}
+  - component: {fileID: 608386918}
+  - component: {fileID: 608386912}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -188,7 +190,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: bf75997a1c67e444489a3f7d12b76eef, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -232,7 +234,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6756996403664951689}
   serializedVersion: 2
-  m_Mass: 3
+  m_Mass: 10
   m_Drag: 5
   m_AngularDrag: 5
   m_UseGravity: 1
@@ -240,3 +242,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!81 &608386918
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6756996403664951689}
+  m_Enabled: 1
+--- !u!114 &608386912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6756996403664951689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee40b205fbc11942930037579b4f476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  isRunning: 0
+  empltySlot: {fileID: 6756996402258317807}
+  target: {fileID: 0}
+  holdCoolDown: 0
