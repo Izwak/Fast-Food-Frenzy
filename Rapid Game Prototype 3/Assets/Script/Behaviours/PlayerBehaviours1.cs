@@ -1249,4 +1249,25 @@ public class PlayerBehaviours1 : MonoBehaviour
             }
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        print("YOU DIED");
+
+        GameObject CollidedObj = collision.collider.gameObject;
+        CarController car = CollidedObj.GetComponent<CarController>();
+        Rigidbody bodyObj = CollidedObj.GetComponent<Rigidbody>();
+
+        if (car != null && bodyObj != null && bodyObj.velocity.magnitude > 3)
+        {
+            print("Mummy Look at Me");
+
+            body.constraints = RigidbodyConstraints.None;
+            body.velocity = bodyObj.velocity;
+            enabled = false;
+
+            //this.gameObject.GetComponent<PlayerBehaviours1>().enabled = false;
+            //enabled = false;
+        }
+    }
 }

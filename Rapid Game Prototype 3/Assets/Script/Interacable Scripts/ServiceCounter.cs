@@ -36,6 +36,7 @@ public class ServiceCounter : MonoBehaviour
             {
                 alert.SetActive(true);
                 slider.value += Time.deltaTime;
+
                 if (!hasPlayed)
                 {
                     bellDing.time = 3.0f;
@@ -81,6 +82,7 @@ public class ServiceCounter : MonoBehaviour
                         customer.gameManager.numCustomersPissed++;
                         customerAtRegister = CustomerType.NONE;
                         isCustomerAtCounterYet = true;
+                        gameManager.audio.Play("Angry");
                         break;
                     }
                 }
@@ -98,6 +100,7 @@ public class ServiceCounter : MonoBehaviour
                             customer.gameManager.numCustomersPissed++;
                             customerAtRegister = CustomerType.NONE;
                             isCustomerAtCounterYet = true;
+                            gameManager.audio.Play("Angry");
                             break;
                         }
                     }
@@ -114,7 +117,7 @@ public class ServiceCounter : MonoBehaviour
                 {
                     CarController customer = customers.GetChild(i).GetComponent<CarController>();
 
-                    if (customer != null && customer.stage == CustomerStage.WAITING)
+                    if (customer != null && customer.stage == CustomerStage.ATCOUNTER)
                     {
                         GameManager.score--;
                         customer.gameManager.numCustomersPissed++;
@@ -122,6 +125,7 @@ public class ServiceCounter : MonoBehaviour
                         customer.stage = CustomerStage.LEAVING;
                         customerAtRegister = CustomerType.NONE;
                         isCustomerAtCounterYet = true;
+                        customer.honk.Play();
                         break;
                     }
                 }
@@ -139,6 +143,7 @@ public class ServiceCounter : MonoBehaviour
                             customer.stage = CustomerStage.LEAVING;
                             customerAtRegister = CustomerType.NONE;
                             isCustomerAtCounterYet = true;
+                            customer.honk.Play();
                             break;
                         }
                     }
