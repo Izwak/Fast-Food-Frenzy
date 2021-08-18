@@ -20,6 +20,8 @@ public class PlayerBehaviours1 : MonoBehaviour
     public float holdCoolDown = 0;
     bool rewritethisbtr = false;
 
+    AudioSource tempSound;
+
     RaycastHit hit;
 
     Vector2 tartgetPoint = new Vector2(0, -1);
@@ -628,6 +630,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                         // Checks that you have something to discard
                         if (holdingNum > 0)
                         {
+                            tempSound = obj.GetComponent<AudioSource>();
+                            tempSound.Play();
                             GameObject playerObj = empltySlot.transform.GetChild(holdingNum - 1).gameObject;
                             Tray tray = playerObj.GetComponent<Tray>();
 
@@ -841,6 +845,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                         if (holdingNum == 0)
                         {
                             GameObject food = Instantiate(obj.createObject);
+                            tempSound = obj.GetComponent<AudioSource>();
+                            tempSound.Play();
                             food.transform.SetParent(empltySlot.transform);
 
                             if (food.CompareTag("Raw Fries"))
@@ -1219,6 +1225,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                         // Put tray in bin
                         if (holdingNum > 0)
                         {
+                            tempSound = obj.GetComponent<AudioSource>();
+                            tempSound.Play();
                             GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
 
                             Tray tray = playersObject.GetComponent<Tray>();

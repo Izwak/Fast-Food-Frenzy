@@ -8,6 +8,8 @@ public class OrderManager : MonoBehaviour
     public GameObject customers;
     public GameObject orderMenu;
 
+    AudioSource angry;
+
     // These are the different bits that make up the order
     public List<GameObject> orderPrefabs;
 
@@ -29,6 +31,11 @@ public class OrderManager : MonoBehaviour
 
         return newOrder;
         //return orders[Random.Range(0, orders.Count)];
+    }
+
+    private void Start()
+    {
+        angry = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -58,6 +65,7 @@ public class OrderManager : MonoBehaviour
                                     // Order Completed, Customer Picks up order and removes it from display
 
                                     customerController.stage = CustomerStage.LEAVING;
+                                    angry.Play();
                                     gameManager.numCustomersPissed++;
                                     break;
                                 }
