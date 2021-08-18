@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7c5b12a7dd94a4a943ab2305d955fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   emptySlot: {fileID: 9194769950546008307}
   pointsOfInterest:
   - {fileID: 0}
