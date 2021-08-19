@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ScreenManager : MonoBehaviour
 {
-    public GameObject menu;
+    public GameMenuScreen menu;
     public GameOverlay overlay;
     public GameObject orders;
     public WinScreen win;

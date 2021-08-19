@@ -37,7 +37,7 @@ public class GrillParticleController : MonoBehaviour
                 }
                 if(emptySlot.transform.GetChild(0).tag == "Fire Paddies") {
                     GetComponent<FireParticleController>().onfire = true;
-                }
+                } 
             }
         }
         if (emptySlot.transform.childCount <= 0)

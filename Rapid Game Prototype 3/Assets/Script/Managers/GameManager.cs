@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public PlayerBehaviours1 player1;
 
     public ScreenManager screen;
+    public new CameraManager camera;
     public new AudioManager audio;
 
     public float timer = 301;
@@ -142,6 +143,7 @@ public class GameManager : MonoBehaviour
         isRunning = true;
         player1.isRunning = true;
         gameState = GameState.GAMEPLAY;
+        camera.stage = CameraState.GAMEPLAY;
 
         audio.Stop("Main Menu Theme");
         audio.Play("Savvy Server");

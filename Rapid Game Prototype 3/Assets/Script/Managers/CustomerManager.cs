@@ -90,10 +90,20 @@ public class CustomerManager : MonoBehaviour
             newCustomer.GetComponent<CustomerController1>().pointsOfInterest[0] = registers[registerNum];
             newCustomer.GetComponent<CustomerController1>().gameManager = gameManager;
 
-            for (int i = 0; i < pointsOfInterest.Count; i++)
+            /*for (int i = 0; i < pointsOfInterest.Count; i++)
             {
                 newCustomer.GetComponent<CustomerController1>().pointsOfInterest[i + 1] = pointsOfInterest[i];
-            }
+            }*/
+
+            newCustomer.GetComponent<CustomerController1>().pointsOfInterest[1] = pointsOfInterest[0];
+            newCustomer.GetComponent<CustomerController1>().pointsOfInterest[3] = pointsOfInterest[3];
+
+            bool send2SecondLine = Random.value > 0.5; // Lol i saw this worked somewhere all u need 2 know is that its a random bool
+
+            if (send2SecondLine)
+                newCustomer.GetComponent<CustomerController1>().pointsOfInterest[2] = pointsOfInterest[2];
+            else
+                newCustomer.GetComponent<CustomerController1>().pointsOfInterest[2] = pointsOfInterest[1];
 
             newCustomer.transform.SetParent(customerParent);
         }
