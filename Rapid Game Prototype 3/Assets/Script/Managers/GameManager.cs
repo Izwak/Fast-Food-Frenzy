@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
             player1.isRunning = true;
             gameState = GameState.GAMEPLAY;
             audio.Play("Savvy Server");
+            camera.stage = CameraState.GAMEPLAY;
         }
     }
 
