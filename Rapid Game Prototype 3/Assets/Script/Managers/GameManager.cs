@@ -12,9 +12,18 @@ public enum GameState
     GAMEPLAY,
 }
 
+public enum GameEnding
+{ 
+    NONE,
+    SCORING,
+    FIRED,
+    DEAD
+}
+
 public class GameManager : MonoBehaviour
 {
-    public static GameState gameState;
+    public static GameState state;
+    public GameEnding ending = GameEnding.NONE;
     public GameState test;
 
     public bool isRunning = false;
@@ -45,7 +54,7 @@ public class GameManager : MonoBehaviour
         screen.win.gameObject.SetActive(false);
         screen.win.confetti.SetActive(false);
 
-        if (gameState == GameState.MAIN_MENU)
+        if (state == GameState.MAIN_MENU)
         {
             screen.menu.gameObject.SetActive(true);
             screen.overlay.gameObject.SetActive(false);
@@ -53,13 +62,13 @@ public class GameManager : MonoBehaviour
             player1.isRunning = false;
             audio.Play("Main Menu Theme");
         }
-        else if (gameState == GameState.GAMEPLAY || gameState == GameState.MENU)
+        else if (state == GameState.GAMEPLAY || state == GameState.MENU)
         {
             screen.menu.gameObject.SetActive(false);
             screen.overlay.gameObject.SetActive(true);
             isRunning = true;
             player1.isRunning = true;
-            gameState = GameState.GAMEPLAY;
+            state = GameState.GAMEPLAY;
             audio.Play("Savvy Server");
             camera.stage = CameraState.GAMEPLAY;
         }
@@ -68,9 +77,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        test = gameState;
+        test = state;
 
-        if (gameState == GameState.GAMEPLAY)
+        if (state == GameState.GAMEPLAY)
         {
             if (isRunning)
             {
@@ -95,7 +104,7 @@ public class GameManager : MonoBehaviour
 
                     screen.win.gameObject.SetActive(true);
 
-                    gameState = GameState.MENU;
+                    state = GameState.MENU;
                     audio.Stop("Panic");
                     audio.Stop("Savvy Server");
 
@@ -111,7 +120,22 @@ public class GameManager : MonoBehaviour
 
                     screen.leaderboard.isEnteringName = true;
 
-                    gameState = GameState.MENU;
+                    state = GameState.MENU;
+                    audio.Stop("Panic");
+                    audio.Stop("Savvy Server");
+
+
+                    audio.Play("YAAAY");
+                }
+
+                else if (ending == GameEnding.DEAD)
+                {
+                    isRunning = false;
+                    screen.overlay.gameObject.SetActive(false);
+                    screen.overlay.gameObject.SetActive(false);
+                    screen.dead.gameObject.SetActive(true);
+
+                    state = GameState.MENU;
                     audio.Stop("Panic");
                     audio.Stop("Savvy Server");
 
@@ -120,7 +144,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        else if (gameState == GameState.MENU)
+        else if (state == GameState.MENU)
         {
             if (!audio.IsPlaying("Shift Over"))
             {
@@ -132,8 +156,8 @@ public class GameManager : MonoBehaviour
     public void ResetToGameplay()
     {
         score = 0;
-        gameState = GameState.MENU;
-        print(gameState + " BEFORE THE CHANGE");
+        state = GameState.MENU;
+        print(state + " BEFORE THE CHANGE");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -143,7 +167,7 @@ public class GameManager : MonoBehaviour
         screen.overlay.gameObject.SetActive(true);
         isRunning = true;
         player1.isRunning = true;
-        gameState = GameState.GAMEPLAY;
+        state = GameState.GAMEPLAY;
         camera.stage = CameraState.GAMEPLAY;
 
         audio.Stop("Main Menu Theme");
@@ -191,7 +215,7 @@ public class GameManager : MonoBehaviour
     public void ResetToMenu()
     {
         score = 0;
-        gameState = GameState.MAIN_MENU;
+        state = GameState.MAIN_MENU;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         player1.isRunning = false;
     }

@@ -10,5 +10,6 @@ public class ScreenManager : MonoBehaviour
     public WinScreen win;
     public GameObject lose;
     public GameObject fired;
+    public GameObject dead;
     public LeaderboardScreen leaderboard;
 }

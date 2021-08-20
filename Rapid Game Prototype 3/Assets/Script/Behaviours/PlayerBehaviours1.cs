@@ -1261,10 +1261,11 @@ public class PlayerBehaviours1 : MonoBehaviour
             print("Mummy Look at Me");
 
             body.constraints = RigidbodyConstraints.None;
-            body.transform.forward = bodyObj.transform.forward;
+            //body.transform.forward = bodyObj.transform.forward;
             body.velocity = bodyObj.velocity * 2;
             enabled = false;
 
+            gameManager.ending = GameEnding.DEAD;
             //this.gameObject.GetComponent<PlayerBehaviours1>().enabled = false;
             //enabled = false;
         }
