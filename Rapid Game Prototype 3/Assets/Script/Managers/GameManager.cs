@@ -17,7 +17,9 @@ public enum GameEnding
     NONE,
     SCORING,
     FIRED,
-    DEAD
+    DEAD,
+    QUIT,
+    GOLD
 }
 
 public class GameManager : MonoBehaviour
@@ -134,6 +136,36 @@ public class GameManager : MonoBehaviour
                     screen.overlay.gameObject.SetActive(false);
                     screen.overlay.gameObject.SetActive(false);
                     screen.dead.gameObject.SetActive(true);
+
+                    state = GameState.MENU;
+                    audio.Stop("Panic");
+                    audio.Stop("Savvy Server");
+
+
+                    audio.Play("YAAAY");
+                }
+
+                else if (ending == GameEnding.QUIT)
+                {
+                    isRunning = false;
+                    screen.overlay.gameObject.SetActive(false);
+                    screen.overlay.gameObject.SetActive(false);
+                    screen.quit.gameObject.SetActive(true);
+
+                    state = GameState.MENU;
+                    audio.Stop("Panic");
+                    audio.Stop("Savvy Server");
+
+
+                    audio.Play("YAAAY");
+                }
+
+                else if (ending == GameEnding.GOLD)
+                {
+                    isRunning = false;
+                    screen.quit.gameObject.SetActive(false);
+                    screen.overlay.gameObject.SetActive(false);
+                    screen.golden.gameObject.SetActive(true);
 
                     state = GameState.MENU;
                     audio.Stop("Panic");

@@ -1276,4 +1276,22 @@ public class PlayerBehaviours1 : MonoBehaviour
             //enabled = false;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "Gold")
+        {
+            gameManager.isRunning = true;
+            GameManager.state = GameState.GAMEPLAY;
+            gameManager.ending = GameEnding.GOLD;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name == "HitBox")
+        {
+            gameManager.ending = GameEnding.QUIT;
+        }
+    }
 }

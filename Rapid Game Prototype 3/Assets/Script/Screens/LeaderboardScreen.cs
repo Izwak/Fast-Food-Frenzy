@@ -136,6 +136,11 @@ public class LeaderboardScreen : MonoBehaviour
         }
     }
 
+    public void SkipScoring()
+    {
+        enterTab.SetActive(false);
+        replayTab.SetActive(true);
+    }
     public void SaveAmdReload()
     {
         Saving.SaveData(gameManager);
