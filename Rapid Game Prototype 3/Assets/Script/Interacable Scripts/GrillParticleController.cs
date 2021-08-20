@@ -40,11 +40,12 @@ public class GrillParticleController : MonoBehaviour
                 } 
             }
         }
-        if (emptySlot.transform.childCount <= 0)
+        if (emptySlot.transform.childCount <= 0 && playingAudio == true)
         {
             GetComponent<FireParticleController>().onfire = false;
             clone.SetActive(false);
             audioController.Stop();
+            StartCoroutine(FadeOutSound.FadeOut(audioController, 1, audioController.time));
             playingAudio = false;
         }
     }
