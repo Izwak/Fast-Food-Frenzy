@@ -19,6 +19,8 @@ TagManager:
   - Tray
   - Happy Meal
   - Door
+  - Fire Paddies
+  - Extinguisher
   layers:
   - Default
   - TransparentFX
