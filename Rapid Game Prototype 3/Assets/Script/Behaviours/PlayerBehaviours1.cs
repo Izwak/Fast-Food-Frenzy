@@ -194,7 +194,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                 }
                 if (obj.type == Interactables.COUNTER)
                 {
-                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Food") && !empltySlot.transform.GetChild(0).CompareTag("Tray"))
+                    if (holdingNum > 0 && !empltySlot.transform.GetChild(0).CompareTag("Food") && !empltySlot.transform.GetChild(0).CompareTag("Extinguisher") && !empltySlot.transform.GetChild(0).CompareTag("Tray"))
                     {
                         DisableOutline(newhit);
                     }
@@ -252,7 +252,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             DisableOutline(newhit);
                         }
                         if (!empltySlot.transform.GetChild(0).CompareTag("Raw Paddies") && !empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") &&
-                            !empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
+                            !empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies") && !empltySlot.transform.GetChild(0).CompareTag("Extinguisher"))
                         {
                             DisableOutline(newhit);
                         }
@@ -274,6 +274,9 @@ public class PlayerBehaviours1 : MonoBehaviour
                             {
                                 DisableOutline(newhit);
                             }
+                        }
+                        if (empltySlot.transform.GetChild(0).CompareTag("Extinguisher")) {
+
                         }
                     }
                 }
@@ -469,7 +472,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             GameObject playersObject = empltySlot.transform.GetChild(0).gameObject;
 
                             // Can put objects on counters if they're a food
-                            if (playersObject.CompareTag("Food"))
+                            if (playersObject.CompareTag("Food") || playersObject.CompareTag("Extinguisher"))
                             {
                                 //print("swap hand with counter");
                                 playersObject.transform.SetParent(obj.emptySlot.transform);
@@ -532,7 +535,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             GameObject counterObject = obj.emptySlot.transform.GetChild(0).gameObject;
 
                             // Pick up Food
-                            if (counterObject.CompareTag("Food"))
+                            if (counterObject.CompareTag("Food") || counterObject.CompareTag("Extinguisher"))
                             {
                                 counterObject.transform.SetParent(empltySlot.transform);
                                 counterObject.transform.localPosition = Vector3.zero;
@@ -941,6 +944,9 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 {
                                     cooking.beingCooked = true;
                                 }
+                            }
+                            if (paddy.CompareTag("Extinguisher")) {
+                                obj.GetComponent<FireParticleController>().onfire = false;
                             }
                         }
 
