@@ -973,7 +973,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                         {
                             // Only take off what you are already holding
                             if ((empltySlot.transform.GetChild(0).CompareTag("Cooked Paddies") && obj.emptySlot.transform.GetChild(0).CompareTag("Cooked Paddies"))
-                                || empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies") && obj.emptySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
+                                || (empltySlot.transform.GetChild(0).CompareTag("Burnt Paddies") && obj.emptySlot.transform.GetChild(0).CompareTag("Burnt Paddies"))
+                                || (empltySlot.transform.GetChild(0).CompareTag("Fire Paddies") && obj.emptySlot.transform.GetChild(0).CompareTag("Fire Paddies")))
                             {
                                 Transform cookedPaddy = obj.emptySlot.transform.GetChild(0).transform;
                                 cookedPaddy.SetParent(empltySlot.transform);
