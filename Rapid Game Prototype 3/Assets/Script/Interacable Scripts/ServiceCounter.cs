@@ -24,12 +24,13 @@ public class ServiceCounter : MonoBehaviour
     {
         hasPlayed = false;
         bellDing = GetComponent<AudioSource>();
-        slider.maxValue = 30;
     }
 
     // Update is called once per frame
     void Update()
     {
+        slider.maxValue = gameManager.registerTimer;
+
         if (gameManager.isRunning)
         {
             if (customerAtRegister != CustomerType.NONE)

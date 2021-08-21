@@ -22,11 +22,19 @@ public enum GameEnding
     GOLD
 }
 
+public enum GameMode
+{
+    BABY,
+    NORMAL,
+    ENDLESS
+}
+
+
 public class GameManager : MonoBehaviour
 {
     public static GameState state;
+    public static GameMode mode = GameMode.BABY;
     public GameEnding ending = GameEnding.NONE;
-    public GameState test;
 
     public bool isRunning = false;
 
@@ -48,6 +56,23 @@ public class GameManager : MonoBehaviour
     public List<int> scores;
 
     public Collider buildingHitBox;
+
+    [HideInInspector]
+    public int customerSpawnRate;
+    [HideInInspector]
+    public int orderTimer;
+    [HideInInspector]
+    public int registerTimer;
+    [HideInInspector]
+    public int burnTime;
+    [HideInInspector]
+    public int maxCustomers;
+
+    public Material[] skyBoxes;
+
+    public Transform[] sunFacing;
+
+    public Light sun;
 
     // Start is called before the first frame update
     void Start()
@@ -74,13 +99,12 @@ public class GameManager : MonoBehaviour
             audio.Play("Savvy Server");
             camera.stage = CameraState.GAMEPLAY;
         }
+        SetGameMode(mode);
     }
 
     // Update is called once per frame
     void Update()
     {
-        test = state;
-
         if (state == GameState.GAMEPLAY)
         {
             if (isRunning)
@@ -134,7 +158,7 @@ public class GameManager : MonoBehaviour
                 {
                     isRunning = false;
                     screen.overlay.gameObject.SetActive(false);
-                    screen.overlay.gameObject.SetActive(false);
+                    screen.orders.gameObject.SetActive(false);
                     screen.dead.gameObject.SetActive(true);
 
                     state = GameState.MENU;
@@ -149,7 +173,7 @@ public class GameManager : MonoBehaviour
                 {
                     isRunning = false;
                     screen.overlay.gameObject.SetActive(false);
-                    screen.overlay.gameObject.SetActive(false);
+                    screen.orders.gameObject.SetActive(false);
                     screen.quit.gameObject.SetActive(true);
 
                     state = GameState.MENU;
@@ -165,6 +189,7 @@ public class GameManager : MonoBehaviour
                     isRunning = false;
                     screen.quit.gameObject.SetActive(false);
                     screen.overlay.gameObject.SetActive(false);
+                    screen.orders.gameObject.SetActive(false);
                     screen.golden.gameObject.SetActive(true);
 
                     state = GameState.MENU;
@@ -187,14 +212,16 @@ public class GameManager : MonoBehaviour
 
     public void ResetToGameplay()
     {
+        SetGameMode(mode);
         score = 0;
         state = GameState.MENU;
         print(state + " BEFORE THE CHANGE");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void LoadGameScene()
+    public void LoadGameScene(int mode)
     {
+        SetGameMode((GameMode)mode);
         screen.menu.gameObject.SetActive(false);
         screen.overlay.gameObject.SetActive(true);
         isRunning = true;
@@ -264,5 +291,36 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
         print("YOU QUIT HERE");
+    }
+
+    public void SetGameMode(GameMode newMode)
+    {
+        mode = newMode;
+
+        if (mode == GameMode.BABY)
+        {
+            customerSpawnRate = 600;
+            orderTimer = 200;
+            registerTimer = 60;
+            burnTime = 20;
+            maxCustomers = 10;
+
+            RenderSettings.skybox = skyBoxes[0];
+            sun.transform.rotation = sunFacing[0].rotation;
+            sun.color = new Color(255.0f / 255.0f, 244.0f / 255.0f, 214.0f / 255.0f);
+            sun.intensity = 0.8f;
+        }
+        else if (mode == GameMode.NORMAL)
+        {
+            customerSpawnRate = 400;
+            orderTimer = 100;
+            registerTimer = 25;
+            burnTime = 10;
+            maxCustomers = 15;
+            RenderSettings.skybox = skyBoxes[1];
+            sun.transform.rotation = sunFacing[1].rotation;
+            sun.color = new Color(255.0f / 255.0f, 61.0f / 255.0f, 0);
+            sun.intensity = 2f;
+        }
     }
 }

@@ -47,10 +47,20 @@ public class GameOverlay : MonoBehaviour
             scoreNegative.gameObject.SetActive(true);
         }
     }
+
+    public IEnumerator waitThenDisplay2(string text, float wait)
+    {
+        yield return new WaitForSeconds(wait);
+
+        tipText.gameObject.SetActive(true);
+        tipText.text = text;
+        tipText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = text;
+    }
+
+
     public void waitThenDisplay(string text)
     {
         tick += Time.deltaTime;
-
         if (tick > .3)
         {
             tipText.gameObject.SetActive(true);

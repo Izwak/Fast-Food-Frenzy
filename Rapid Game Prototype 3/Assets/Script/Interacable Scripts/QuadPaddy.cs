@@ -6,16 +6,10 @@ public class QuadPaddy : MonoBehaviour
 {
     public GameObject[] paddy;
 
-    int paddyCount = 4;
+    public int paddyCount = 4;
 
     // Start is called before the first frame update
     void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
     {
         
     }

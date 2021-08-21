@@ -25,7 +25,7 @@ public class OrderBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bar.maxValue = 100;
+        //bar.maxValue = 100;
     }
 
     // Update is called once per frame

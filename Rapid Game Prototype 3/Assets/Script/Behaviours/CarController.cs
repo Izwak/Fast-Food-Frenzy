@@ -158,6 +158,7 @@ public class CarController : MonoBehaviour
                     Destroy(item);
 
                     stage = CustomerStage.LEAVING;
+                    currentTarget = 5;
 
                     GameManager.score++;
                 }
@@ -165,6 +166,7 @@ public class CarController : MonoBehaviour
         }
         if (stage == CustomerStage.LEAVING)
         {
+            print("First target" + currentTarget);
             speed = 7;
             body.velocity = transform.forward * speed;
             target = pointsOfInterest[currentTarget].transform.position + new Vector3(2, 0, 0);
@@ -173,6 +175,7 @@ public class CarController : MonoBehaviour
 
             if (dis < 0.1f)
             {
+
                 currentTarget++;
             }
             if (currentTarget == 6)

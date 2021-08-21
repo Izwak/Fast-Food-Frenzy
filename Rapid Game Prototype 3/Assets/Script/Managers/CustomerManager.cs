@@ -26,13 +26,14 @@ public class CustomerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
     }
 
     private void FixedUpdate()
     {
         if (gameManager.isRunning)
         {
-            if (customerParent.childCount < 13 && tick % 400 == 0)
+            if (customerParent.childCount < gameManager.maxCustomers && tick % gameManager.customerSpawnRate == 1)
             {
                 if (CountCars() < 5)
                 {

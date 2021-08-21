@@ -17,6 +17,7 @@ public class OrderManager : MonoBehaviour
         // Make sure orders has the order template on the zeroth element with an OrderBehaviour script
         GameObject newOrder = Instantiate(orderPrefabs[0]);
         OrderBehaviour newOrderBehaviour = newOrder.GetComponent<OrderBehaviour>();
+        newOrderBehaviour.bar.maxValue = gameManager.orderTimer;
 
         int orderSize = Random.Range(1, 5);
 

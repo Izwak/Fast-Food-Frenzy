@@ -97,12 +97,12 @@ public class GameMenuScreen : MonoBehaviour
         LevelSelect.gameObject.SetActive(true);
     }
 
-    public void CallZoomIn()
+    public void CallZoomIn(int mode)
     {
-        StartCoroutine(ZoomIn());
+        StartCoroutine(ZoomIn(mode));
     }
 
-    IEnumerator ZoomIn()
+    IEnumerator ZoomIn(int mode)
     {
         float time = .5f;
         float timer = 0;
@@ -128,7 +128,7 @@ public class GameMenuScreen : MonoBehaviour
         }
 
         blackScreen.alpha = 0;
-        gameManager.LoadGameScene();
+        gameManager.LoadGameScene(mode);
     }
 
 }

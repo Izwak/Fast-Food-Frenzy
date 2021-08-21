@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GrillController : MonoBehaviour
 {
+    public GameManager gameManager;
     public GameObject emptySlot;
     public GameObject pattyParticles;
     GameObject clone;
@@ -30,7 +31,10 @@ public class GrillController : MonoBehaviour
     {
         if (emptySlot.transform.childCount > 0)
         {
-            if (emptySlot.transform.GetChild(0) != null)
+            GameObject paddiies = emptySlot.transform.GetChild(0).gameObject;
+
+
+            if (paddiies != null)
             {
                 clone.SetActive(true);
                 if (!playingAudio)
@@ -39,12 +43,19 @@ public class GrillController : MonoBehaviour
                     audioController.Play();
                     playingAudio = true;
                 }
-                if(emptySlot.transform.GetChild(0).tag == "Fire Paddies") {
+                if(paddiies.tag == "Fire Paddies") {
                     GetComponent<FireParticleController>().onfire = true;
-                } 
+                }
+
+                Cooking cooking = paddiies.GetComponent<Cooking>();
+
+                if (cooking != null && !paddiies.CompareTag("Raw Paddies"))
+                {
+                    cooking.duration = gameManager.burnTime;
+                }
             }
         }
-        if (emptySlot.transform.childCount <= 0 && playingAudio == true)
+        if (emptySlot.transform.childCount == 0 && playingAudio == true)
         {
             clone.SetActive(false);
             fading = true;

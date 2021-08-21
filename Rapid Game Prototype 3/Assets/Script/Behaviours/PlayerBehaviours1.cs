@@ -909,15 +909,36 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 int amountOnTray = tray.emptySlot.transform.childCount;
                                 if (tray != null && amountOnTray < 4)
                                 {
-                                    for (int i = 0; i < 4- amountOnTray; i++) {
-                                        GameObject newBurger = Instantiate(obj.createObject);
-                                        newBurger.transform.SetParent(tray.emptySlot.transform);
-                                        newBurger.transform.localPosition = Vector3.zero;
-                                        newBurger.transform.forward = transform.forward;
+                                    int burgersTaken = 0;
 
-                                        burgerStation.TakePaddy();
+                                    int maxBurgersAllowed;
+
+                                    if (GameManager.mode == GameMode.BABY)
+                                        maxBurgersAllowed = 4;
+                                    else
+                                        maxBurgersAllowed = 2;
+
+
+                                    for (int i = 0; i < 4- amountOnTray; i++) {
+
+                                        burgersTaken++;
+
+                                        // Make sure theres paddies to put on bun
+                                        if (burgerStation.CanTakePaddy() && burgersTaken <= maxBurgersAllowed)
+                                        {
+                                            GameObject newBurger = Instantiate(obj.createObject);
+                                            newBurger.transform.SetParent(tray.emptySlot.transform);
+                                            newBurger.transform.localPosition = Vector3.zero;
+                                            newBurger.transform.forward = transform.forward;
+
+                                            burgerStation.TakePaddy();
+                                            isRunning = false;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
-                                    isRunning = false;
 
                                     if (pointer != null)
                                     {
@@ -1059,6 +1080,13 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 }
                             }
                         }
+                    }
+
+                    else if (obj.type == Interactables.ICECREAMMACHINE)
+                    {
+                        print("Interacted with ice crea");
+
+                        StartCoroutine(gameManager.screen.overlay.waitThenDisplay2("Ice Cream Machine is Broken LOL", 0));
                     }
                 }
             }

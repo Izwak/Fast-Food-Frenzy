@@ -16,6 +16,7 @@ public enum Interactables
     PICKUP,
     WINDOWPICKUP,
     TRAYDISPENCER,
+    ICECREAMMACHINE
 }
 public class Interact : MonoBehaviour
 {

@@ -1,9 +1,10 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Frier : MonoBehaviour
 {
+    public GameManager gameManager;
     public GameObject[] traySlots = new GameObject[4];
     public GameObject particles;
 
@@ -64,6 +65,13 @@ public class Frier : MonoBehaviour
             {
                 particleList[i].SetActive(true);
                 isEmpty = false;
+
+                Cooking cooking = traySlots[i].transform.GetChild(0).GetComponent<Cooking>();
+
+                if (!traySlots[i].transform.GetChild(0).CompareTag("Raw Fries") && cooking != null)
+                {
+                    cooking.duration = gameManager.burnTime;
+                }
             }
             else
             {
