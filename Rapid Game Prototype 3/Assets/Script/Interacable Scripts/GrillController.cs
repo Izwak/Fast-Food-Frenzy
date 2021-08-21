@@ -46,7 +46,6 @@ public class GrillController : MonoBehaviour
         }
         if (emptySlot.transform.childCount <= 0 && playingAudio == true)
         {
-            GetComponent<FireParticleController>().onfire = false;
             clone.SetActive(false);
             fading = true;
             if (fading)
