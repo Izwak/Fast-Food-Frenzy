@@ -11,6 +11,8 @@ public class Frier : MonoBehaviour
     GameObject[] particleList = new GameObject[4];
     Transform[] trayTransforms = new Transform[4];
     bool isPlaying;
+    bool fading;
+    float startVolume;
 
     AudioSource audioController;
 
@@ -42,6 +44,7 @@ public class Frier : MonoBehaviour
     {
         isPlaying = false;
         audioController = GetComponent<AudioSource>();
+        startVolume = audioController.volume;
         //because its easier to do it automatically
         for (int i = 0; i < 4; i++)
         {
@@ -69,13 +72,25 @@ public class Frier : MonoBehaviour
         }
         if (!isEmpty && !isPlaying)
         {
+            audioController.volume = startVolume;
             audioController.Play();
             isPlaying = true;
         }
         else if (isEmpty)
         {
-            audioController.Stop();
-            isPlaying = false;
+            //audioController.Stop();
+            //isPlaying = false;
+            fading = true;
+            if (fading)
+            {
+                audioController.volume -= startVolume * Time.deltaTime * 2;
+                if (audioController.volume <= 0)
+                {
+                    audioController.Stop();
+                    fading = false;
+                    isPlaying = false;
+                }
+            }
         }
         //if (isFull())
         //    particles.SetActive(true);
