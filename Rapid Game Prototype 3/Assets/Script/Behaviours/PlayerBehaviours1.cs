@@ -906,15 +906,17 @@ public class PlayerBehaviours1 : MonoBehaviour
                             else
                             {
                                 Tray tray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
-
-                                if (tray != null && tray.emptySlot.transform.childCount < 4)
+                                int amountOnTray = tray.emptySlot.transform.childCount;
+                                if (tray != null && amountOnTray < 4)
                                 {
-                                    GameObject newBurger = Instantiate(obj.createObject);
-                                    newBurger.transform.SetParent(tray.emptySlot.transform);
-                                    newBurger.transform.localPosition = Vector3.zero;
-                                    newBurger.transform.forward = transform.forward;
+                                    for (int i = 0; i < 4- amountOnTray; i++) {
+                                        GameObject newBurger = Instantiate(obj.createObject);
+                                        newBurger.transform.SetParent(tray.emptySlot.transform);
+                                        newBurger.transform.localPosition = Vector3.zero;
+                                        newBurger.transform.forward = transform.forward;
 
-                                    burgerStation.TakePaddy();
+                                        burgerStation.TakePaddy();
+                                    }
                                     isRunning = false;
 
                                     if (pointer != null)
