@@ -34,7 +34,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameState state;
     public static GameMode mode = GameMode.BABY;
+    public static bool iceCreamMachineWorking = false; // lol as if
     public GameEnding ending = GameEnding.NONE;
+
 
     public bool isRunning = false;
 

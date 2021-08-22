@@ -29,6 +29,12 @@ public class PickUp : MonoBehaviour
                 {
                     OrderBehaviour order = orderMenu.transform.GetChild(orderNum).gameObject.GetComponent<OrderBehaviour>();
 
+                    if (orderObj.gameObject.name == "Ice Cream(Clone)" && order != null && order.type == type)
+                    {
+                        print("Hello There");
+                        return orderNum;
+                    }
+
                     if (order.GetFoodCount() == 1 && orderObj.name == order.emptySlot.transform.GetChild(0).name)
                     {
                         if (order.type == type)

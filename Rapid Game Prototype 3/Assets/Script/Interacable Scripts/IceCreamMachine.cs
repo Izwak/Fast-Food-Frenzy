@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class IceCreamMachine : MonoBehaviour
 {
+    public GameManager gameManager;
+    public float tick = 60;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +17,9 @@ public class IceCreamMachine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (gameManager.isRunning)
+        {
+            tick += Time.deltaTime;
+        }
     }
 }

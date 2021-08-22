@@ -1086,7 +1086,27 @@ public class PlayerBehaviours1 : MonoBehaviour
                     {
                         print("Interacted with ice crea");
 
-                        StartCoroutine(gameManager.screen.overlay.waitThenDisplay2("Ice Cream Machine is Broken LOL", 0));
+                        IceCreamMachine iceCreamMachine = obj.GetComponent<IceCreamMachine>();
+
+                        if (!GameManager.iceCreamMachineWorking)
+                        {
+                            StartCoroutine(gameManager.screen.overlay.waitThenDisplay2("Ice Cream Machine is Broken LOL", 0));
+                        }
+                        else if (holdingNum == 0 && iceCreamMachine != null) 
+                        {
+                            if (iceCreamMachine.tick > 60)
+                            {
+                                GameObject iceCream = Instantiate(obj.createObject, empltySlot.transform);
+                                iceCream.transform.localPosition = Vector3.zero;
+                                iceCream.transform.localRotation = Quaternion.identity;
+                                iceCreamMachine.tick = 0;
+                            }
+                            else
+                            {
+                                StartCoroutine(gameManager.screen.overlay.waitThenDisplay2("Chill out dude wait " + (60 - (int)iceCreamMachine.tick) + " seconds", 0));
+                            }
+
+                        }
                     }
                 }
             }
@@ -1315,6 +1335,7 @@ public class PlayerBehaviours1 : MonoBehaviour
             gameManager.isRunning = true;
             GameManager.state = GameState.GAMEPLAY;
             gameManager.ending = GameEnding.GOLD;
+            GameManager.iceCreamMachineWorking = true;
         }
     }
 

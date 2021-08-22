@@ -21,6 +21,7 @@ TagManager:
   - Door
   - Fire Paddies
   - Extinguisher
+  - Ice Cream
   layers:
   - Default
   - TransparentFX

@@ -67,7 +67,7 @@ public class GrillController : MonoBehaviour
                     audioController.Stop();
                     fading = false;
                     playingAudio = false;
-                    GetComponent<FireParticleController>().onfire = false;
+                    //GetComponent<FireParticleController>().onfire = false;
                 }
             }
             //audioController.Stop();
