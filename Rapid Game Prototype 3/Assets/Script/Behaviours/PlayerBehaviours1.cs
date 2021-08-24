@@ -7,6 +7,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 {
     public GameManager gameManager;
     public bool isRunning;
+    public Joystick joystick;
 
     public GameObject empltySlot;
 
@@ -37,7 +38,40 @@ public class PlayerBehaviours1 : MonoBehaviour
     {
         if (isRunning)
         {
-            tartgetPoint += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            int test = Input.touchCount;
+
+            bool isTouchInteract = false;
+
+            if (Input.touches.Length > 0)
+            {
+                for (int i = 0; i < Input.touches.Length; i++)
+                {
+                    Vector2 touchPos = Input.touches[i].position;
+
+                    print("X: " + touchPos.x + ", Y: " + touchPos.y);
+                    
+
+                    if (touchPos.x > 1000)
+                    {
+                        isTouchInteract = true;
+                        print("Interact");
+                        break;
+                    }
+                }
+            }
+
+
+
+            //print(Input.touchCount);
+
+            if (Input.touchCount >= 2)
+            {
+                //is2ndTouch = true;
+            }
+
+
+            //tartgetPoint += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            tartgetPoint += new Vector2(joystick.Horizontal, joystick.Vertical);
 
             angle = Mathf.Atan2(tartgetPoint.x, tartgetPoint.y) * Mathf.Rad2Deg;
 
@@ -46,21 +80,23 @@ public class PlayerBehaviours1 : MonoBehaviour
             {
                 tartgetPoint = tartgetPoint.normalized * speed;
             }
-            body.velocity = new Vector3(Input.GetAxis("Horizontal") * speed, body.velocity.y, Input.GetAxis("Vertical") * speed);
+
+            //body.velocity = new Vector3(Input.GetAxis("Horizontal") * speed, body.velocity.y, Input.GetAxis("Vertical") * speed);
+            body.velocity = new Vector3(joystick.Horizontal * speed, body.velocity.y, joystick.Vertical* speed);
             transform.rotation = Quaternion.Euler(0, angle, 0);
 
-            if (Input.GetButtonDown("Fire3"))
+            if (Input.GetButtonDown("Fire3") || isTouchInteract)
             {
                 speed = 8;
             }
-            if (Input.GetButtonUp("Fire3"))
+            if (Input.GetButtonUp("Fire3") || !isTouchInteract)
             {
                 speed = 5;
             }
 
             LookingAtObjects();
 
-            if (Input.GetButton("Interact") && gameManager.isRunning)
+            if ((Input.GetButton("Interact") || isTouchInteract) && gameManager.isRunning)
             {
                 holdCoolDown += Time.deltaTime;
 
@@ -71,9 +107,9 @@ public class PlayerBehaviours1 : MonoBehaviour
                     rewritethisbtr = true;
                 }
             }
-            if (Input.GetButtonUp("Interact") && gameManager.isRunning)
+            if ((Input.GetButtonUp("Interact")|| !isTouchInteract) && gameManager.isRunning)
             {
-                if (holdCoolDown < 0.3)
+                if (holdCoolDown < 0.3 && holdCoolDown != 0)
                 {
                     Interactions();
                 }
@@ -888,6 +924,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                         if (burgerStation != null && burgerStation.paddyHeater.childCount > 0)
                         {
+                            gameManager.screen.touchUI.gameObject.SetActive(false);
                             if (holdingNum == 0)
                             {
                                 GameObject newBurger = Instantiate(obj.createObject);

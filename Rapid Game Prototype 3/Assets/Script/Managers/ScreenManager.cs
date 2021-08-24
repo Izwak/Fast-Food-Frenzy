@@ -7,6 +7,7 @@ public class ScreenManager : MonoBehaviour
     public GameMenuScreen menu;
     public LeaderboardScreen leaderboard;
     public GameOverlay overlay;
+    public TouchUIScreen touchUI;
     public GameObject orders;
     public WinScreen win;
     public GameObject lose;

@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameMenuScreen : MonoBehaviour
 {
-    public static bool doTheBeginingThing = true;
+    public static bool dofadeAtBegining = true;
 
     public GameManager gameManager;
     public Transform title;
@@ -12,17 +13,19 @@ public class GameMenuScreen : MonoBehaviour
     public Transform buttonBoard;
     public Transform LevelSelect;
 
+    public GameObject eventButton;
+
     public Transform[] points;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (doTheBeginingThing)
+        if (dofadeAtBegining)
         {
             blackScreen.alpha = 1;
             StartCoroutine(fadeInIn(5));
             buttonBoard.position = points[2].position;
-            doTheBeginingThing = false;
+            dofadeAtBegining = false;
         }
         else
         {
@@ -30,6 +33,9 @@ public class GameMenuScreen : MonoBehaviour
             title.position = points[1].position;
             title.localScale = points[1].localScale;
             buttonBoard.position = points[3].position;
+
+            if (GameManager.isUsingController)
+                EventSystem.current.SetSelectedGameObject(eventButton);
         }
     }
 
@@ -67,6 +73,8 @@ public class GameMenuScreen : MonoBehaviour
             yield return null;
         }
 
+        EventSystem.current.SetSelectedGameObject(eventButton);
+
         //StartCoroutine(transitionToLevelSelect());
     }
 
@@ -78,7 +86,7 @@ public class GameMenuScreen : MonoBehaviour
 
     IEnumerator transitionToLevelSelect()
     {
-        gameManager.camera.stage = CameraState.GAMELIST;
+        gameManager.camerBoi.stage = CameraState.GAMELIST;
 
         float time = 3;
         float timer = 0;
@@ -110,7 +118,7 @@ public class GameMenuScreen : MonoBehaviour
         while (timer < time)
         {
             timer += Time.deltaTime;
-            gameManager.camera.stage = CameraState.ZOOMIN;
+            gameManager.camerBoi.stage = CameraState.ZOOMIN;
             transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 5, timer / time);
             blackScreen.alpha = Mathf.Lerp(0, 1, timer / time);
             yield return null;
@@ -118,7 +126,7 @@ public class GameMenuScreen : MonoBehaviour
 
 
         timer = 0;
-        gameManager.camera.stage = CameraState.GAMEPLAY;
+        gameManager.camerBoi.stage = CameraState.GAMEPLAY;
 
         while (timer < time)
         {

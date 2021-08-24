@@ -83,7 +83,7 @@ public class ServiceCounter : MonoBehaviour
                         customer.gameManager.numCustomersPissed++;
                         customerAtRegister = CustomerType.NONE;
                         isCustomerAtCounterYet = true;
-                        gameManager.audio.Play("Angry");
+                        gameManager.audioBoi.Play("Angry");
                         break;
                     }
                 }
@@ -101,7 +101,7 @@ public class ServiceCounter : MonoBehaviour
                             customer.gameManager.numCustomersPissed++;
                             customerAtRegister = CustomerType.NONE;
                             isCustomerAtCounterYet = true;
-                            gameManager.audio.Play("Angry");
+                            gameManager.audioBoi.Play("Angry");
                             break;
                         }
                     }

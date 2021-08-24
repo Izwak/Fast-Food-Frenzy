@@ -65,7 +65,7 @@ public class OrderManager : MonoBehaviour
                                     // Order Completed, Customer Picks up order and removes it from display
 
                                     customerController.stage = CustomerStage.LEAVING;
-                                    gameManager.audio.Play("Angry");
+                                    gameManager.audioBoi.Play("Angry");
                                     //angry.Play();
                                     gameManager.numCustomersPissed++;
                                     break;

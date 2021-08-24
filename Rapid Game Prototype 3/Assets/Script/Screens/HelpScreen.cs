@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 enum Page
 {
@@ -70,6 +71,8 @@ public class HelpScreen : MonoBehaviour
     {
         this.gameObject.SetActive(false);
         gameManager.screen.menu.gameObject.SetActive(true);
+
+        EventSystem.current.SetSelectedGameObject(gameManager.screen.menu.eventButton);
     }
 
     public void Open(int openingPage)

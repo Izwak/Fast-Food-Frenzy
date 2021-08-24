@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public enum GameState
 {
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
     public static GameState state;
     public static GameMode mode = GameMode.BABY;
     public static bool iceCreamMachineWorking = false; // lol as if
+    public static bool isUsingController = false;
     public GameEnding ending = GameEnding.NONE;
 
 
@@ -43,8 +45,8 @@ public class GameManager : MonoBehaviour
     public PlayerBehaviours1 player1;
 
     public ScreenManager screen;
-    public new CameraManager camera;
-    public new AudioManager audio;
+    public CameraManager camerBoi;
+    public AudioManager audioBoi;
 
     public float timer = 301;
     public int finalScore;
@@ -89,7 +91,7 @@ public class GameManager : MonoBehaviour
             screen.overlay.gameObject.SetActive(false);
             isRunning = false;
             player1.isRunning = false;
-            audio.Play("Main Menu Theme");
+            audioBoi.Play("Main Menu Theme");
         }
         else if (state == GameState.GAMEPLAY || state == GameState.MENU)
         {
@@ -98,8 +100,9 @@ public class GameManager : MonoBehaviour
             isRunning = true;
             player1.isRunning = true;
             state = GameState.GAMEPLAY;
-            audio.Play("Savvy Server");
-            camera.stage = CameraState.GAMEPLAY;
+            audioBoi.Play("Savvy Server");
+            camerBoi.stage = CameraState.GAMEPLAY;
+            screen.touchUI.gameObject.SetActive(true);
         }
         SetGameMode(mode);
     }
@@ -114,11 +117,11 @@ public class GameManager : MonoBehaviour
                 timer -= Time.deltaTime;
 
                 // Start panicing once u get to 15 seconds
-                if (timer < 17.2 && !audio.IsPlaying("Panic"))
+                if (timer < 17.2 && !audioBoi.IsPlaying("Panic"))
                 {
-                    audio.Play("Panic");
+                    audioBoi.Play("Panic");
                     print("Number of times this is being run");
-                    audio.FadeOut("Savvy Server", 7f);
+                    audioBoi.FadeOut("Savvy Server", 7f);
                 }
 
                 // Take you to the Score Screen
@@ -133,10 +136,10 @@ public class GameManager : MonoBehaviour
                     screen.win.gameObject.SetActive(true);
 
                     state = GameState.MENU;
-                    audio.Stop("Panic");
-                    audio.Stop("Savvy Server");
+                    audioBoi.Stop("Panic");
+                    audioBoi.Stop("Savvy Server");
 
-                    audio.Play("YAAAY");
+                    audioBoi.Play("YAAAY");
                 }
 
                 // Take you to the Fired screen
@@ -149,11 +152,11 @@ public class GameManager : MonoBehaviour
                     screen.leaderboard.isEnteringName = true;
 
                     state = GameState.MENU;
-                    audio.Stop("Panic");
-                    audio.Stop("Savvy Server");
+                    audioBoi.Stop("Panic");
+                    audioBoi.Stop("Savvy Server");
 
 
-                    audio.Play("YAAAY");
+                    audioBoi.Play("YAAAY");
                 }
 
                 else if (ending == GameEnding.DEAD)
@@ -164,11 +167,11 @@ public class GameManager : MonoBehaviour
                     screen.dead.gameObject.SetActive(true);
 
                     state = GameState.MENU;
-                    audio.Stop("Panic");
-                    audio.Stop("Savvy Server");
+                    audioBoi.Stop("Panic");
+                    audioBoi.Stop("Savvy Server");
 
 
-                    audio.Play("YAAAY");
+                    audioBoi.Play("YAAAY");
                 }
 
                 else if (ending == GameEnding.QUIT)
@@ -179,11 +182,11 @@ public class GameManager : MonoBehaviour
                     screen.quit.gameObject.SetActive(true);
 
                     state = GameState.MENU;
-                    audio.Stop("Panic");
-                    audio.Stop("Savvy Server");
+                    audioBoi.Stop("Panic");
+                    audioBoi.Stop("Savvy Server");
 
 
-                    audio.Play("YAAAY");
+                    audioBoi.Play("YAAAY");
                 }
 
                 else if (ending == GameEnding.GOLD)
@@ -195,19 +198,19 @@ public class GameManager : MonoBehaviour
                     screen.golden.gameObject.SetActive(true);
 
                     state = GameState.MENU;
-                    audio.Stop("Panic");
-                    audio.Stop("Savvy Server");
+                    audioBoi.Stop("Panic");
+                    audioBoi.Stop("Savvy Server");
 
 
-                    audio.Play("YAAAY");
+                    audioBoi.Play("YAAAY");
                 }
             }
         }
         else if (state == GameState.MENU)
         {
-            if (!audio.IsPlaying("Shift Over"))
+            if (!audioBoi.IsPlaying("Shift Over"))
             {
-                audio.FadeIn("Shift Over", 3);
+                audioBoi.FadeIn("Shift Over", 3);
             }
         }
     }
@@ -229,10 +232,11 @@ public class GameManager : MonoBehaviour
         isRunning = true;
         player1.isRunning = true;
         state = GameState.GAMEPLAY;
-        camera.stage = CameraState.GAMEPLAY;
+        camerBoi.stage = CameraState.GAMEPLAY;
 
-        audio.Stop("Main Menu Theme");
-        audio.Play("Savvy Server");
+        audioBoi.Stop("Main Menu Theme");
+        audioBoi.Play("Savvy Server");
+        screen.touchUI.gameObject.SetActive(true);
     }
 
     public void LoadLeaderboard(bool isEntering)
@@ -287,6 +291,9 @@ public class GameManager : MonoBehaviour
         screen.menu.gameObject.SetActive(true);
         screen.overlay.gameObject.SetActive(false);
         screen.leaderboard.gameObject.SetActive(false);
+
+        if (isUsingController)
+            EventSystem.current.SetSelectedGameObject(screen.menu.eventButton);
     }
 
     public void QuitGame()
