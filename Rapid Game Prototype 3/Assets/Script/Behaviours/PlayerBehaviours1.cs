@@ -25,6 +25,8 @@ public class PlayerBehaviours1 : MonoBehaviour
 
     RaycastHit hit;
 
+    TouchPhase touchInteract = TouchPhase.Stationary;
+
     Vector2 tartgetPoint = new Vector2(0, -1);
 
     // Start is called before the first frame update
@@ -40,7 +42,6 @@ public class PlayerBehaviours1 : MonoBehaviour
         {
             int test = Input.touchCount;
 
-            bool isTouchInteract = false;
 
             if (Input.touches.Length > 0)
             {
@@ -48,55 +49,53 @@ public class PlayerBehaviours1 : MonoBehaviour
                 {
                     Vector2 touchPos = Input.touches[i].position;
 
-                    print("X: " + touchPos.x + ", Y: " + touchPos.y);
+                    //print("X: " + touchPos.x + ", Y: " + touchPos.y);
                     
 
                     if (touchPos.x > 1000)
                     {
-                        isTouchInteract = true;
-                        print("Interact");
+                        touchInteract = Input.touches[i].phase;
+                        //isTouchInteract = true;
+                        //print("Interact");
                         break;
                     }
                 }
             }
 
-
-
-            //print(Input.touchCount);
-
-            if (Input.touchCount >= 2)
-            {
-                //is2ndTouch = true;
-            }
-
-
-            //tartgetPoint += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            tartgetPoint += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             tartgetPoint += new Vector2(joystick.Horizontal, joystick.Vertical);
 
             angle = Mathf.Atan2(tartgetPoint.x, tartgetPoint.y) * Mathf.Rad2Deg;
 
             // Sets a position for the player to be looking at makes turning less jerky
-            if (tartgetPoint.magnitude > speed)
+            if (tartgetPoint.magnitude > speed /2)
             {
-                tartgetPoint = tartgetPoint.normalized * speed;
+                tartgetPoint = tartgetPoint.normalized * speed / 2;
             }
 
-            //body.velocity = new Vector3(Input.GetAxis("Horizontal") * speed, body.velocity.y, Input.GetAxis("Vertical") * speed);
-            body.velocity = new Vector3(joystick.Horizontal * speed, body.velocity.y, joystick.Vertical* speed);
+            body.velocity = Vector3.zero;
+            body.velocity += new Vector3(Input.GetAxis("Horizontal") * speed, body.velocity.y, Input.GetAxis("Vertical") * speed);
+            body.velocity += new Vector3(joystick.Horizontal * speed, body.velocity.y, joystick.Vertical* speed);
+
             transform.rotation = Quaternion.Euler(0, angle, 0);
 
-            if (Input.GetButtonDown("Fire3") || isTouchInteract)
+            print("Phase" + touchInteract);
+
+            //if (Input.GetButtonDown("Fire3"))
+            if (Input.GetButtonDown("Fire3") || touchInteract == TouchPhase.Began)
             {
                 speed = 8;
             }
-            if (Input.GetButtonUp("Fire3") || !isTouchInteract)
+            //if (Input.GetButtonUp("Fire3"))
+            if (Input.GetButtonUp("Fire3") || touchInteract == TouchPhase.Ended)
             {
                 speed = 5;
             }
 
             LookingAtObjects();
 
-            if ((Input.GetButton("Interact") || isTouchInteract) && gameManager.isRunning)
+            //if ((Input.GetButton("Interact")) && gameManager.isRunning)
+            if ((Input.GetButton("Interact") || touchInteract != TouchPhase.Ended) && gameManager.isRunning)
             {
                 holdCoolDown += Time.deltaTime;
 
@@ -104,10 +103,12 @@ public class PlayerBehaviours1 : MonoBehaviour
                 {
                     //print("Held");
                     HoldInteractions();
+
                     rewritethisbtr = true;
                 }
             }
-            if ((Input.GetButtonUp("Interact")|| !isTouchInteract) && gameManager.isRunning)
+            //if ((Input.GetButtonUp("Interact")) && gameManager.isRunning)
+            if ((Input.GetButtonUp("Interact") || touchInteract == TouchPhase.Ended) && gameManager.isRunning)
             {
                 if (holdCoolDown < 0.3 && holdCoolDown != 0)
                 {

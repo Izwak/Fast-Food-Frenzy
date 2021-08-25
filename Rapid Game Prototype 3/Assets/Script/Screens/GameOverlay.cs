@@ -13,6 +13,7 @@ public class GameOverlay : MonoBehaviour
 
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI tipText;
+    public Button pauseButton;
 
 
     public int scoreGoal;

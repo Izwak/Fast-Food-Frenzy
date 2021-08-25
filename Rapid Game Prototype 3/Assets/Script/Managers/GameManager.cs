@@ -268,6 +268,7 @@ public class GameManager : MonoBehaviour
             screen.leaderboard.backTab.SetActive(false);
             screen.leaderboard.enterTab.SetActive(true);
             screen.leaderboard.replayTab.SetActive(false);
+            screen.touchUI.gameObject.SetActive(false);
         }
         else
         {

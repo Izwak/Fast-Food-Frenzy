@@ -51,6 +51,7 @@ public class BurgerMinigame : MonoBehaviour
             //print("Has Won");
 
             ResetBoard();
+            gameManager.screen.touchUI.gameObject.SetActive(true);
         }
     }
 
