@@ -11,8 +11,6 @@ public enum CustomerType
 }
 public class CustomerManager : MonoBehaviour
 {
-    public GameManager gameManager;
-
     public Transform customerParent;
     public GameObject customerPrefab;
     public List<GameObject> carPrefabs;
@@ -31,9 +29,9 @@ public class CustomerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (gameManager.isRunning)
+        if (GameManager.Instance.isRunning)
         {
-            if (customerParent.childCount < gameManager.maxCustomers && tick % gameManager.customerSpawnRate == 1)
+            if (customerParent.childCount < GameManager.Instance.maxCustomers && tick % GameManager.Instance.customerSpawnRate == 1)
             {
                 if (CountCars() < 5)
                 {
@@ -75,7 +73,6 @@ public class CustomerManager : MonoBehaviour
             GameObject newCustomer = Instantiate(carPrefabs[Random.Range(0, 5)]);
             newCustomer.transform.position = carPointsOfInterest[0].transform.position; // Set new customer to spawn pos
             newCustomer.GetComponent<CarController>().pointsOfInterest[0] = registers[registerNum];
-            newCustomer.GetComponent<CarController>().gameManager = gameManager;
 
             for (int i = 0; i < carPointsOfInterest.Count; i++)
             {
@@ -89,7 +86,6 @@ public class CustomerManager : MonoBehaviour
             GameObject newCustomer = Instantiate(customerPrefab);
             newCustomer.transform.position = pointsOfInterest[0].transform.position; // Set new customer to spawn pos
             newCustomer.GetComponent<CustomerController1>().pointsOfInterest[0] = registers[registerNum];
-            newCustomer.GetComponent<CustomerController1>().gameManager = gameManager;
 
             /*for (int i = 0; i < pointsOfInterest.Count; i++)
             {

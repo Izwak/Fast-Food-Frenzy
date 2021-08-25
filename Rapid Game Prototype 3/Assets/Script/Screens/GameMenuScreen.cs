@@ -7,7 +7,6 @@ public class GameMenuScreen : MonoBehaviour
 {
     public static bool dofadeAtBegining = true;
 
-    public GameManager gameManager;
     public Transform title;
     public CanvasGroup blackScreen;
     public Transform buttonBoard;
@@ -34,7 +33,7 @@ public class GameMenuScreen : MonoBehaviour
             title.localScale = points[1].localScale;
             buttonBoard.position = points[3].position;
 
-            if (GameManager.isUsingController)
+            if (GameManager.IsUsingController)
                 EventSystem.current.SetSelectedGameObject(eventButton);
         }
     }
@@ -86,7 +85,7 @@ public class GameMenuScreen : MonoBehaviour
 
     IEnumerator transitionToLevelSelect()
     {
-        gameManager.camerBoi.stage = CameraState.GAMELIST;
+        GameManager.Instance.camerBoi.stage = CameraState.GAMELIST;
 
         float time = 3;
         float timer = 0;
@@ -118,7 +117,7 @@ public class GameMenuScreen : MonoBehaviour
         while (timer < time)
         {
             timer += Time.deltaTime;
-            gameManager.camerBoi.stage = CameraState.ZOOMIN;
+            GameManager.Instance.camerBoi.stage = CameraState.ZOOMIN;
             transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 5, timer / time);
             blackScreen.alpha = Mathf.Lerp(0, 1, timer / time);
             yield return null;
@@ -126,7 +125,7 @@ public class GameMenuScreen : MonoBehaviour
 
 
         timer = 0;
-        gameManager.camerBoi.stage = CameraState.GAMEPLAY;
+        GameManager.Instance.camerBoi.stage = CameraState.GAMEPLAY;
 
         while (timer < time)
         {
@@ -136,7 +135,7 @@ public class GameMenuScreen : MonoBehaviour
         }
 
         blackScreen.alpha = 0;
-        gameManager.LoadGameScene(mode);
+        GameManager.Instance.LoadGameScene(mode);
     }
 
 }

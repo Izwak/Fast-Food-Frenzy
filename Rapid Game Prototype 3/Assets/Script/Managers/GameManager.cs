@@ -33,10 +33,13 @@ public enum GameMode
 
 public class GameManager : MonoBehaviour
 {
-    public static GameState state;
-    public static GameMode mode = GameMode.BABY;
-    public static bool iceCreamMachineWorking = false; // lol as if
-    public static bool isUsingController = false;
+    public static GameManager Instance;
+
+    public static GameMode Mode = GameMode.BABY;
+    public static GameState State = GameState.MAIN_MENU;
+    public static bool IceCreamMachineWorking = false; // lol as if
+    public static bool IsUsingController = false;
+
     public GameEnding ending = GameEnding.NONE;
 
 
@@ -50,7 +53,7 @@ public class GameManager : MonoBehaviour
 
     public float timer = 301;
     public int finalScore;
-    public static float score = 0; // i might be cheating here but 2 lazy 2 not make static
+    public float score = 0; // This is the overlay bar
     public int numCustomersServed;
     public int numCustomersPissed;
     public int numFoodWasted;
@@ -60,6 +63,12 @@ public class GameManager : MonoBehaviour
     public List<int> scores;
 
     public Collider buildingHitBox;
+
+    public Material[] skyBoxes;
+
+    public Transform[] sunFacing;
+
+    public Light sun;
 
     [HideInInspector]
     public int customerSpawnRate;
@@ -72,11 +81,10 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public int maxCustomers;
 
-    public Material[] skyBoxes;
-
-    public Transform[] sunFacing;
-
-    public Light sun;
+    public void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -85,7 +93,7 @@ public class GameManager : MonoBehaviour
         screen.win.gameObject.SetActive(false);
         screen.win.confetti.SetActive(false);
 
-        if (state == GameState.MAIN_MENU)
+        if (State == GameState.MAIN_MENU)
         {
             screen.menu.gameObject.SetActive(true);
             screen.overlay.gameObject.SetActive(false);
@@ -93,24 +101,24 @@ public class GameManager : MonoBehaviour
             player1.isRunning = false;
             audioBoi.Play("Main Menu Theme");
         }
-        else if (state == GameState.GAMEPLAY || state == GameState.MENU)
+        else if (State == GameState.GAMEPLAY || State == GameState.MENU)
         {
             screen.menu.gameObject.SetActive(false);
             screen.overlay.gameObject.SetActive(true);
             isRunning = true;
             player1.isRunning = true;
-            state = GameState.GAMEPLAY;
+            State = GameState.GAMEPLAY;
             audioBoi.Play("Savvy Server");
             camerBoi.stage = CameraState.GAMEPLAY;
             screen.touchUI.gameObject.SetActive(true);
         }
-        SetGameMode(mode);
+        SetGameMode(Mode);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (state == GameState.GAMEPLAY)
+        if (State == GameState.GAMEPLAY)
         {
             if (isRunning)
             {
@@ -125,7 +133,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 // Take you to the Score Screen
-                if (timer < 0 || GameManager.score >= screen.overlay.scoreGoal)
+                if (timer < 0 || score >= screen.overlay.scoreGoal)
                 {
                     isRunning = false;
                     screen.overlay.gameObject.SetActive(false);
@@ -135,7 +143,7 @@ public class GameManager : MonoBehaviour
 
                     screen.win.gameObject.SetActive(true);
 
-                    state = GameState.MENU;
+                    State = GameState.MENU;
                     audioBoi.Stop("Panic");
                     audioBoi.Stop("Savvy Server");
 
@@ -143,7 +151,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 // Take you to the Fired screen
-                else if (GameManager.score <= -screen.overlay.scoreMin)
+                else if (score <= -screen.overlay.scoreMin)
                 {
                     isRunning = false;
                     screen.overlay.gameObject.SetActive(false);
@@ -151,22 +159,7 @@ public class GameManager : MonoBehaviour
 
                     screen.leaderboard.isEnteringName = true;
 
-                    state = GameState.MENU;
-                    audioBoi.Stop("Panic");
-                    audioBoi.Stop("Savvy Server");
-
-
-                    audioBoi.Play("YAAAY");
-                }
-
-                else if (ending == GameEnding.DEAD)
-                {
-                    isRunning = false;
-                    screen.overlay.gameObject.SetActive(false);
-                    screen.orders.gameObject.SetActive(false);
-                    screen.dead.gameObject.SetActive(true);
-
-                    state = GameState.MENU;
+                    State = GameState.MENU;
                     audioBoi.Stop("Panic");
                     audioBoi.Stop("Savvy Server");
 
@@ -181,7 +174,7 @@ public class GameManager : MonoBehaviour
                     screen.orders.gameObject.SetActive(false);
                     screen.quit.gameObject.SetActive(true);
 
-                    state = GameState.MENU;
+                    State = GameState.MENU;
                     audioBoi.Stop("Panic");
                     audioBoi.Stop("Savvy Server");
 
@@ -197,7 +190,7 @@ public class GameManager : MonoBehaviour
                     screen.orders.gameObject.SetActive(false);
                     screen.golden.gameObject.SetActive(true);
 
-                    state = GameState.MENU;
+                    State = GameState.MENU;
                     audioBoi.Stop("Panic");
                     audioBoi.Stop("Savvy Server");
 
@@ -206,22 +199,54 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        else if (state == GameState.MENU)
+        else if (State == GameState.MENU)
         {
             if (!audioBoi.IsPlaying("Shift Over"))
             {
                 audioBoi.FadeIn("Shift Over", 3);
             }
         }
+
+        if (ending == GameEnding.DEAD)
+        {
+            isRunning = false;
+            screen.overlay.gameObject.SetActive(false);
+            screen.orders.gameObject.SetActive(false);
+            screen.win.gameObject.SetActive(false);
+            screen.fired.gameObject.SetActive(false);
+            screen.golden.gameObject.SetActive(false);
+            screen.quit.gameObject.SetActive(false);
+            screen.touchUI.gameObject.SetActive(false);
+            screen.dead.gameObject.SetActive(true);
+
+            State = GameState.MENU;
+            audioBoi.Stop("Panic");
+            audioBoi.Stop("Savvy Server");
+
+
+            audioBoi.Play("YAAAY");
+        }
+
+        if (Input.touchCount == 4)
+        {
+            timer = 1;
+        }
+
     }
 
     public void ResetToGameplay()
     {
-        SetGameMode(mode);
-        score = 0;
-        state = GameState.MENU;
-        print(state + " BEFORE THE CHANGE");
+        State = GameState.MENU;
+        SetGameMode(Mode);
+        print(State + " BEFORE THE CHANGE");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ResetToMenu()
+    {
+        State = GameState.MAIN_MENU;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        player1.isRunning = false;
     }
 
     public void LoadGameScene(int mode)
@@ -231,7 +256,7 @@ public class GameManager : MonoBehaviour
         screen.overlay.gameObject.SetActive(true);
         isRunning = true;
         player1.isRunning = true;
-        state = GameState.GAMEPLAY;
+        State = GameState.GAMEPLAY;
         camerBoi.stage = CameraState.GAMEPLAY;
 
         audioBoi.Stop("Main Menu Theme");
@@ -278,14 +303,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetToMenu()
-    {
-        score = 0;
-        state = GameState.MAIN_MENU;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        player1.isRunning = false;
-    }
-
     public void LoadToMenu()
     {
         // This function is to be used when you want to go from a menu to main menu without resetting the scene
@@ -293,7 +310,7 @@ public class GameManager : MonoBehaviour
         screen.overlay.gameObject.SetActive(false);
         screen.leaderboard.gameObject.SetActive(false);
 
-        if (isUsingController)
+        if (IsUsingController)
             EventSystem.current.SetSelectedGameObject(screen.menu.eventButton);
     }
 
@@ -305,9 +322,10 @@ public class GameManager : MonoBehaviour
 
     public void SetGameMode(GameMode newMode)
     {
-        mode = newMode;
+        // This is the STATIC varible you idiot don't delete this line its IMPORTANT
+        Mode = newMode;
 
-        if (mode == GameMode.BABY)
+        if (newMode == GameMode.BABY)
         {
             customerSpawnRate = 600;
             orderTimer = 200;
@@ -320,7 +338,7 @@ public class GameManager : MonoBehaviour
             sun.color = new Color(255.0f / 255.0f, 244.0f / 255.0f, 214.0f / 255.0f);
             sun.intensity = 0.8f;
         }
-        else if (mode == GameMode.NORMAL)
+        else if (newMode == GameMode.NORMAL)
         {
             customerSpawnRate = 400;
             orderTimer = 100;
@@ -332,5 +350,21 @@ public class GameManager : MonoBehaviour
             sun.color = new Color(255.0f / 255.0f, 61.0f / 255.0f, 0);
             sun.intensity = 2f;
         }
+    }
+
+    public void LoadPauseMenu()
+    {
+        screen.pause.gameObject.SetActive(true);
+        screen.touchUI.gameObject.SetActive(false);
+        screen.overlay.pauseButton.gameObject.SetActive(false);
+        audioBoi.GetSound("Savvy Server").source.volume /= 5;
+    }
+
+    public void UnloadPauseMenu()
+    {
+        screen.pause.gameObject.SetActive(false);
+        screen.touchUI.gameObject.SetActive(true);
+        screen.overlay.pauseButton.gameObject.SetActive(true);
+        audioBoi.GetSound("Savvy Server").source.volume *= 5;
     }
 }

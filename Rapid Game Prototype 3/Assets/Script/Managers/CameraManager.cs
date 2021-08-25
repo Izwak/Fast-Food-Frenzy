@@ -12,7 +12,6 @@ public enum CameraState
 
 public class CameraManager : MonoBehaviour
 {
-    public GameManager gameManager;
     public Camera mainCamera;
     public Transform[] cameraPoints;
     public Transform rig;

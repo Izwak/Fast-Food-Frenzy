@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ServiceCounter : MonoBehaviour
 {
-    public GameManager gameManager;
     public Transform orderMenu;
     public Transform customers;
 
@@ -29,9 +28,9 @@ public class ServiceCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        slider.maxValue = gameManager.registerTimer;
+        slider.maxValue = GameManager.Instance.registerTimer;
 
-        if (gameManager.isRunning)
+        if (GameManager.Instance.isRunning)
         {
             if (customerAtRegister != CustomerType.NONE)
             {
@@ -77,13 +76,13 @@ public class ServiceCounter : MonoBehaviour
 
                     if (customer != null && customer.stage == CustomerStage.ATCOUNTER)
                     {
-                        GameManager.score--;
+                        GameManager.Instance.score--;
                         slider.value = 0;
                         customer.stage = CustomerStage.LEAVING;
-                        customer.gameManager.numCustomersPissed++;
+                        GameManager.Instance.numCustomersPissed++;
                         customerAtRegister = CustomerType.NONE;
                         isCustomerAtCounterYet = true;
-                        gameManager.audioBoi.Play("Angry");
+                        GameManager.Instance.audioBoi.Play("Angry");
                         break;
                     }
                 }
@@ -95,13 +94,13 @@ public class ServiceCounter : MonoBehaviour
 
                         if (customer != null && customer.stage == CustomerStage.INLINE)
                         {
-                            GameManager.score--;
+                            GameManager.Instance.score--;
                             slider.value = 0;
                             customer.stage = CustomerStage.LEAVING;
-                            customer.gameManager.numCustomersPissed++;
+                            GameManager.Instance.numCustomersPissed++;
                             customerAtRegister = CustomerType.NONE;
                             isCustomerAtCounterYet = true;
-                            gameManager.audioBoi.Play("Angry");
+                            GameManager.Instance.audioBoi.Play("Angry");
                             break;
                         }
                     }
@@ -120,8 +119,8 @@ public class ServiceCounter : MonoBehaviour
 
                     if (customer != null && customer.stage == CustomerStage.ATCOUNTER)
                     {
-                        GameManager.score--;
-                        customer.gameManager.numCustomersPissed++;
+                        GameManager.Instance.score--;
+                        GameManager.Instance.numCustomersPissed++;
                         slider.value = 0;
                         customer.stage = CustomerStage.LEAVING;
                         customerAtRegister = CustomerType.NONE;
@@ -138,8 +137,8 @@ public class ServiceCounter : MonoBehaviour
 
                         if (customer != null && customer.stage == CustomerStage.INLINE)
                         {
-                            GameManager.score--;
-                            customer.gameManager.numCustomersPissed++;
+                            GameManager.Instance.score--;
+                            GameManager.Instance.numCustomersPissed++;
                             slider.value = 0;
                             customer.stage = CustomerStage.LEAVING;
                             customerAtRegister = CustomerType.NONE;

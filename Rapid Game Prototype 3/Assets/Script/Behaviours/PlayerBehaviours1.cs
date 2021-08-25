@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerBehaviours1 : MonoBehaviour
 {
-    public GameManager gameManager;
     public bool isRunning;
     public Joystick joystick;
 
@@ -18,14 +17,14 @@ public class PlayerBehaviours1 : MonoBehaviour
     float speed = 5;
     float angle;
 
-    public float holdCoolDown = 0;
+    float holdCoolDown = 0;
     bool rewritethisbtr = false;
 
     AudioSource tempSound;
 
     RaycastHit hit;
 
-    TouchPhase touchInteract = TouchPhase.Stationary;
+    TouchPhase touchInteract = TouchPhase.Canceled;
 
     Vector2 tartgetPoint = new Vector2(0, -1);
 
@@ -79,7 +78,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
             transform.rotation = Quaternion.Euler(0, angle, 0);
 
-            print("Phase" + touchInteract);
+            //print("Phase" + touchInteract);
 
             //if (Input.GetButtonDown("Fire3"))
             if (Input.GetButtonDown("Fire3") || touchInteract == TouchPhase.Began)
@@ -95,7 +94,7 @@ public class PlayerBehaviours1 : MonoBehaviour
             LookingAtObjects();
 
             //if ((Input.GetButton("Interact")) && gameManager.isRunning)
-            if ((Input.GetButton("Interact") || touchInteract != TouchPhase.Ended) && gameManager.isRunning)
+            if ((Input.GetButton("Interact") || touchInteract == TouchPhase.Moved || touchInteract == TouchPhase.Stationary) && GameManager.Instance.isRunning)
             {
                 holdCoolDown += Time.deltaTime;
 
@@ -108,7 +107,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                 }
             }
             //if ((Input.GetButtonUp("Interact")) && gameManager.isRunning)
-            if ((Input.GetButtonUp("Interact") || touchInteract == TouchPhase.Ended) && gameManager.isRunning)
+             if ((Input.GetButtonUp("Interact") || touchInteract == TouchPhase.Ended) && GameManager.Instance.isRunning)
             {
                 if (holdCoolDown < 0.3 && holdCoolDown != 0)
                 {
@@ -196,7 +195,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                     if (displayIcon != null)
                         displayIcon.icon.gameObject.SetActive(false);
 
-                    gameManager.screen.overlay.hideTip();
+                    GameManager.Instance.screen.overlay.hideTip();
                 }
             }
 
@@ -245,7 +244,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                             if (tray != null)
                             {
-                                gameManager.screen.overlay.waitThenDisplay("Hold Space to take tray");
+                                GameManager.Instance.screen.overlay.waitThenDisplay("Hold Space to take tray");
                             }
                         }
                         // When u can pick up tray display take tray tip
@@ -255,7 +254,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                             if (tray != null)
                             {
-                                gameManager.screen.overlay.waitThenDisplay("Hold Space to place tray");
+                                GameManager.Instance.screen.overlay.waitThenDisplay("Hold Space to place tray");
                             }
                         }
                         else if (counterHoldingNum > 0 && holdingNum > 0)
@@ -266,7 +265,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                             if (playerTray != null && counterTray != null)
                             {
-                                GameOverlay overlay = gameManager.screen.overlay;
+                                GameOverlay overlay = GameManager.Instance.screen.overlay;
 
                                 Dispencer dispencer = obj.GetComponent<Dispencer>();
 
@@ -627,7 +626,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                             Destroy(counterObject);
 
-                                            gameManager.numCustomersServed++;
+                                            GameManager.Instance.numCustomersServed++;
 
                                             // Turn order into a happy meal
                                             GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
@@ -650,7 +649,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                             Destroy(counterObject);
 
-                                            gameManager.numCustomersServed++;
+                                            GameManager.Instance.numCustomersServed++;
 
                                             // Turn order into a happy meal
                                             GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
@@ -683,8 +682,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 // If the tray has food on it throw that in bin
                                 if (trayNum > 0)
                                 {
-                                    GameManager.score -= 1;
-                                    gameManager.numFoodWasted++;
+                                    GameManager.Instance.score -= 1;
+                                    GameManager.Instance.numFoodWasted++;
 
                                     Destroy(tray.emptySlot.transform.GetChild(trayNum - 1).gameObject);
                                 }
@@ -692,8 +691,8 @@ public class PlayerBehaviours1 : MonoBehaviour
                             // If not a tray throw in bin
                             else
                             {
-                                GameManager.score -= 1;
-                                gameManager.numFoodWasted++;
+                                GameManager.Instance.score -= 1;
+                                GameManager.Instance.numFoodWasted++;
 
                                 Destroy(playerObj);
                             }
@@ -925,7 +924,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                         if (burgerStation != null && burgerStation.paddyHeater.childCount > 0)
                         {
-                            gameManager.screen.touchUI.gameObject.SetActive(false);
+                            GameManager.Instance.screen.touchUI.gameObject.SetActive(false);
                             if (holdingNum == 0)
                             {
                                 GameObject newBurger = Instantiate(obj.createObject);
@@ -951,7 +950,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                     int maxBurgersAllowed;
 
-                                    if (GameManager.mode == GameMode.BABY)
+                                    if (GameManager.Mode == GameMode.BABY)
                                         maxBurgersAllowed = 4;
                                     else
                                         maxBurgersAllowed = 2;
@@ -1126,9 +1125,9 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                         IceCreamMachine iceCreamMachine = obj.GetComponent<IceCreamMachine>();
 
-                        if (!GameManager.iceCreamMachineWorking)
+                        if (!GameManager.IceCreamMachineWorking)
                         {
-                            StartCoroutine(gameManager.screen.overlay.waitThenDisplay2("Ice Cream Machine is Broken LOL", 0));
+                            StartCoroutine(GameManager.Instance.screen.overlay.waitThenDisplay2("Ice Cream Machine is Broken LOL", 0));
                         }
                         else if (holdingNum == 0 && iceCreamMachine != null) 
                         {
@@ -1141,7 +1140,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                             }
                             else
                             {
-                                StartCoroutine(gameManager.screen.overlay.waitThenDisplay2("Chill out dude wait " + (60 - (int)iceCreamMachine.tick) + " seconds", 0));
+                                StartCoroutine(GameManager.Instance.screen.overlay.waitThenDisplay2("Chill out dude wait " + (60 - (int)iceCreamMachine.tick) + " seconds", 0));
                             }
 
                         }
@@ -1186,7 +1185,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
 
-                                gameManager.screen.overlay.hideTip();
+                                GameManager.Instance.screen.overlay.hideTip();
                             }
                         }
                         // Take tray from counter
@@ -1202,7 +1201,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                 playersObject.transform.localPosition = Vector3.zero;
                                 playersObject.transform.localRotation = Quaternion.identity;
 
-                                gameManager.screen.overlay.hideTip();
+                                GameManager.Instance.screen.overlay.hideTip();
                             }
                         }
                         // Both player and counter have Trays
@@ -1242,7 +1241,7 @@ public class PlayerBehaviours1 : MonoBehaviour
                                     counterTray.transform.localRotation = Quaternion.identity;
                                 }
 
-                                gameManager.screen.overlay.hideTip();
+                                GameManager.Instance.screen.overlay.hideTip();
                             }
                         }
 
@@ -1277,7 +1276,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                             Destroy(counterObject);
 
-                                            gameManager.numCustomersServed++;
+                                            GameManager.Instance.numCustomersServed++;
 
                                             // Turn order into a happy meal
                                             GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
@@ -1300,7 +1299,7 @@ public class PlayerBehaviours1 : MonoBehaviour
 
                                             Destroy(counterObject);
 
-                                            gameManager.numCustomersServed++;
+                                            GameManager.Instance.numCustomersServed++;
 
                                             // Turn order into a happy meal
                                             GameObject happyMeal = Instantiate(pickUp.HappyMeal, obj.emptySlot.transform);
@@ -1329,13 +1328,13 @@ public class PlayerBehaviours1 : MonoBehaviour
                             // For every object in the tray
                             if (tray != null)
                             {
-                                GameManager.score -= tray.emptySlot.transform.childCount;
-                                gameManager.numFoodWasted += tray.emptySlot.transform.childCount;
+                                GameManager.Instance.score -= tray.emptySlot.transform.childCount;
+                                GameManager.Instance.numFoodWasted += tray.emptySlot.transform.childCount;
                             }
 
                             // For thee tray itself
-                            GameManager.score--;
-                            gameManager.numFoodWasted++;
+                            GameManager.Instance.score--;
+                            GameManager.Instance.numFoodWasted++;
 
                             Destroy(playersObject);
                         }
@@ -1360,7 +1359,7 @@ public class PlayerBehaviours1 : MonoBehaviour
             body.velocity = bodyObj.velocity * 2;
             enabled = false;
 
-            gameManager.ending = GameEnding.DEAD;
+            GameManager.Instance.ending = GameEnding.DEAD;
             //this.gameObject.GetComponent<PlayerBehaviours1>().enabled = false;
             //enabled = false;
         }
@@ -1370,10 +1369,10 @@ public class PlayerBehaviours1 : MonoBehaviour
     {
         if (other.gameObject.name == "Gold")
         {
-            gameManager.isRunning = true;
-            GameManager.state = GameState.GAMEPLAY;
-            gameManager.ending = GameEnding.GOLD;
-            GameManager.iceCreamMachineWorking = true;
+            GameManager.Instance.isRunning = true;
+            //GameManager.state = GameState.GAMEPLAY;
+            GameManager.Instance.ending = GameEnding.GOLD;
+            GameManager.IceCreamMachineWorking = true;
         }
     }
 
@@ -1381,7 +1380,7 @@ public class PlayerBehaviours1 : MonoBehaviour
     {
         if (other.gameObject.name == "HitBox")
         {
-            gameManager.ending = GameEnding.QUIT;
+            GameManager.Instance.ending = GameEnding.QUIT;
         }
     }
 }

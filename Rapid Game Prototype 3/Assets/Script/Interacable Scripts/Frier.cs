@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Frier : MonoBehaviour
 {
-    public GameManager gameManager;
     public GameObject[] traySlots = new GameObject[4];
     public GameObject particles;
 
@@ -70,7 +69,7 @@ public class Frier : MonoBehaviour
 
                 if (!traySlots[i].transform.GetChild(0).CompareTag("Raw Fries") && cooking != null)
                 {
-                    cooking.duration = gameManager.burnTime;
+                    cooking.duration = GameManager.Instance.burnTime;
                 }
             }
             else

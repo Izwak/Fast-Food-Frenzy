@@ -9,8 +9,6 @@ public class PickUp : MonoBehaviour
     public Transform orderMenu;
     public Transform CustomerParent;
 
-    //public bool isDriveTru;
-
     public CustomerType type;
 
     public int DoesOrderMatch(GameObject orderObj)

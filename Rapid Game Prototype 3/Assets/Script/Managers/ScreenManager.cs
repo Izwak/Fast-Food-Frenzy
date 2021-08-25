@@ -16,18 +16,4 @@ public class ScreenManager : MonoBehaviour
     public GameObject quit;
     public GameObject golden;
     public GameObject pause;
-
-    public void LoadPauseMenu()
-    {
-        pause.gameObject.SetActive(true);
-        touchUI.gameObject.SetActive(false);
-        overlay.pauseButton.gameObject.SetActive(false);
-    }
-
-    public void UnloadPauseMenu()
-    {
-        pause.gameObject.SetActive(false);
-        touchUI.gameObject.SetActive(true);
-        overlay.pauseButton.gameObject.SetActive(true);
-    }
 }

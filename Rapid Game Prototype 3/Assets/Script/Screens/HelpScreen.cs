@@ -15,7 +15,6 @@ enum Page
 
 public class HelpScreen : MonoBehaviour
 {
-    public GameManager gameManager;
     public GameObject page;
     public GameObject order;
     public GameObject tray;
@@ -23,7 +22,6 @@ public class HelpScreen : MonoBehaviour
     public GameObject iceCream;
 
     public Image[] images;
-
 
     public void SetPage(int pageNum)
     {
@@ -70,24 +68,24 @@ public class HelpScreen : MonoBehaviour
     public void Close()
     {
         this.gameObject.SetActive(false);
-        gameManager.screen.menu.gameObject.SetActive(true);
+        GameManager.Instance.screen.menu.gameObject.SetActive(true);
 
-        EventSystem.current.SetSelectedGameObject(gameManager.screen.menu.eventButton);
+        EventSystem.current.SetSelectedGameObject(GameManager.Instance.screen.menu.eventButton);
     }
 
     public void Open(int openingPage)
     {
-        if (GameManager.state == GameState.MAIN_MENU)
+        if (GameManager.State == GameState.MAIN_MENU)
         {
             this.gameObject.SetActive(true);
-            gameManager.screen.menu.gameObject.SetActive(false);
+            GameManager.Instance.screen.menu.gameObject.SetActive(false);
 
             SetPage(openingPage);
         }
-        else if (GameManager.state == GameState.GAMEPLAY)
+        else if (GameManager.State == GameState.GAMEPLAY)
         {
             this.gameObject.SetActive(true);
-            gameManager.screen.menu.gameObject.SetActive(false);
+            GameManager.Instance.screen.menu.gameObject.SetActive(false);
 
             SetPage(openingPage);
         }

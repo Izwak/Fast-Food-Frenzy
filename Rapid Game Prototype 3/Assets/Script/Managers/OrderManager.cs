@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class OrderManager : MonoBehaviour
 {
-    public GameManager gameManager;
     public GameObject customers;
     public GameObject orderMenu;
 
@@ -17,7 +16,7 @@ public class OrderManager : MonoBehaviour
         // Make sure orders has the order template on the zeroth element with an OrderBehaviour script
         GameObject newOrder = Instantiate(orderPrefabs[0]);
         OrderBehaviour newOrderBehaviour = newOrder.GetComponent<OrderBehaviour>();
-        newOrderBehaviour.bar.maxValue = gameManager.orderTimer;
+        newOrderBehaviour.bar.maxValue = GameManager.Instance.orderTimer;
 
         int orderSize = Random.Range(1, 5);
 
@@ -65,9 +64,8 @@ public class OrderManager : MonoBehaviour
                                     // Order Completed, Customer Picks up order and removes it from display
 
                                     customerController.stage = CustomerStage.LEAVING;
-                                    gameManager.audioBoi.Play("Angry");
-                                    //angry.Play();
-                                    gameManager.numCustomersPissed++;
+                                    GameManager.Instance.audioBoi.Play("Angry");
+                                    GameManager.Instance.numCustomersPissed++;
                                     break;
                                 }
 
@@ -86,7 +84,7 @@ public class OrderManager : MonoBehaviour
                                     // Order Completed, Customer Picks up order and removes it from display
 
                                     carController.stage = CustomerStage.LEAVING;
-                                    gameManager.numCustomersPissed++;
+                                    GameManager.Instance.numCustomersPissed++;
                                     break;
                                 }
 
@@ -94,7 +92,7 @@ public class OrderManager : MonoBehaviour
                         }
 
                         RemoveDisplayOrder(i);
-                        GameManager.score--;
+                        GameManager.Instance.score--;
                     }
                 }
             }

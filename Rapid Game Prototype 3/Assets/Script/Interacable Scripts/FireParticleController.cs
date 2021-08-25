@@ -33,7 +33,7 @@ public class FireParticleController : MonoBehaviour
             timer += Time.deltaTime;
             if (timer > 3) {
                 timer = 0;
-                GameManager.score--;
+                GameManager.Instance.score--;
             }
             if (!wasonfire) {
                 wasonfire = true;

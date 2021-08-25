@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GrillController : MonoBehaviour
 {
-    public GameManager gameManager;
     public GameObject emptySlot;
     public GameObject pattyParticles;
     GameObject clone;
@@ -51,7 +50,7 @@ public class GrillController : MonoBehaviour
 
                 if (cooking != null && !paddiies.CompareTag("Raw Paddies"))
                 {
-                    cooking.duration = gameManager.burnTime;
+                    cooking.duration = GameManager.Instance.burnTime;
                 }
             }
         }

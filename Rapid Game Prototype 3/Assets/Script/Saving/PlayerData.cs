@@ -9,10 +9,10 @@ public class PlayerData
     public List<float> time;
     public List<int> score;
 
-    public PlayerData(GameManager gameManager)
+    public PlayerData()
     {
-        name = gameManager.names;
-        time = gameManager.times;
-        score = gameManager.scores;
+        name = GameManager.Instance.names;
+        time = GameManager.Instance.times;
+        score = GameManager.Instance.scores;
     }
 }

@@ -13,7 +13,6 @@ public enum CustomerStage
 
 public class CustomerController1 : MonoBehaviour
 {
-    public GameManager gameManager;
     public Transform emptySlot;
     public List<GameObject> pointsOfInterest;
 
@@ -181,7 +180,7 @@ public class CustomerController1 : MonoBehaviour
 
                         stage = CustomerStage.LEAVING;
 
-                        GameManager.score++;
+                        GameManager.Instance.score++;
                     }
                 }
             }

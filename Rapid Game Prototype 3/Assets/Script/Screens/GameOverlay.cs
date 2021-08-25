@@ -6,8 +6,6 @@ using TMPro;
 
 public class GameOverlay : MonoBehaviour
 {
-    public GameManager gameManager;
-
     public Slider scoreSlider;
     public Slider scoreNegative;
 
@@ -18,7 +16,6 @@ public class GameOverlay : MonoBehaviour
 
     public int scoreGoal;
     public int scoreMin;
-
 
     float tick;
 
@@ -32,17 +29,17 @@ public class GameOverlay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scoreSlider.value = GameManager.score;
-        scoreNegative.value = -GameManager.score;
+        scoreSlider.value = GameManager.Instance.score;
+        scoreNegative.value = -GameManager.Instance.score;
 
-        timerText.text = FloatToMinutes(gameManager.timer);
+        timerText.text = FloatToMinutes(GameManager.Instance.timer);
 
-        if (GameManager.score >= 0)
+        if (GameManager.Instance.score >= 0)
         {
             scoreSlider.gameObject.SetActive(true);
             scoreNegative.gameObject.SetActive(false);
         }
-        else if (GameManager.score < 0)
+        else if (GameManager.Instance.score < 0)
         {
             scoreSlider.gameObject.SetActive(false);
             scoreNegative.gameObject.SetActive(true);

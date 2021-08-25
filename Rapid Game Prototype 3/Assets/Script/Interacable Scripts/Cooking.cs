@@ -39,7 +39,7 @@ public class Cooking : MonoBehaviour
 
                 if (next.name == "Paddy Burnt" || next.name == "Burnt Fries")
                 {
-                    GameManager.score -=2;
+                    GameManager.Instance.score -=2;
                 }
 
                 Cooking cooking = next.GetComponent<Cooking>();

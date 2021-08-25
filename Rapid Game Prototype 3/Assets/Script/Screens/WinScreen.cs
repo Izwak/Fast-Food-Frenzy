@@ -5,7 +5,6 @@ using TMPro;
 
 public class WinScreen : MonoBehaviour
 {
-    public GameManager gameManager;
     public GameObject confetti;
 
     public GameObject button;
@@ -13,8 +12,6 @@ public class WinScreen : MonoBehaviour
 
     public GameObject[] wordTexts;
     public TextMeshProUGUI[] numberTexts;
-
-    float tick = 0;
 
     bool doneTheThingYet = false;
 
@@ -34,8 +31,6 @@ public class WinScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tick += Time.deltaTime;
-
         if (!doneTheThingYet) // Yes i am a amazing programmer
         {
             StartCoroutine(slowlyDisplayText());
@@ -91,10 +86,10 @@ public class WinScreen : MonoBehaviour
         doneTheThingYet = true;
 
         // Do the calculations
-        int served = gameManager.numCustomersServed;
-        int pissed = gameManager.numCustomersPissed;
-        int wasted = gameManager.numFoodWasted;
-        float timer = gameManager.timer;
+        int served = GameManager.Instance.numCustomersServed;
+        int pissed = GameManager.Instance.numCustomersPissed;
+        int wasted = GameManager.Instance.numFoodWasted;
+        float timer = GameManager.Instance.timer;
 
         SetText(numberTexts[0], served + " x 100");
         SetText(numberTexts[1], pissed + " x -50");
@@ -116,7 +111,7 @@ public class WinScreen : MonoBehaviour
         SetText(numberTexts[4], "0");
         SetText(rating, SetLetterGrade((int)score));
 
-        gameManager.finalScore = (int)score;
+        GameManager.Instance.finalScore = (int)score;
 
 
         // Display the actions slowly
@@ -132,15 +127,15 @@ public class WinScreen : MonoBehaviour
 
         int finalScore = 0;
 
-        if (gameManager.finalScore > 0)
+        if (GameManager.Instance.finalScore > 0)
         {
             print("Positive");
-            while (finalScore < gameManager.finalScore)
+            while (finalScore < GameManager.Instance.finalScore)
             {
                 finalScore += 5;
 
-                if (finalScore > gameManager.finalScore)
-                    finalScore = gameManager.finalScore;
+                if (finalScore > GameManager.Instance.finalScore)
+                    finalScore = GameManager.Instance.finalScore;
 
                 int thousands = Mathf.FloorToInt(finalScore / 1000);
                 int hundreds = Mathf.FloorToInt(finalScore % 1000);
@@ -153,15 +148,15 @@ public class WinScreen : MonoBehaviour
                 yield return null;
             }
         }
-        else if (gameManager.finalScore < 0)
+        else if (GameManager.Instance.finalScore < 0)
         {
             print("Negative");
-            while (finalScore > gameManager.finalScore)
+            while (finalScore > GameManager.Instance.finalScore)
             {
                 finalScore -= 5;
 
-                if (finalScore < gameManager.finalScore)
-                    finalScore = gameManager.finalScore;
+                if (finalScore < GameManager.Instance.finalScore)
+                    finalScore = GameManager.Instance.finalScore;
 
                 int thousands = Mathf.FloorToInt(finalScore / 1000);
                 int hundreds = Mathf.FloorToInt(finalScore % 1000);
