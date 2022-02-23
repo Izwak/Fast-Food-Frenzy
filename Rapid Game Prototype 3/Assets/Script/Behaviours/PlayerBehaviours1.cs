@@ -943,14 +943,20 @@ public class PlayerBehaviours1 : MonoBehaviour
                             else
                             {
                                 Tray tray = empltySlot.transform.GetChild(0).GetComponent<Tray>();
-                                int amountOnTray = tray.emptySlot.transform.childCount;
-                                if (tray != null && amountOnTray < 4)
+
+                                if (tray != null)
                                 {
+                                    int amountOnTray = tray.emptySlot.transform.childCount;
+
+                                    // Make sure tray isnt full
+                                    if (amountOnTray > 4)
+                                        return;
+
                                     int burgersTaken = 0;
 
                                     int maxBurgersAllowed;
 
-                                    if (GameManager.Mode == GameMode.BABY)
+                                    if (GameManager.mode == GameMode.BABY)
                                         maxBurgersAllowed = 4;
                                     else
                                         maxBurgersAllowed = 2;

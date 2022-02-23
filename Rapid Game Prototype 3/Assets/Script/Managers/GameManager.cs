@@ -9,8 +9,9 @@ using UnityEngine.EventSystems;
 public enum GameState
 {
     MAIN_MENU,
-    MENU,
+    MENU, // End of Shift
     GAMEPLAY,
+    PAUSE,
 }
 
 public enum GameEnding
@@ -35,10 +36,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public static GameMode Mode = GameMode.BABY;
-    public static GameState State = GameState.MAIN_MENU;
+    public static GameMode mode = GameMode.BABY;
+    public static GameState state = GameState.MAIN_MENU;
     public static bool IceCreamMachineWorking = false; // lol as if
-    public static bool IsUsingController = false;
+    //public static bool IsUsingController = true;
 
     public GameEnding ending = GameEnding.NONE;
 
@@ -81,6 +82,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public int maxCustomers;
 
+    public bool isTouchEnabled;
+
     public void Awake()
     {
         Instance = this;
@@ -93,7 +96,7 @@ public class GameManager : MonoBehaviour
         screen.win.gameObject.SetActive(false);
         screen.win.confetti.SetActive(false);
 
-        if (State == GameState.MAIN_MENU)
+        if (state == GameState.MAIN_MENU)
         {
             screen.menu.gameObject.SetActive(true);
             screen.overlay.gameObject.SetActive(false);
@@ -101,28 +104,34 @@ public class GameManager : MonoBehaviour
             player1.isRunning = false;
             audioBoi.Play("Main Menu Theme");
         }
-        else if (State == GameState.GAMEPLAY || State == GameState.MENU)
+        else if (state == GameState.GAMEPLAY || state == GameState.MENU)
         {
             screen.menu.gameObject.SetActive(false);
             screen.overlay.gameObject.SetActive(true);
             isRunning = true;
             player1.isRunning = true;
-            State = GameState.GAMEPLAY;
+            state = GameState.GAMEPLAY;
             audioBoi.Play("Savvy Server");
             camerBoi.stage = CameraState.GAMEPLAY;
-            screen.touchUI.gameObject.SetActive(true);
+            if (isTouchEnabled)
+                screen.touchUI.gameObject.SetActive(true);
         }
-        SetGameMode(Mode);
+        SetGameMode(mode);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (State == GameState.GAMEPLAY)
+        if (state == GameState.GAMEPLAY)
         {
             if (isRunning)
             {
                 timer -= Time.deltaTime;
+
+                if (Input.GetButtonDown("Pause"))
+                {
+                    LoadPauseMenu();
+                }
 
                 // Start panicing once u get to 15 seconds
                 if (timer < 17.2 && !audioBoi.IsPlaying("Panic"))
@@ -143,7 +152,7 @@ public class GameManager : MonoBehaviour
 
                     screen.win.gameObject.SetActive(true);
 
-                    State = GameState.MENU;
+                    state = GameState.MENU;
                     audioBoi.Stop("Panic");
                     audioBoi.Stop("Savvy Server");
 
@@ -159,7 +168,7 @@ public class GameManager : MonoBehaviour
 
                     screen.leaderboard.isEnteringName = true;
 
-                    State = GameState.MENU;
+                    state = GameState.MENU;
                     audioBoi.Stop("Panic");
                     audioBoi.Stop("Savvy Server");
 
@@ -174,7 +183,7 @@ public class GameManager : MonoBehaviour
                     screen.orders.gameObject.SetActive(false);
                     screen.quit.gameObject.SetActive(true);
 
-                    State = GameState.MENU;
+                    state = GameState.MENU;
                     audioBoi.Stop("Panic");
                     audioBoi.Stop("Savvy Server");
 
@@ -190,7 +199,7 @@ public class GameManager : MonoBehaviour
                     screen.orders.gameObject.SetActive(false);
                     screen.golden.gameObject.SetActive(true);
 
-                    State = GameState.MENU;
+                    state = GameState.MENU;
                     audioBoi.Stop("Panic");
                     audioBoi.Stop("Savvy Server");
 
@@ -199,7 +208,14 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        else if (State == GameState.MENU)
+        else if (state == GameState.PAUSE)
+        {
+            if (Input.GetButtonDown("Pause"))
+            {
+                UnloadPauseMenu();
+            }
+        }
+        else if (state == GameState.MENU)
         {
             if (!audioBoi.IsPlaying("Shift Over"))
             {
@@ -219,7 +235,7 @@ public class GameManager : MonoBehaviour
             screen.touchUI.gameObject.SetActive(false);
             screen.dead.gameObject.SetActive(true);
 
-            State = GameState.MENU;
+            state = GameState.MENU;
             audioBoi.Stop("Panic");
             audioBoi.Stop("Savvy Server");
 
@@ -236,15 +252,15 @@ public class GameManager : MonoBehaviour
 
     public void ResetToGameplay()
     {
-        State = GameState.MENU;
-        SetGameMode(Mode);
-        print(State + " BEFORE THE CHANGE");
+        state = GameState.MENU;
+        SetGameMode(mode);
+        print(state + " BEFORE THE CHANGE");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ResetToMenu()
     {
-        State = GameState.MAIN_MENU;
+        state = GameState.MAIN_MENU;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         player1.isRunning = false;
     }
@@ -256,12 +272,16 @@ public class GameManager : MonoBehaviour
         screen.overlay.gameObject.SetActive(true);
         isRunning = true;
         player1.isRunning = true;
-        State = GameState.GAMEPLAY;
+        state = GameState.GAMEPLAY;
         camerBoi.stage = CameraState.GAMEPLAY;
 
         audioBoi.Stop("Main Menu Theme");
         audioBoi.Play("Savvy Server");
-        screen.touchUI.gameObject.SetActive(true);
+
+        if (isTouchEnabled)
+        {
+            screen.touchUI.gameObject.SetActive(true);
+        }
     }
 
     public void LoadLeaderboard(bool isEntering)
@@ -309,9 +329,6 @@ public class GameManager : MonoBehaviour
         screen.menu.gameObject.SetActive(true);
         screen.overlay.gameObject.SetActive(false);
         screen.leaderboard.gameObject.SetActive(false);
-
-        if (IsUsingController)
-            EventSystem.current.SetSelectedGameObject(screen.menu.eventButton);
     }
 
     public void QuitGame()
@@ -323,7 +340,7 @@ public class GameManager : MonoBehaviour
     public void SetGameMode(GameMode newMode)
     {
         // This is the STATIC varible you idiot don't delete this line its IMPORTANT
-        Mode = newMode;
+        mode = newMode;
 
         if (newMode == GameMode.BABY)
         {
@@ -358,13 +375,16 @@ public class GameManager : MonoBehaviour
         screen.touchUI.gameObject.SetActive(false);
         screen.overlay.pauseButton.gameObject.SetActive(false);
         audioBoi.GetSound("Savvy Server").source.volume /= 5;
+        state = GameState.PAUSE;
     }
 
     public void UnloadPauseMenu()
     {
         screen.pause.gameObject.SetActive(false);
-        screen.touchUI.gameObject.SetActive(true);
+        if (isTouchEnabled)
+            screen.touchUI.gameObject.SetActive(true);
         screen.overlay.pauseButton.gameObject.SetActive(true);
         audioBoi.GetSound("Savvy Server").source.volume *= 5;
+        state = GameState.GAMEPLAY;
     }
 }

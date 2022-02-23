@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/New Kitchen.unity
     guid: e1a2c997e1480194681151d64e251ca2
+  - enabled: 1
+    path: Assets/Scenes/Lighting2.unity
+    guid: 3eea5789be53da140819b22801294df5
   m_configObjects: {}

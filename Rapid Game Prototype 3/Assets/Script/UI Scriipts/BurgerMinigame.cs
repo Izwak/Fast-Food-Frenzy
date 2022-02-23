@@ -1,28 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BurgerMinigame : MonoBehaviour
 {
-    public GameManager gameManager;
+    //public GameManager gameManager;
 
-    public List<Transform> DObjects;
+    public static DragWindow selected;
+
+    public List<Transform> DObjects; // No clue y i called it a d object
 
     public bool[] correctPos;
+        
 
     // Start is called before the first frame update
     void Start()
     {
+        selected = DObjects[1].GetComponent<DragWindow>();
+        selected.border.GetComponent<Image>().color = new Color(0, 1, 0, 1);
 
         for (int i = 1; i < 6; i++)
         {
             correctPos[i] = false;
 
-
             // First point stays where it is
             // Starting rand pos
             DObjects[i].transform.localPosition = new Vector3(Random.Range(100, 1820) - Screen.width / 2, Random.Range(100, 920) - Screen.width / 2, 0);
         }
+
+
     }
 
     // Update is called once per frame
@@ -48,10 +55,17 @@ public class BurgerMinigame : MonoBehaviour
 
         if (Won())
         {
-            //print("Has Won");
-
             ResetBoard();
-            gameManager.screen.touchUI.gameObject.SetActive(true);
+
+            if (GameManager.Instance.isTouchEnabled)
+                GameManager.Instance.screen.touchUI.gameObject.SetActive(true);
+        }
+
+        // Draw dem kewl lines
+        for (int i = 0; i < DObjects.Count; i++)
+        {
+
+            Debug.DrawLine(selected.transform.position, DObjects[i].position, Color.black);
         }
     }
 
@@ -103,10 +117,26 @@ public class BurgerMinigame : MonoBehaviour
                 GameObject stackTop = obj1.gameObject;
 
                 // Find the ingredient on the top of the stack
-                while (stackTop.transform.childCount > 1)
+                do
                 {
-                    stackTop = stackTop.transform.GetChild(1).gameObject;
-                }
+                    // If theres no children theres no where left to go, break
+                    if (stackTop.transform.childCount == 0)
+                    {
+                        break;
+                    }
+
+                    // The Last Ingedint is thr next ingredient
+                    DragWindow nextInredient = stackTop.transform.GetChild(stackTop.transform.childCount - 1).GetComponent<DragWindow>();
+
+                    // If its not an ingredient, break
+                    if (nextInredient == null)
+                    {
+                        break;
+                    }
+
+                    stackTop = nextInredient.gameObject;
+
+                } while (true);
 
                 // Check Obj 2
                 for (int j = 0; j < 7; j++)
@@ -153,7 +183,28 @@ public class BurgerMinigame : MonoBehaviour
         }
     }
 
+    void SelectNext()
+    {
+        float[] distanceX = new float[DObjects.Count];
+        float[] distanceY = new float[DObjects.Count];
 
+        for (int i = 0; i < DObjects.Count; i++)
+        {
+            distanceX[i] = selected.transform.position.x - DObjects[i].position.x;
+            distanceY[i] = selected.transform.position.y - DObjects[i].position.y;
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            DragWindow closest;
+
+            for (int i = 0; i < DObjects.Count; i++)
+            {
+                //if (DObjects[i].)
+            }
+        }
+    }
 
     bool Won()
     {
@@ -179,12 +230,17 @@ public class BurgerMinigame : MonoBehaviour
             if (i > 0) // Dont Rand first object
                 DObjects[i].transform.localPosition = new Vector3(Random.Range(100, 1820) - Screen.width / 2, Random.Range(100, 920) - Screen.width / 2, 0);
 
+            // Reset Stack
             Stackable stackable = DObjects[i].GetComponent<Stackable>();
 
             if (stackable != null)
-            {
                 stackable.isActive1 = true;
-            }
+
+            // Reset Borders
+            DragWindow dragWindow = DObjects[i].GetComponent<DragWindow>();
+
+            if (dragWindow != null)
+                dragWindow.border.SetParent(dragWindow.transform);
         }
 
         for (int i = 0; i < 6; i++)
@@ -193,7 +249,7 @@ public class BurgerMinigame : MonoBehaviour
         }
 
         //gameManager.gameState = GameState.GAMEPLAY;
-        gameManager.player1.isRunning = true;
+        GameManager.Instance.player1.isRunning = true;
         this.gameObject.SetActive(false);
     }
 }

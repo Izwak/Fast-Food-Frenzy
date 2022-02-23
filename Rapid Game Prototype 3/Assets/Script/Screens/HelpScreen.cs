@@ -21,7 +21,7 @@ public class HelpScreen : MonoBehaviour
     public GameObject burger;
     public GameObject iceCream;
 
-    public Image[] images;
+    public GameObject[] buttons;
 
     public void SetPage(int pageNum)
     {
@@ -33,35 +33,34 @@ public class HelpScreen : MonoBehaviour
         burger.SetActive(false);
         iceCream.SetActive(false);
 
-        foreach (Image image in images)
+        foreach (GameObject button in buttons)
         {
-            image.color = Color.gray;
+            //button.GetComponent<Image>().color = Color.gray;
+            Debug.Log("Test");
         }
+
+        buttons[pageNum].GetComponent<Image>().color = Color.white;
+        EventSystem.current.SetSelectedGameObject(buttons[pageNum]);
 
         if (pageType == Page.PAGE)
         {
             page.SetActive(true);
-            images[0].color = Color.white;
         }
         else if (pageType == Page.ORDERS)
         {
             order.SetActive(true);
-            images[1].color = Color.white;
         }
         else if (pageType == Page.TRAY)
         {
             tray.SetActive(true);
-            images[2].color = Color.white;
         }
         else if (pageType == Page.BURGERS)
         {
             burger.SetActive(true);
-            images[3].color = Color.white;
         }
         else if (pageType == Page.ICECREAMLOL)
         {
             iceCream.SetActive(true);
-            images[4].color = Color.white;
         }
     }
 
@@ -70,24 +69,29 @@ public class HelpScreen : MonoBehaviour
         this.gameObject.SetActive(false);
         GameManager.Instance.screen.menu.gameObject.SetActive(true);
 
-        EventSystem.current.SetSelectedGameObject(GameManager.Instance.screen.menu.eventButton);
+        EventSystem.current.SetSelectedGameObject(GameManager.Instance.screen.menu.eventButtons[0]);
     }
 
     public void Open(int openingPage)
     {
-        if (GameManager.State == GameState.MAIN_MENU)
+        /*if (GameManager.state == GameState.MAIN_MENU)
         {
             this.gameObject.SetActive(true);
             GameManager.Instance.screen.menu.gameObject.SetActive(false);
 
             SetPage(openingPage);
         }
-        else if (GameManager.State == GameState.GAMEPLAY)
+        else if (GameManager.state == GameState.GAMEPLAY)
         {
             this.gameObject.SetActive(true);
             GameManager.Instance.screen.menu.gameObject.SetActive(false);
 
             SetPage(openingPage);
-        }
+        }*/
+
+        this.gameObject.SetActive(true);
+        GameManager.Instance.screen.menu.gameObject.SetActive(false);
+
+        SetPage(openingPage);
     }
 }

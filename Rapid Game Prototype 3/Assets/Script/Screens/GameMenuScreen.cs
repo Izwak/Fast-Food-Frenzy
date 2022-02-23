@@ -12,7 +12,7 @@ public class GameMenuScreen : MonoBehaviour
     public Transform buttonBoard;
     public Transform LevelSelect;
 
-    public GameObject eventButton;
+    public GameObject[] eventButtons;
 
     public Transform[] points;
 
@@ -33,8 +33,8 @@ public class GameMenuScreen : MonoBehaviour
             title.localScale = points[1].localScale;
             buttonBoard.position = points[3].position;
 
-            if (GameManager.IsUsingController)
-                EventSystem.current.SetSelectedGameObject(eventButton);
+            /*if (GameManager.IsUsingController)
+                EventSystem.current.SetSelectedGameObject(eventButton);*/
         }
     }
 
@@ -72,13 +72,14 @@ public class GameMenuScreen : MonoBehaviour
             yield return null;
         }
 
-        EventSystem.current.SetSelectedGameObject(eventButton);
+        EventSystem.current.SetSelectedGameObject(eventButtons[0]);
 
         //StartCoroutine(transitionToLevelSelect());
     }
 
     public void LoadLevelMenu()
     {
+        //buttonBoard.gameObject.SetActive(false);
         StopAllCoroutines();
         StartCoroutine(transitionToLevelSelect());
     }
@@ -93,6 +94,8 @@ public class GameMenuScreen : MonoBehaviour
         Vector3 titleStart = title.position;
         Vector3 buttonBoardStart = buttonBoard.position;
 
+        EventSystem.current.SetSelectedGameObject(null);
+
         while (timer < time)
         {
             timer += Time.deltaTime;
@@ -101,7 +104,10 @@ public class GameMenuScreen : MonoBehaviour
             yield return null;
         }
 
+        buttonBoard.gameObject.SetActive(false);
         LevelSelect.gameObject.SetActive(true);
+
+        EventSystem.current.SetSelectedGameObject(GameManager.Instance.screen.menu.eventButtons[1]);
     }
 
     public void CallZoomIn(int mode)
