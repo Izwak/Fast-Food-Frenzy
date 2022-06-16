@@ -165,7 +165,7 @@ public class CarController : MonoBehaviour
         }
         if (stage == CustomerStage.LEAVING)
         {
-            print("First target" + currentTarget);
+            //print("First target" + currentTarget);
             speed = 7;
             body.velocity = transform.forward * speed;
             target = pointsOfInterest[currentTarget].transform.position + new Vector3(2, 0, 0);
